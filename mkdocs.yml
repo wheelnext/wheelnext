@@ -1,0 +1,51 @@
+site_name: WheelNext
+repo_url: https://github.com/wheel-next/wheel-next
+
+theme:
+  name: material
+  features:
+    - header.autohide
+      #    - navigation.tabs
+      #    - navigation.tabs.sticky
+  palette:
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: blue grey
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue grey
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+nav:
+  - "index.md"
+  - "glossary.md"
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+# - git-authors
+# - git-committers:
+#     repository: rgommers/pypi-painpoints
+#     token: !ENV GH_TOKEN
+
+markdown_extensions:
+  - admonition
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/wheel-next/wheel-next
+    - icon: material/license
+      link: https://github.com/wheel-next/wheel-next/blob/main/LICENSE
