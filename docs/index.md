@@ -4,7 +4,7 @@ description: WheelNext is <TBD>
 
 ## Introduction
 
-Content to be added.
+Content to be added here.
 
 ## Contributing
 
@@ -17,8 +17,7 @@ All contributions are very welcome and appreciated! Ways to contribute include:
 - ... and anything else you consider useful!
 
 The content for this website is
-[maintained on GitHub](https://github.com/wheel-next/wheel-next).
-
+[maintained on GitHub](https://github.com/wheelnext/wheelnext).
 
 ## Acknowledgements
 

@@ -1,5 +1,5 @@
 site_name: WheelNext
-repo_url: https://github.com/wheel-next/wheel-next
+repo_url: https://github.com/wheelnext/wheelnext
 
 theme:
   name: material
@@ -46,6 +46,6 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/wheel-next/wheel-next
+      link: https://github.com/wheelnext/wheelnext
     - icon: material/license
-      link: https://github.com/wheel-next/wheel-next/blob/main/LICENSE
+      link: https://github.com/wheelnext/wheelnext/blob/main/LICENSE

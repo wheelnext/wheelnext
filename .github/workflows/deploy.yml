@@ -32,7 +32,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           personal_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}
-          external_repository: wheel-next/wheel-next
+          external_repository: wheelnext/wheelnext
           publish_branch: gh-pages
           publish_dir: ./site
           user_name: 'github-actions[bot]'
