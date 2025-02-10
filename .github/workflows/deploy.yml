@@ -31,7 +31,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
         with:
-          personal_token: ${{ secrets.ACTIONS_DEPLOY_TOKEN }}
+          personal_token: ${{ secrets.CI_TOKEN }}
           external_repository: wheelnext/wheelnext
           publish_branch: gh-pages
           publish_dir: ./site

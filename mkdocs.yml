@@ -24,6 +24,7 @@ theme:
 
 nav:
   - "index.md"
+  - "community_updates.md"
   - "glossary.md"
 
 plugins:
@@ -37,6 +38,7 @@ plugins:
 
 markdown_extensions:
   - admonition
+  - attr_list
   - footnotes
   - pymdownx.details
   - pymdownx.superfences
