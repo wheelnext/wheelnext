@@ -7,9 +7,17 @@
 	"customizations": {
 		"vscode": {
 			"settings": {
+				"editor.formatOnPaste": true,
 				"editor.formatOnSave": true,
-				"makefile.configureOnOpen": false,
-				"terminal.integrated.shell.linux": "/bin/zsh"
+				"editor.codeActionsOnSave": {
+					"source.fixAll.markdownlint": "explicit"
+				},
+				"terminal.integrated.shell.linux": "/bin/zsh",
+				"[markdown]": {
+					"editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+					"editor.formatOnSave": true,
+					"editor.formatOnPaste": true
+				}
 			},
 			"extensions": [
 				// Python

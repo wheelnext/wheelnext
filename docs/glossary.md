@@ -1,5 +1,7 @@
 # Glossary
 
+This page is borrowed from [pypackaging-native](https://pypackaging-native.github.io/glossary/){:target="_blank"}, just added as a reference.
+
 ## Acronyms
 
 | Acronym | ... stands for | Explanation |

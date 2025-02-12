@@ -24,7 +24,16 @@ theme:
 
 nav:
   - "index.md"
+  - "philosophy_and_design_space.md"
   - "community_updates.md"
+  - "WheelNext Proposals":
+      - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
+      - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
+      - "Default Extra": "proposals/pep771_default_extras.md"
+      - "How To Reinvent the Wheel": "proposals/pep777_how_to_reinvent_the_wheel.md"
+      - "Symlink Support in Wheel": "proposals/pep778_symlink_support.md"
+      - "Build Isolation Bypass": "proposals/pepxxx_build_isolation_bypass.md"
+      - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
   - "glossary.md"
 
 plugins:
@@ -44,6 +53,7 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  - tables
 
 extra:
   social:
