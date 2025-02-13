@@ -1,0 +1,45 @@
+---
+# markdownlint schema example: https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.yaml
+
+#########################################################
+# This first set of errors cannot be automatically fixed.
+#########################################################
+
+MD003:
+    style: atx
+
+# Unordered list indentation: https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md007.md
+MD007:
+    indent: 4
+
+# Hard tabs: https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md010.md
+MD010: # MD010/no-hard-tabs
+    code_blocks: false # ignore tabs in code blocks, which are generally intentional
+
+# Line length: https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md013.md
+MD013:
+    line_length: 120
+    code_block_line_length: 120
+    tables: false
+
+# Inline HTML: https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md033.md
+MD033: false # no-inline-html
+
+# Without this rule suppression, the linter flags trailing punctuation in
+# headers like "## What makes Gridsome sites fast?" but we allow headers
+# like that.
+# Trailing punctuation: https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md026.md
+MD026: false # no-trailing-punctuation
+
+# The linter flags http://example.com and wants them formatted like
+# <http://example.com>, but this doesn't improve readability.
+MD034: false # no-bare-urls
+
+MD037: false # no-space-in-emphasis
+MD038: false # no-space-in-code
+MD039: false # no-space-in-links
+
+MD044: true # proper-names
+#  names:
+#    - "ChIP-seq"
+MD047: true # single-trailing-newline
