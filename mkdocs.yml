@@ -61,3 +61,6 @@ extra:
       link: https://github.com/wheelnext/wheelnext
     - icon: material/license
       link: https://github.com/wheelnext/wheelnext/blob/main/LICENSE
+
+extra_css:
+  - assets/css/style.css
