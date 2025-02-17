@@ -42,6 +42,25 @@ Therefore we strongly believe that if you are one of those users who doesn't car
 problems WheelNext is trying to solve, you will *still* not care when the solutions being proposed.
 In other words, to you, "if it ain't broke, it ain't gonna be fixed".
 
+### Favor backward compatible changes whenever possible
+
+The Python packaging ecosystem is complex and used in many different ways. It is preferred to not
+modify tools in a way that would either break the function of a previous version of the installers
+(not yet supporting feature X) or to modify the meaning or behavior of a given flag or usecase.
+
+### Be intentful and explicit on what is being broken and why
+
+Some changes or evolutions require non-backward compatible changes to be implemented. In these cases,
+it is important to be explicit on what behavior(s) or functionality(ies) needs to be modified in a non backward
+compatible way, why it's important, what is to gain and why it's considered the best approach.
+
+### Complexity in the tooling rather than user experience
+
+We thrive to design a simple and efficient user experience. As often as possible, we aim to hide any
+complexity into the tooling ecosystem itself and offer the most streamline user experience possible. This means
+we care about the full end-to-end user experience from the packaging step to the end-user installation of a
+given package.
+
 ### Don't focus on a single tool or service
 
 Despite the overwhelming popularity of `pip` and `PyPI`, these aren't the only games in town.  For
@@ -58,6 +77,15 @@ it.  WheelNext cannot solve all these problems, and to attempt to will dilute th
 and resources of its participants.  There are also plenty of ways to improve things outside the
 scope of WheelNext, and we encourage you to do so!  Let's keep WheelNext focused on the problems
 we can improve and resist the temptation to fix the world.
+
+## Mode of Operation
+
+### Proof-of-Concept / Minimum-Viable-Product first, PEP second.
+
+We believe in quick engineering cycles, rapid design reviews and iterations. We recognize that an
+informed discussion is a lot easier when the PEP is accompanied by an actual "technical implementation"
+(even minimal and crude) of the proposed change. This can be in the form of a PR to any number of projects,
+a `pip install-able package`, etc.
 
 ## Principles of participation
 
