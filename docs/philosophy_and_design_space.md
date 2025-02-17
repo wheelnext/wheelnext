@@ -32,14 +32,14 @@ wholesale revolution in the way people and tools operate.
 
 ### If you don't care now, you won't care later
 
-For *many* use cases and users, Python packaging is "good enough".  Maybe they are building
+For *many* use cases and users, Python packaging is "good enough". Maybe they are building
 libraries and applications that don't ever touch the "Accelerated Python" ecosystem.  Python is used
 in so many domains and at such widely varying scales, from one-off scripts to large, long lived
-application platforms, and more.  The niche of problems that Wheel Next is trying to solve simply
+application platforms, and more.  The niche of problems that WheelNext is trying to solve simply
 don't affect everyone.
 
 Therefore we strongly believe that if you are one of those users who doesn't care now about the
-problems Wheel Next is trying to solve, you will *still* not care when the solutions being proposed.
+problems WheelNext is trying to solve, you will *still* not care when the solutions being proposed.
 In other words, to you, "if it ain't broke, it ain't gonna be fixed".
 
 ### Don't focus on a single tool or service
@@ -54,16 +54,16 @@ relevant tools, and think about the level of effort to get other indexes or inst
 
 We all have our pet peeves and complaints about packaging.  Regardless of how you interface with the
 packaging ecosystem, it's pretty much guaranteed that if you do, there are things that bug you about
-it.  Wheel Next cannot solve all these problems, and to attempt to will dilute the limited bandwidth
+it.  WheelNext cannot solve all these problems, and to attempt to will dilute the limited bandwidth
 and resources of its participants.  There are also plenty of ways to improve things outside the
-scope of Wheel Next, and we encourage you to do so!  Let's keep Wheel Next focused on the problems
+scope of WheelNext, and we encourage you to do so!  Let's keep WheelNext focused on the problems
 we can improve and resist the temptation to fix the world.
 
 ## Principles of participation
 
 ### Be fully open, transparent, and collaborative
 
-All work for the Wheel Next solutions is done in the open, with full transparency and collaboration,
+All work for the WheelNext solutions is done in the open, with full transparency and collaboration,
 adhering to the spirit of Open Source.  We welcome participation from all stakeholders and
 interested parties.  We strongly believe that solutions which represent the widest possible
 consensus will yield the best results, and the most widespread and quickest adoption across the
