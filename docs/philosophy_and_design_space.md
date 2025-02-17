@@ -50,6 +50,34 @@ is gaining popularity, and there are many alternative PyPI compatible services, 
 some commercial.  Whenever possible, try to propose solutions that can be adopted across all
 relevant tools, and think about the level of effort to get other indexes or installers on board.
 
+### Favor backward compatible changes whenever possible
+
+The Python packaging ecosystem is complex and used in many different ways. It is preferred to not
+modify tools in a way that would either break the function of a previous version of the installers
+(not yet supporting feature X) or to modify the meaning or behavior of a given flag or usecase.
+
+### Be intentful and explicit on what is being broken and why
+
+Some changes or evolutions require non-backward compatible changes to be implemented. In these cases,
+it is important to be explicit on what behavior(s) or functionality(ies) needs to be modified in a non backward
+compatible way, why it's important, what is to gain and why it's considered the best approach.
+
+### Complexity in the tooling rather than user experience
+
+We thrive to design a simple and efficient user experience. As often as possible, we aim to hide any
+complexity into the tooling ecosystem itself and offer the most streamline user experience possible. This means
+we care about the full end-to-end user experience from the packaging step to the end-user installation of a
+given package.
+
+## Mode of Operation
+
+### Proof-of-Concept / Minimum-Viable-Product first, PEP second.
+
+We believe in quick engineering cycles, rapid design reviews and iterations. We recognize that an
+informed discussion is a lot easier when the PEP is accompanied by an actual "technical implementation"
+(even minimal and crude) of the proposed change. This can be in the form of a PR to any number of projects,
+a `pip install-able package`, etc.
+
 ### Avoid mission creep
 
 We all have our pet peeves and complaints about packaging.  Regardless of how you interface with the
