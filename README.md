@@ -1,4 +1,4 @@
-# Wheel - Next
+# WheelNext
 
 ## Contributing
 
@@ -10,6 +10,16 @@ All contributions are very welcome and appreciated! Ways to contribute include:
 - Proposing new topics for inclusion on the website, and writing the content for them
 - ... and anything else you consider useful!
 
+## Using the DevContainer
+
+This repository provides a [devcontainer](https://containers.dev/).
+Instructions to install this feature and start the `devcontainer` can be found for:
+
+- VSCode: https://code.visualstudio.com/docs/devcontainers/containers
+- Github CodeSpace: https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/introduction-to-dev-containers
+- JetBrains: https://www.jetbrains.com/help/idea/start-dev-container-inside-ide.html
+
+The `devcontainer` automatically launches an HTTP server on port `8080` and serving the live-built documentation: http://localhost:8080/
 
 ## Building the documentation locally
 
@@ -28,7 +38,6 @@ or build the docs locally and serve them over local HTTP:
 ```sh
 uvx --with-requirements requirements.txt mkdocs build
 ```
-
 
 ## Code of Conduct
 
