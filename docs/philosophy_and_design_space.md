@@ -76,7 +76,7 @@ given package.
 We believe in quick engineering cycles, rapid design reviews and iterations. We recognize that an
 informed discussion is a lot easier when the PEP is accompanied by an actual "technical implementation"
 (even minimal and crude) of the proposed change. This can be in the form of a PR to any number of projects,
-a `pip install-able package`, etc.
+a "pip install-able" package, etc.
 
 ### Avoid mission creep
 
