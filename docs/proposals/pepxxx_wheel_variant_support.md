@@ -167,13 +167,13 @@ A prototype implementation has been developed, demonstrating:
 Several alternative approaches were considered and ultimately rejected:
 
 1. **Explicit Package Naming (`mypackage-gpu`, `mypackage-cpu`)**
-   - Leads to dependency resolution issues and combinatorial explosion of package variants.
+    - Leads to dependency resolution issues and combinatorial explosion of package variants.
 
 2. **Bundling All Dependencies into a Single Wheel**
-   - Results in unnecessarily large downloads and inefficiencies.
+    - Results in unnecessarily large downloads and inefficiencies.
 
 3. **Modifying `pip` Internals Directly**
-   - Would impose significant maintenance burden on `pip` maintainers and slow adaptation to new hardware platforms.
+    - Would impose significant maintenance burden on `pip` maintainers and slow adaptation to new hardware platforms.
 
 4. **One index per configuration**
     - Significant user complexity. Force the user to carefully read the documentation.
@@ -184,14 +184,14 @@ Several alternative approaches were considered and ultimately rejected:
 ## Open Issues
 
 1. **Dependency Management**
-   - How should dependencies be expressed when a package depends on a variant of another package?
+    - How should dependencies be expressed when a package depends on a variant of another package?
 
 2. **Lockfile Support**
-   - Should lockfiles store variant hashes or remain variant-agnostic?
+    - Should lockfiles store variant hashes or remain variant-agnostic?
 
 3. **Platform Detection Edge Cases**
-   - How should plugins handle ambiguous or incomplete hardware information?
-   - Probably should stay up to the plugin maintainer to decide.
+    - How should plugins handle ambiguous or incomplete hardware information?
+    - Probably should stay up to the plugin maintainer to decide.
 
 4. **How to maintain a source-of-truth**
     - Everybody who build CUDA-accelerated Wheel Variants need to use **exactly** the metadata that will
