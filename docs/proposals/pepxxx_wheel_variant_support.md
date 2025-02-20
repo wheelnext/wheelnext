@@ -1,4 +1,4 @@
-# PEP ### - External Wheel Hosting
+# PEP ### - Wheel Variants
 
 | Resource            | Link                                                                                                                                     |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -56,6 +56,8 @@ their hardware).
 compiled in.
 
 - A library maintainer wants to provide packages of their game library using different graphics backends.
+
+- SciPy wants to provide packages built against different BLAS libraries, like OpenBLAS and Accelerate on macOS. This is something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull/2#discussion_r1957200935)
 
 - Manylinux standard doesn’t cover all use-cases: [github.com/pypa/manylinux/issues/1725](https://github.com/pypa/manylinux/issues/1725)
 
