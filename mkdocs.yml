@@ -25,7 +25,6 @@ theme:
 nav:
   - "index.md"
   - "philosophy_and_design_space.md"
-  - "community_updates.md"
   - "WheelNext Proposals":
       - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
       - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
@@ -35,6 +34,7 @@ nav:
       - "Build Isolation Bypass": "proposals/pepxxx_build_isolation_bypass.md"
       - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
   - "glossary.md"
+  - "slidedecks_resources.md"
 
 plugins:
   - search
