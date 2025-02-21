@@ -21,4 +21,4 @@ The content for this website is
 ## Acknowledgements
 
 - Initial development effort was led by [NVIDIA](http://nvidia.com/)
-- Many ideas, formulations and this template are inhereted from [PyPackaging Native](https://github.com/pypackaging-native/pypackaging-native)
+- Many ideas, formulations and this template are inherited from [PyPackaging Native](https://github.com/pypackaging-native/pypackaging-native)

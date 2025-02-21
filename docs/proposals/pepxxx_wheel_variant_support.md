@@ -13,7 +13,7 @@ Current mechanisms for distinguishing Python Wheels (i.e Python ABI version, OS,
 insufficient for modern hardware diversity, particularly for environments requiring specialized dependencies such as
 high performance computing, accelerated computing (GPU, FPGA, ASIC, etc.), etc.
 
-This proposal introduces `Wheel Variants`, a mechanism for publish platform-dependant wheels and selecting the most suitable
+This proposal introduces `Wheel Variants`, a mechanism for publishing platform-dependent wheels and selecting the most suitable
 package variant for a given platform.
 
 To enable fine-grained package selection without fragmenting the Python ecosystem, this PEP proposes:
@@ -124,7 +124,7 @@ or `variant.conf`.
 
 8. A `[uv] pip install --variant=abcd1234 package` option should be available to force installation of generic wheels.
 
-9. Platform detection can be expensive, it must be cache-able. The following caching policy might be a good start [ultimately up to the tool]
+9. Platform detection can be expensive, it must be cache-able. The following caching policy might be a good start (ultimately up to the tool):
     - Run once and cache
     - Void at restart
     - Void at plugin update
@@ -132,7 +132,7 @@ or `variant.conf`.
 
 ## Backward Compatibility
 
-The introduction of `Wheel Variants` does not break existing `installer` [`pip/uv/etc.`] versions, as older versions
+The introduction of `Wheel Variants` does not break existing `installer` (`pip`, `uv`, etc.) versions, as older versions
 will simply ignore variant wheels. This is ensured by modifying the standard wheel filename regex ensures that legacy
 `pip` versions do not mistakenly install incompatible variants.
 
@@ -158,7 +158,7 @@ A prototype implementation has been developed, demonstrating:
 
 - `variantlib`, the library handling plugin registration and variant selection.
 
-- Demo `Provider Plugins` capable of detecting `fictional  hardware` and `fictional technology`
+- Demo `Provider Plugins` capable of detecting `fictional  hardware` and `fictional technology`.
 
 - A modified version of `pip` integrating variant-aware package resolution.
 
@@ -197,7 +197,7 @@ Several alternative approaches were considered and ultimately rejected:
     - Everybody who build CUDA-accelerated Wheel Variants need to use **exactly** the metadata that will
     be provided to installers.
     - Same logic for CPU, every `AVX512` accelerated package need to highlight that feature in the exact same way.
-    - Shall we have a package like `troveclassifiers` to act as a "source of truth" ?
+    - Shall we have a package like `troveclassifiers` to act as a "source of truth"?
 
 ## Conclusion
 

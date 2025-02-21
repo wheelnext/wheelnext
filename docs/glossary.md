@@ -68,6 +68,7 @@ added as a reference.
 
 | Term | Explanation | Examples / References |
 |---|---|---|
+| Accelerated Python | TODO | TODO |
 | Architecture | In the context of packaging software, this generally refers to the CPU architecture (=ISA) | |
 | ABI Break | Failing to maintain the ABI | See [here](https://pypackaging-native.github.io/background/binary_interface/#an-example-of-an-abi-break) |
 | Binary Compatibility | Succeeding to maintain the ABI (e.g. across versions / upgrades) | See [here](https://pypackaging-native.github.io/background/binary_interface/)|
