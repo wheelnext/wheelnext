@@ -1,0 +1,26 @@
+name: Adds all issues that include the 'tracked' label to WheelNext project board
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+      - transferred
+      - labeled
+      
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - labeled
+
+jobs:
+  add-to-project:
+    name: Add issue to WheelNext Project Board
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/orgs/wheelnext/projects/4
+          github-token: ${{ secrets.CI_TOKEN }}
+          labeled: tracked
