@@ -936,7 +936,7 @@
 <p>This PEP proposes an evolution of Python Wheels standard to support hardware-specific or platform-dependent package variants.
 Current mechanisms for distinguishing Python Wheels (i.e Python ABI version, OS, CPU architecture, and Build ID) are
 insufficient for modern hardware diversity, particularly for environments requiring specialized dependencies such as
-high performance computing, accelerated computing (GPU, FPGA, ASIC, etc.), etc.</p>
+high performance computing, hardware accelerated software (GPU, FPGA, ASIC, etc.), etc.</p>
 <p>This proposal introduces <code>Wheel Variants</code>, a mechanism for publishing platform-dependent wheels and selecting the most suitable
 package variant for a given platform.</p>
 <p>To enable fine-grained package selection without fragmenting the Python ecosystem, this PEP proposes:</p>
@@ -966,10 +966,10 @@ embedded systems and AI accelerators.</p>
 <h3 id="user-stories">User Stories<a class="headerlink" href="#user-stories" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
-<p>A user wants to install a version of NumPy that is accelerated for their CPU architecture.</p>
+<p>A user wants to install a version of NumPy that is specialized for their CPU architecture.</p>
 </li>
 <li>
-<p>A user wants to install a version of PyTorch that is accelerated for their GPU architecture.</p>
+<p>A user wants to install a version of PyTorch that is specialized for their GPU architecture.</p>
 </li>
 <li>
 <p>A user wants to install a version of mpi4py that has certain features enabled (e.g. specific MPI implementations for
@@ -986,7 +986,8 @@ compiled in.</p>
 <p>A library maintainer wants to provide packages of their game library using different graphics backends.</p>
 </li>
 <li>
-<p>SciPy wants to provide packages built against different BLAS libraries, like OpenBLAS and Accelerate on macOS. This is something they <a href="https://github.com/wheelnext/wheelnext/pull/2#discussion_r1957200935">indirectly do today</a></p>
+<p>SciPy wants to provide packages built against different BLAS libraries, like OpenBLAS and Accelerate on macOS. This is
+something they <a href="https://github.com/wheelnext/wheelnext/pull/2#discussion_r1957200935">indirectly do today</a></p>
 </li>
 <li>
 <p>Manylinux standard doesn’t cover all use-cases: <a href="https://github.com/pypa/manylinux/issues/1725">github.com/pypa/manylinux/issues/1725</a></p>
@@ -1050,7 +1051,8 @@ or <code>variant.conf</code>.</p>
 <p>A <code>[uv] pip install --variant=abcd1234 package</code> option should be available to force installation of generic wheels.</p>
 </li>
 <li>
-<p>Platform detection can be expensive, it must be cache-able. The following caching policy might be a good start (ultimately up to the tool):</p>
+<p>Platform detection can be expensive, it must be cache-able. The following caching policy might be a good start
+(ultimately up to the tool):</p>
 <ul>
 <li>Run once and cache</li>
 <li>Void at restart</li>
@@ -1146,7 +1148,7 @@ platform data. To mitigate this:</p>
 <ul>
 <li>Everybody who build CUDA-accelerated Wheel Variants need to use <strong>exactly</strong> the metadata that will
 be provided to installers.</li>
-<li>Same logic for CPU, every <code>AVX512</code> accelerated package need to highlight that feature in the exact same way.</li>
+<li>Same logic for CPU, every <code>AVX512</code> specialized packages need to highlight that feature in the exact same way.</li>
 <li>Shall we have a package like <code>troveclassifiers</code> to act as a "source of truth"?</li>
 </ul>
 </li>
@@ -1177,7 +1179,7 @@ maintaining efficiency for package maintainers and repository hosts.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="February 21, 2025 16:57:20">February 21, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 8, 2025 03:17:44">March 8, 2025</span>
   </span>
 
     
