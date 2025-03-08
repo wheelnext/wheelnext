@@ -68,7 +68,6 @@ added as a reference.
 
 | Term | Explanation | Examples / References |
 |---|---|---|
-| Accelerated Python | TODO | TODO |
 | Architecture | In the context of packaging software, this generally refers to the CPU architecture (=ISA) | |
 | ABI Break | Failing to maintain the ABI | See [here](https://pypackaging-native.github.io/background/binary_interface/#an-example-of-an-abi-break) |
 | Binary Compatibility | Succeeding to maintain the ABI (e.g. across versions / upgrades) | See [here](https://pypackaging-native.github.io/background/binary_interface/)|
@@ -86,6 +85,7 @@ added as a reference.
 | `easy_install` | Deprecated method for installing Python packages, superseded by `pip install` | See [here](https://setuptools.pypa.io/en/latest/deprecated/easy_install.html) |
 | Egg | Historical format for distributing Python packages | See [here](https://setuptools.pypa.io/en/latest/deprecated/python_eggs.html) |
 | Emulation | Pretending to run on a different CPU architecture; this can be used to avoid cross-compilation | See QEMU, resp. [here](https://en.wikipedia.org/wiki/Emulator) |
+| Hardware Acceleration | Software that uses specialized hardware or hardware functions to achieve a desired objective faster. | Machine/Deep Learning with GPUs/TPUs/FPGAs/ASICs, Video Decoding/Encoding, etc. |
 | Linker | A tool to correctly find the required third-party symbols for a given project | GNU's gold, LLVM's lld, [mold](https://github.com/rui314/mold) |
 | Mamba | Alternative implementation of the `conda` CLI tool with a faster solver | See [here](https://mamba.readthedocs.io/) |
 | Manylinux | Baseline tooling to allow distributing wheels across various Linux distributions | See [PEP 600](https://peps.python.org/pep-0600/) and the PEPs it replaces |

@@ -11,7 +11,7 @@
 This PEP proposes an evolution of Python Wheels standard to support hardware-specific or platform-dependent package variants.
 Current mechanisms for distinguishing Python Wheels (i.e Python ABI version, OS, CPU architecture, and Build ID) are
 insufficient for modern hardware diversity, particularly for environments requiring specialized dependencies such as
-high performance computing, accelerated computing (GPU, FPGA, ASIC, etc.), etc.
+high performance computing, hardware accelerated software (GPU, FPGA, ASIC, etc.), etc.
 
 This proposal introduces `Wheel Variants`, a mechanism for publishing platform-dependent wheels and selecting the most suitable
 package variant for a given platform.
@@ -43,9 +43,9 @@ embedded systems and AI accelerators.
 
 ### User Stories
 
-- A user wants to install a version of NumPy that is accelerated for their CPU architecture.
+- A user wants to install a version of NumPy that is specialized for their CPU architecture.
 
-- A user wants to install a version of PyTorch that is accelerated for their GPU architecture.
+- A user wants to install a version of PyTorch that is specialized for their GPU architecture.
 
 - A user wants to install a version of mpi4py that has certain features enabled (e.g. specific MPI implementations for
 their hardware).
@@ -57,7 +57,8 @@ compiled in.
 
 - A library maintainer wants to provide packages of their game library using different graphics backends.
 
-- SciPy wants to provide packages built against different BLAS libraries, like OpenBLAS and Accelerate on macOS. This is something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull/2#discussion_r1957200935)
+- SciPy wants to provide packages built against different BLAS libraries, like OpenBLAS and Accelerate on macOS. This is
+something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull/2#discussion_r1957200935)
 
 - Manylinux standard doesn’t cover all use-cases: [github.com/pypa/manylinux/issues/1725](https://github.com/pypa/manylinux/issues/1725)
 
@@ -124,7 +125,8 @@ or `variant.conf`.
 
 8. A `[uv] pip install --variant=abcd1234 package` option should be available to force installation of generic wheels.
 
-9. Platform detection can be expensive, it must be cache-able. The following caching policy might be a good start (ultimately up to the tool):
+9. Platform detection can be expensive, it must be cache-able. The following caching policy might be a good start
+(ultimately up to the tool):
     - Run once and cache
     - Void at restart
     - Void at plugin update
@@ -196,7 +198,7 @@ Several alternative approaches were considered and ultimately rejected:
 4. **How to maintain a source-of-truth**
     - Everybody who build CUDA-accelerated Wheel Variants need to use **exactly** the metadata that will
     be provided to installers.
-    - Same logic for CPU, every `AVX512` accelerated package need to highlight that feature in the exact same way.
+    - Same logic for CPU, every `AVX512` specialized packages need to highlight that feature in the exact same way.
     - Shall we have a package like `troveclassifiers` to act as a "source of truth"?
 
 ## Conclusion

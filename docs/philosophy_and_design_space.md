@@ -33,10 +33,10 @@ wholesale revolution in the way people and tools operate.
 ### If you don't care now, you won't care later
 
 For *many* use cases and users, Python packaging is "good enough". Maybe they are building
-libraries and applications that don't ever touch the "Accelerated Python" ecosystem (see [glossary](./glossary.md)).  Python is used
-in so many domains and at such widely varying scales, from one-off scripts to large, long lived
-application platforms, and more.  The niche of problems that WheelNext is trying to solve simply
-don't affect everyone.
+libraries and applications that don't ever need "hardware acceleration or specialization" (see [glossary](./glossary.md)).  
+Python is used in so many domains and at such widely varying scales, from one-off scripts to large, 
+long lived application platforms, and more.  The niche of problems that WheelNext is trying to solve
+simply don't affect everyone.
 
 Therefore we strongly believe that if you are one of those users who doesn't care now about the
 problems WheelNext is trying to solve, you will *still* not care when the solutions are being proposed.
