@@ -33,13 +33,13 @@ wholesale revolution in the way people and tools operate.
 ### If you don't care now, you won't care later
 
 For *many* use cases and users, Python packaging is "good enough". Maybe they are building
-libraries and applications that don't ever touch the "Accelerated Python" ecosystem.  Python is used
+libraries and applications that don't ever touch the "Accelerated Python" ecosystem (see [glossary](./glossary.md)).  Python is used
 in so many domains and at such widely varying scales, from one-off scripts to large, long lived
 application platforms, and more.  The niche of problems that WheelNext is trying to solve simply
 don't affect everyone.
 
 Therefore we strongly believe that if you are one of those users who doesn't care now about the
-problems WheelNext is trying to solve, you will *still* not care when the solutions being proposed.
+problems WheelNext is trying to solve, you will *still* not care when the solutions are being proposed.
 In other words, to you, "if it ain't broke, it ain't gonna be fixed".
 
 ### Don't focus on a single tool or service
@@ -59,7 +59,7 @@ modify tools in a way that would either break the function of a previous version
 ### Be intentful and explicit on what is being broken and why
 
 Some changes or evolutions require non-backward compatible changes to be implemented. In these cases,
-it is important to be explicit on what behavior(s) or functionality(ies) needs to be modified in a non backward
+it is important to be explicit on what behavior(s) or functionality(ies) need(s) to be modified in a non backward
 compatible way, why it's important, what is to gain and why it's considered the best approach.
 
 ### Complexity in the tooling rather than user experience
@@ -92,7 +92,7 @@ we can improve and resist the temptation to fix the world.
 ### Be fully open, transparent, and collaborative
 
 All work for the WheelNext solutions is done in the open, with full transparency and collaboration,
-adhering to the spirit of Open Source.  We welcome participation from all stakeholders and
+adhering to the spirit of open source.  We welcome participation from all stakeholders and
 interested parties.  We strongly believe that solutions which represent the widest possible
 consensus will yield the best results, and the most widespread and quickest adoption across the
 ecosystem.  We'll rely on all participants to help improve proposals, implement prototypes and
