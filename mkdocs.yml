@@ -33,6 +33,12 @@ nav:
       - "Symlink Support in Wheel": "proposals/pep778_symlink_support.md"
       - "Build Isolation Bypass": "proposals/pepxxx_build_isolation_bypass.md"
       - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
+  - "WheelNext Summits":
+      - "March 21st 2025":
+          - "Workshops":
+              - "Index Priority": summits/2025_03/workshops/index_priority.md
+              - "Packaging Governance": summits/2025_03/workshops/packaging_governance.md
+              - "Wheel Variants": summits/2025_03/workshops/wheel_variants.md
   - "glossary.md"
   - "slidedecks_resources.md"
 
