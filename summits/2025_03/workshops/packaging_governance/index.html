@@ -685,36 +685,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rapid-summary-of-the-solution" class="md-nav__link">
+  <a href="#workshop-goals" class="md-nav__link">
     <span class="md-ellipsis">
-      Rapid Summary of the Solution
+      Workshop Goals
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#points-of-discussion" class="md-nav__link">
+  <a href="#summary-of-the-issues" class="md-nav__link">
     <span class="md-ellipsis">
-      Points of Discussion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#expected-deliverables" class="md-nav__link">
-    <span class="md-ellipsis">
-      Expected Deliverables
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#useful-links" class="md-nav__link">
-    <span class="md-ellipsis">
-      Useful Links
+      Summary of the Issues
     </span>
   </a>
   
@@ -861,36 +843,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rapid-summary-of-the-solution" class="md-nav__link">
+  <a href="#workshop-goals" class="md-nav__link">
     <span class="md-ellipsis">
-      Rapid Summary of the Solution
+      Workshop Goals
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#points-of-discussion" class="md-nav__link">
+  <a href="#summary-of-the-issues" class="md-nav__link">
     <span class="md-ellipsis">
-      Points of Discussion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#expected-deliverables" class="md-nav__link">
-    <span class="md-ellipsis">
-      Expected Deliverables
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#useful-links" class="md-nav__link">
-    <span class="md-ellipsis">
-      Useful Links
+      Summary of the Issues
     </span>
   </a>
   
@@ -925,70 +889,119 @@
 
 
 <h1 id="workshop-python-packaging-governance">Workshop - Python Packaging Governance<a class="headerlink" href="#workshop-python-packaging-governance" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PEP Link</code></td>
+<td><a href="https://peps.python.org/pep-0772/">https://peps.python.org/pep-0772/</a></td>
+</tr>
+<tr>
+<td><code>DPO Discussion</code></td>
+<td><a href="https://discuss.python.org/t/pep-772-packaging-governance-process/79724">PEP 772, Packaging governance process</a></td>
+</tr>
+<tr>
+<td><code>Github Repository</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <h2 id="abstract">Abstract<a class="headerlink" href="#abstract" title="Permanent link">&para;</a></h2>
-<p>In this workshop, we address the critical challenges in [Problem Being Addressed]. Our goal is to bring together
-community members to collaborate on solutions that will improve the overall ecosystem.</p>
-<h2 id="rapid-summary-of-the-solution">Rapid Summary of the Solution<a class="headerlink" href="#rapid-summary-of-the-solution" title="Permanent link">&para;</a></h2>
+<p><a href="https://peps.python.org/pep-0772/">PEP 772</a> proposes to formalize Python packaging governance.
+Packaging is extremely important to Python's past, current, and future success, and needs a formal,
+elected decision-making body in order to prioritize and evolve packaging standards, tools, and
+services.</p>
+<p>PEP 772 is largely modeled on <a href="https://peps.python.org/pep-0013/">PEP 13</a>, the governing document
+establishing the Python Steering Council, which is responsible for the evolution of the Python
+language, the CPython reference implementation, and the standard library.  The Python Package
+Authority (PyPA) was established via <a href="https://peps.python.org/pep-0609/">PEP 609</a>, which does not
+have a community elected decision making body, with ad hoc meeting.  The PyPA provides opinions,
+insights, and feedback, on packaging standards and decisions, but doesn't itself make binding
+decisions.  The PyPA is defined by the group of projects under its umbrella, rather than elected
+individuals with mandates to make such binding decisions.</p>
+<p>There is also a <a href="https://wiki.python.org/psf/PackagingWG">Packaging Working Group</a> operating under
+the authority of the Python Software Foundation, tasked to support the larger efforts of improving
+and maintaining the packaging ecosystem in Python through fundraising and disbursement of raised
+funds.</p>
+<p>Meanwhile, the Steering Council has established <a href="https://github.com/python/steering-council/blob/main/process/standing-delegations.md#pypa-delegations">standing
+delegations</a>
+for decisions over aspects of the packaging ecosystem:</p>
+<ul>
+<li>Package Distribution Metadata PEPs: Paul Moore</li>
+<li>Package Index Interface PEPs: Donald Stufft</li>
+</ul>
+<p>These mostly informal arrangements lead to several problems, which PEP 772 attempts to address:</p>
+<ul>
+<li>While the individuals with standing delegates are clearly highly experienced experts, the
+  packaging ecosystem is much too diverse to burden any single person with all the decision making
+  responsibilities.  A larger elected body reduces the <a href="https://en.wikipedia.org/wiki/Bus_factor">bus
+  factor</a> and ensures a more robust and resilient
+  governance structure.</li>
+<li>As with any single apex for decision making, biases, time constraints, and a narrow focus may lead
+  to delays in critical decision making or decisions that miss important requirements from areas
+  outside their area of expertise.  A larger elected body will naturally have a more global view of
+  the ecosystem.</li>
+<li>With only standing delegations from the Steering Council as the basis for their authority, the
+  decision making is less accountable to the vast Python packaging community.  While the current
+  standing delegates are all well-known and respected leaders in Python packaging, their priorities
+  may not always reflect the priorities of the wider community.  A larger elected body is, by
+  definition, accountable to the voting members by way of the democratic election process, and the
+  voting membership is by proxy accountable to all stakeholders in the Python packaging community.</li>
+</ul>
+<p>To address these and other problems, PEP 772 proposes to formalize packaging governance under a
+Packaging Council, with a structure largely modeled on PEP 13's establishment of the Python Steering
+Council.  The Packaging Council will consist of five elected members (in two rotating cohorts) which
+will have broad authority over packaging standards, and the <a href="https://packaging.python.org/">Python Packaging User
+Guide</a>, as well as a mandate to establish processes for making
+binding decisions over packaging tools and services.  The Python Steering Council would then change
+its standing delegations to give authority to the Package Council for decisions within the packaging
+ecosystem, and the PSF Board would be encouraged to formally deprecate the Packaging Working Group.
+While the PyPA would -- at least initially -- continue to exist, both the Packaging Council and the
+PyPA would be tasked with establishing decision making processes for projects under the PyPA
+umbrella.</p>
+<h2 id="workshop-goals">Workshop Goals<a class="headerlink" href="#workshop-goals" title="Permanent link">&para;</a></h2>
+<p>During the <a href="https://discuss.python.org/t/pep-772-packaging-governance-process/79724">DPO
+discussions</a> a number of
+important issues were identified. These are currently under discussion among the PEP authors, with
+an update expected to be posted in the next few weeks.  The intent of the PEP 772 authors is to have
+a PEP ready for Steering Council pronouncement and PSF adoption by the time of the <a href="https://us.pycon.org/2025/">2025 US
+PyCon</a> conference.</p>
+<p>While the Wheel Next summit isn't directly tasked with providing input into these issues,
+because of the nature of its participants, the summit provides a unique opportunity to gather
+important feedback on these topics.  It's anticipated that many of the participants of the Wheel
+Next summit may eventually become voting members of packaging community, and possibly Packaging
+Council members themselves.</p>
+<h2 id="summary-of-the-issues">Summary of the Issues<a class="headerlink" href="#summary-of-the-issues" title="Permanent link">&para;</a></h2>
 <p>During this workshop, we will explore and discuss several key points:</p>
 <ul>
-<li><strong>[Point of Discussion 1]:</strong> [Brief Description]</li>
-<li><strong>[Point of Discussion 2]:</strong> [Brief Description]</li>
-<li><strong>[Point of Discussion 3]:</strong> [Brief Description]</li>
-<li><strong>[Point of Discussion 4]:</strong> [Brief Description]</li>
-</ul>
-<h2 id="points-of-discussion">Points of Discussion<a class="headerlink" href="#points-of-discussion" title="Permanent link">&para;</a></h2>
-<ul>
-<li>
-<p><strong>[Discussion Topic 1]:</strong></p>
-<ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
-</ul>
-</li>
-<li>
-<p><strong>[Discussion Topic 2]:</strong></p>
-<ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
-</ul>
-</li>
-<li>
-<p><strong>[Discussion Topic 3]:</strong></p>
-<ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
-</ul>
-</li>
-<li>
-<p><strong>[Discussion Topic 4]:</strong></p>
-<ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
-</ul>
-</li>
-</ul>
-<h2 id="expected-deliverables">Expected Deliverables<a class="headerlink" href="#expected-deliverables" title="Permanent link">&para;</a></h2>
-<p>By the end of the workshop, we aim to achieve the following deliverables:</p>
-<ul>
-<li>[Deliverable 1]</li>
-<li>[Deliverable 2]</li>
-<li>[Deliverable 3]</li>
-<li>[Deliverable 4]</li>
-</ul>
-<h2 id="useful-links">Useful Links<a class="headerlink" href="#useful-links" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://wheelnext.dev">Link Title 1</a></li>
-<li><a href="https://wheelnext.dev/">Link Title 2</a></li>
-<li><a href="https://wheelnext.dev/">Link Title 3</a></li>
-<li><a href="https://wheelnext.dev/">Link Title 4</a></li>
+<li><strong>Initial Seeding of the Voting Membership:</strong> This is probably the most critical issue to resolve
+  before the PEP can be pronounced upon.  Much of the evolving responsibility of the Packaging
+  Council will be determined over time, including how the voting membership will grow to be fully
+  representative of the Python packaging community, while still maintaining a functional voting membership.
+  However, the initial seeding of that membership is critically important.</li>
+<li><strong>Communication and Inclusion of the Wider Community:</strong> The landscape of packaging stakeholders is
+  vast and likely unknowable.  Included are individual package maintainers and producers, large
+  corporate users, a multitude of package consumers, packaging tool builders, maintainers of systems
+  and services such as PyPI and other third party indexes, etc.  Very likely, most of these
+  stakeholders aren't involved in discussion on <a href="https://discuss.python.org">DPO</a>, and yet they will
+  be directly affected by the decisions of the Packaging Council.  How does the Packaging Council
+  ensure that their voices are heard, that its work is widely disseminated, and that communication
+  is both effective and widespread?  Are there other forums that should be included in the
+  discussions, or at least informed regularly to encourage their participation on DPO?</li>
 </ul>
 <h2 id="organizers">Organizers<a class="headerlink" href="#organizers" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Organizer 1:</strong> [Name, Company, Email - if want to share]</li>
+<li><strong>Organizer 1:</strong> Barry Warsaw, NVIDIA / Python Core Developer / Python Steering Council member; barry@python.org</li>
 <li><strong>Organizer 2:</strong> [Name, Company, Email - if want to share]</li>
 <li><strong>Organizer 3:</strong> [Name, Company, Email - if want to share]</li>
 </ul>
-<p>We look forward to your participation and contributions to making [Subject of Workshop] more efficient and robust!</p>
+<p>We look forward to your participation and contributions to making the Python Packaging Council
+discussions more efficient and robust!</p>
 
 
 
@@ -1011,7 +1024,7 @@ community members to collaborate on solutions that will improve the overall ecos
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 10, 2025 16:38:19">March 10, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 11, 2025 00:34:59">March 11, 2025</span>
   </span>
 
     
