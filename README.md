@@ -36,7 +36,7 @@ uvx --with-requirements requirements.txt mkdocs build
 or build the docs locally and serve them over local HTTP:
 
 ```sh
-uvx --with-requirements requirements.txt mkdocs build
+uvx --with-requirements requirements.txt mkdocs serve
 ```
 
 ## Code of Conduct
