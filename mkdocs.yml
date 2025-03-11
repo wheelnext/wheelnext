@@ -25,6 +25,7 @@ theme:
 nav:
   - "index.md"
   - "philosophy_and_design_space.md"
+  # - "Python Packaging Governance": packaging_governance.md
   - "WheelNext Proposals":
       - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
       - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
@@ -37,7 +38,6 @@ nav:
       - "March 21st 2025":
           - "Workshops":
               - "Index Priority": summits/2025_03/workshops/index_priority.md
-              - "Packaging Governance": summits/2025_03/workshops/packaging_governance.md
               - "Wheel Variants": summits/2025_03/workshops/wheel_variants.md
   - "glossary.md"
   - "slidedecks_resources.md"
