@@ -2,73 +2,74 @@ site_name: WheelNext
 repo_url: https://github.com/wheelnext/wheelnext
 
 theme:
-  name: material
-  features:
-    - header.autohide
-      #    - navigation.tabs
-      #    - navigation.tabs.sticky
-  palette:
-    # Palette toggle for dark mode
-    - scheme: slate
-      primary: indigo
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
+    name: material
+    features:
+        - header.autohide
+          #    - navigation.tabs
+          #    - navigation.tabs.sticky
+    palette:
+        # Palette toggle for dark mode
+        - scheme: slate
+          primary: indigo
+          toggle:
+              icon: material/brightness-4
+              name: Switch to light mode
 
-    # Palette toggle for light mode
-    - scheme: default
-      primary: blue grey
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
+        # Palette toggle for light mode
+        - scheme: default
+          primary: blue grey
+          toggle:
+              icon: material/brightness-7
+              name: Switch to dark mode
 
 nav:
-  - "index.md"
-  - "philosophy_and_design_space.md"
-  # - "Python Packaging Governance": packaging_governance.md
-  - "WheelNext Proposals":
-      - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
-      - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
-      - "Default Extra": "proposals/pep771_default_extras.md"
-      - "How To Reinvent the Wheel": "proposals/pep777_how_to_reinvent_the_wheel.md"
-      - "Symlink Support in Wheel": "proposals/pep778_symlink_support.md"
-      - "Build Isolation Bypass": "proposals/pepxxx_build_isolation_bypass.md"
-      - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
-  - "WheelNext Summits":
-      - "March 21st 2025":
-          - "Workshops":
-              - "Index Priority": summits/2025_03/workshops/index_priority.md
-              - "Wheel Variants": summits/2025_03/workshops/wheel_variants.md
-  - "glossary.md"
-  - "slidedecks_resources.md"
+    - "index.md"
+    - "philosophy_and_design_space.md"
+    # - "Python Packaging Governance": packaging_governance.md
+    - "WheelNext Proposals":
+          - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
+          - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
+          - "Default Extra": "proposals/pep771_default_extras.md"
+          - "How To Reinvent the Wheel": "proposals/pep777_how_to_reinvent_the_wheel.md"
+          - "Symlink Support in Wheel": "proposals/pep778_symlink_support.md"
+          - "Build Isolation Bypass": "proposals/pepxxx_build_isolation_bypass.md"
+          - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
+    - "WheelNext Summits":
+          - "2025 Summit":
+                - "Welcome !": "summits/2025_03/index.md"
+                - "Workshops":
+                      - "Index Priority": summits/2025_03/workshops/index_priority.md
+                      - "Wheel Variants": summits/2025_03/workshops/wheel_variants.md
+    - "glossary.md"
+    - "slidedecks_resources.md"
 
 plugins:
-  - search
-  - git-revision-date-localized:
-      enable_creation_date: true
+    - search
+    - git-revision-date-localized:
+          enable_creation_date: true
 # - git-authors
 # - git-committers:
 #     repository: rgommers/pypi-painpoints
 #     token: !ENV GH_TOKEN
 
 markdown_extensions:
-  - admonition
-  - attr_list
-  - footnotes
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.tabbed:
-      alternate_style: true
-  - tables
-  - toc:
-      permalink: true
+    - admonition
+    - attr_list
+    - footnotes
+    - pymdownx.details
+    - pymdownx.superfences
+    - pymdownx.tabbed:
+          alternate_style: true
+    - tables
+    - toc:
+          permalink: true
 
 extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/wheelnext/wheelnext
-    - icon: material/license
-      link: https://github.com/wheelnext/wheelnext/blob/main/LICENSE
+    social:
+        - icon: fontawesome/brands/github
+          link: https://github.com/wheelnext/wheelnext
+        - icon: material/license
+          link: https://github.com/wheelnext/wheelnext/blob/main/LICENSE
 
 extra_css:
-  - assets/css/style.css
+    - assets/css/style.css
