@@ -4,7 +4,7 @@
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `PEP Link`          | `To Be Published`                                                                                                                        |
 | `DPO Discussion`    | [Implementation variants: rehashing and refocusing](https://discuss.python.org/t/implementation-variants-rehashing-and-refocusing/54884) |
-| `Github Repository` | <https://github.com/wheelnext/pep_wheel_variants>                                                                                        |
+| `Github Repository` | <https://github.com/wheelnext/pep_xxx_wheel_variants>                                                                                        |
 
 ## Abstract
 

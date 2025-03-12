@@ -2,56 +2,64 @@
 
 ## Abstract
 
-In this workshop, we address the critical challenges in [Problem Being Addressed]. Our goal is to bring together
-community members to collaborate on solutions that will improve the overall ecosystem.
+In this workshop, we will focus on brainstorming about the best way to deliver the
+This workshop will focus on the Python [Wheel Variant proposal](/proposals/pepxxx_wheel_variant_support/), which enables
+hardware-specific and platform-dependent package variants to address modern hardware diversity. It proposes a system for
+building, packaging, publishing and installing the most suitable package variant for a given platform without
+fragmenting the Python ecosystem.
+
+## Definition
+
+A **Wheel Variant** is a Python Wheel specialized for a given platform (hardware, software, etc.).
 
 ## Rapid Summary of the Solution
 
-During this workshop, we will explore and discuss several key points:
+- **Wheel Variants System:** Enables multiple wheels for the same Python package name & version, distinguished by
+hardware-specific attributes using hash-based unique identifier.
 
-- **[Point of Discussion 1]:** [Brief Description]
-- **[Point of Discussion 2]:** [Brief Description]
-- **[Point of Discussion 3]:** [Brief Description]
-- **[Point of Discussion 4]:** [Brief Description]
+- **Provider Plugins:** Dynamically detect platform attributes and recommend suitable wheels. Plugins can interface
+with any Python installer so long as they implement the interface. They could be in any language so long the interface
+is respected.
+
+- **Backward Compatibility and Security:** Ensures compatibility with existing Python tooling by guaranteing that Wheel
+Variants will be ignored by non Wheel Variant enabled installers.
 
 ## Points of Discussion
 
-- **[Discussion Topic 1]:**
-    - [Sub-topic or Detail 1]
-    - [Sub-topic or Detail 2]
+Many aspects of the proposal need some in-depth thinking and discussions.
+We would like to keep the discussion "reasonably non technical and more focused on user experience".
 
-- **[Discussion Topic 2]:**
-    - [Sub-topic or Detail 1]
-    - [Sub-topic or Detail 2]
-
-- **[Discussion Topic 3]:**
-    - [Sub-topic or Detail 1]
-    - [Sub-topic or Detail 2]
-
-- **[Discussion Topic 4]:**
-    - [Sub-topic or Detail 1]
-    - [Sub-topic or Detail 2]
+- **[UX: Package Installation Workflow]:**
+    - Shall there be a flag to "enable" variants: `pip install --allow_variants <package>`
+    - How do you request a specific `variant` to be installed: `I would like an ARMv8.1a package please`
+    - How do you build `lockfiles`. Shall it contain any `variant` information ?
+<br><br>
+- **[UX: Packaging Building Workflow]:**
+    - What would be a "good approach" for a `Provider Plugin` to "inform the build backend" what Variant Metadata to inject.
+    - Arbitry metadata will lead to some chaos. How do we keep a sense of "structure" without
+    a centralized entity (shall it be decentralized)?
+    - How do we help package maintainer to select "reasonable sets of variants" to build instead of projects doing
+    something widly different.
+    - How shall we provide a "build matrix experience" for a given project (build my project for these X many variants).
 
 ## Expected Deliverables
 
-By the end of the workshop, we aim to achieve the following deliverables:
-
-- [Deliverable 1]
-- [Deliverable 2]
-- [Deliverable 3]
-- [Deliverable 4]
+By the end of the workshop, we aim to converge to some ideas, strategies and consensus to tackle the aforementioned questions.
 
 ## Useful Links
 
-- [Link Title 1](https://wheelnext.dev)
-- [Link Title 2](https://wheelnext.dev/)
-- [Link Title 3](https://wheelnext.dev/)
-- [Link Title 4](https://wheelnext.dev/)
+- [Wheel Variant Proposal](/proposals/pepxxx_wheel_variant_support/)
+- [Discussion on discuss.python.org](https://discuss.python.org/t/implementation-variants-rehashing-and-refocusing/54884)
+- [Tutorial and Working Demo of Wheel Variants](https://github.com/wheelnext/pep_xxx_wheel_variants)
+- [PyPackaging Native ~ Packaging projects with GPU code](https://pypackaging-native.github.io/key-issues/gpus/)
+- [PyPackaging Native ~ Distributing a package containing SIMD code](https://pypackaging-native.github.io/key-issues/simd_support/ )
 
-## Organizers
+## Workshop Organizers
 
-- **Organizer 1:** [Name, Company, Email - if want to share]
-- **Organizer 2:** [Name, Company, Email - if want to share]
-- **Organizer 3:** [Name, Company, Email - if want to share]
+- **Jonathan Dekhtiar:** NVIDIA - jdekhtiar @ nvidia.com
+- **Ralf Gommers:** Quansight - [Email - if you want to share]
+- **Eli Uriegas:** Meta - [Email - if you want to share]
 
-We look forward to your participation and contributions to making [Subject of Workshop] more efficient and robust!
+<hr>
+
+We look forward to your participation and contributions to making Wheel Variants a reality!
