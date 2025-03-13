@@ -21,7 +21,7 @@ hardware-specific attributes using hash-based unique identifier.
 with any Python installer so long as they implement the interface. They could be in any language so long the interface
 is respected.
 
-- **Backward Compatibility and Security:** Ensures compatibility with existing Python tooling by guaranteing that Wheel
+- **Backward Compatibility and Security:** Ensures compatibility with existing Python tooling by guaranteeing that Wheel
 Variants will be ignored by non Wheel Variant enabled installers.
 
 ## Points of Discussion
