@@ -54,28 +54,35 @@ Tools with existing index priority schemes may choose to migrate to these propos
 ## Security Implications
 
 Index priority allows users to specify a trust hierarchy among indexes, limiting dependency confusion attacks. It
-complements but does not replace [PEP 708](https://peps.python.org/pep-0708/). Index priority addresses dependency confusion attacks from the client configuration side, while PEP 708 addresses these attacks from the package maintainer/package index side.
+complements but does not replace [PEP 708](https://peps.python.org/pep-0708/). Index priority addresses dependency
+confusion attacks from the client configuration side, while PEP 708 addresses these attacks from the package
+maintainer/package index side.
 
 ## How to teach this
 
 Promotion of the concepts should occur through message boards, GitHub issue trackers, and chat channels. Documentation
-should be updated across various platforms, including PyPUG and pip's documentation, to explain the behaviors and their implications.
+should be updated across various platforms, including PyPI and pip's documentation, to explain the behaviors and their implications.
 
 ## Reference Implementation
 
-The uv project demonstrates index priority, albeit without the notion of "index groups" with its default behavior. A reference implementation for a Python-based
-tool is underway at https://github.com/pypa/pip/pull/13210. The plan includes opt-in settings, enhanced output, and tracking of
-index usage.
+The uv project demonstrates index priority, albeit without the notion of "index groups" with its default behavior. A
+reference implementation for a Python-based tool is underway at https://github.com/pypa/pip/pull/13210. The plan
+includes opt-in settings, enhanced output, and tracking of index usage.
 
 ## Rejected Ideas
 
 - Setting up a proxy/mirror server, as it requires hosting and may not be accessible in all environments.
 - Using build tags and local version specifiers, which are not always viable and have limitations.
-- Relying solely on PEP 708, which does not address implementation variants among indexes and does not allow sufficient user control of valid indexes.
+- Relying solely on PEP 708, which does not address implementation variants among indexes and does not allow sufficient
+user control of valid indexes.
 - Namespacing, which does not improve trust expression among indexes as effectively as this proposal.
 
 ## Open issues
 
-- Ensuring that different indexes do not have conflicting metadata for the same package, or de-conflicting the metadata by treating the metadata for each index independently (caching scheme change).
-- Communicating potential unintuitive behaviors with index priority, such as lack of updates from higher-priority indexes. This issue has already been socialized to some extent thanks to uv's implementation of index priority.
-- Developing tools to validate the sanity of a set of indexes and support installers in identifying confusing issues. This problem is not unique to index priority, and these kinds of tools would help avoid confusion with any handling of more than one index.
+- Ensuring that different indexes do not have conflicting metadata for the same package, or de-conflicting the metadata
+by treating the metadata for each index independently (caching scheme change).
+- Communicating potential unintuitive behaviors with index priority, such as lack of updates from higher-priority
+indexes. This issue has already been socialized to some extent thanks to uv's implementation of index priority.
+- Developing tools to validate the sanity of a set of indexes and support installers in identifying confusing issues.
+This problem is not unique to index priority, and these kinds of tools would help avoid confusion with any handling of
+more than one index.
