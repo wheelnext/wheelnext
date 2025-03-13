@@ -36,8 +36,8 @@ We would like to keep the discussion "reasonably non technical and more focused 
     - What would be a "good approach" for a `Provider Plugin` to "inform the build backend" what Variant Metadata to inject.
     - Arbitrary metadata will lead to some chaos. How do we keep a sense of "structure" without
     a centralized entity (shall it be decentralized)?
-    - How do we help package maintainer to select "reasonable sets of variants" to build instead of projects doing
-    something widly different.
+    - How do we help package maintainers select "reasonable sets of variants" to build instead of projects doing
+    something wildly different.
     - How shall we provide a "build matrix experience" for a given project (build my project for these X many variants).
 
 ## Expected Deliverables
