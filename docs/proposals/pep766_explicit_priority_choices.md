@@ -71,7 +71,7 @@ index usage.
 
 - Setting up a proxy/mirror server, as it requires hosting and may not be accessible in all environments.
 - Using build tags and local version specifiers, which are not always viable and have limitations.
-- Relying solely on PEP 708, which does not address implementation variants among indexes.
+- Relying solely on PEP 708, which does not address implementation variants among indexes and does not allow sufficient user control of valid indexes.
 - Namespacing, which does not improve trust expression among indexes as effectively as this proposal.
 
 ## Open issues
