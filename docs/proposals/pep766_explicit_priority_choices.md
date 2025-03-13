@@ -63,7 +63,7 @@ should be updated across various platforms, including PyPUG and pip's documentat
 
 ## Reference Implementation
 
-The uv project demonstrates index priority with its default behavior. A reference implementation for a Python-based
+The uv project demonstrates index priority, albeit without the notion of "index groups" with its default behavior. A reference implementation for a Python-based
 tool is underway at https://github.com/pypa/pip/pull/13210. The plan includes opt-in settings, enhanced output, and tracking of
 index usage.
 
