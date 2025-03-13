@@ -38,7 +38,8 @@ issues of trust, security, and user expectations.
 
 - Resolves packages one index at a time, preferring packages from higher-priority indexes.
 - Provides stability and predictability, avoiding "surprise" updates.
-- Requires caching and lockfiles to include the index origin.
+- Requires modification of caching and lockfile schemes to include the index origin of a package.
+- Relaxes the assumption that all files with the same filename will be identical.
 
 ### Mirroring
 
