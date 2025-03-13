@@ -4,7 +4,7 @@
 ## Foreword
 
 We are excited to count among our ranks numerous key contributors to so many key project of the Python Open Source Ecosystem, and
-So many companies / groups / organizations who recognized the value of fixing the issues WheelNext is trying to approach.
+so many companies / groups / organizations who recognized the value of advancing the state of Python packaging through the WheelNext initiative.
 
 Below you will find the list of communities, projects and companies involved in making WheelNext great !
 
