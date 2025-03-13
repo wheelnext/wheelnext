@@ -64,7 +64,7 @@ should be updated across various platforms, including PyPUG and pip's documentat
 ## Reference Implementation
 
 The uv project demonstrates index priority with its default behavior. A reference implementation for a Python-based
-tool, such as pip, will be provided if necessary. The plan includes opt-in settings, enhanced output, and tracking of
+tool is underway at https://github.com/pypa/pip/pull/13210. The plan includes opt-in settings, enhanced output, and tracking of
 index usage.
 
 ## Rejected Ideas
