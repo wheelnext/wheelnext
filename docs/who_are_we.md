@@ -22,7 +22,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Scikit-Build: https://scikit-build.readthedocs.io/en/latest/
 - Scikit-Learn: https://scikit-learn.org/
 - Triton: <https://openai.com/index/triton/>
-- UV: <https://docs.astral.sh/uv/>
+- uv: <https://docs.astral.sh/uv/>
 - XGBoost: <https://xgboost.readthedocs.io/en/stable/>
 
 ## Companies (alphabetic order)
