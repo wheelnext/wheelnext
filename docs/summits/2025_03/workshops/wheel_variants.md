@@ -32,7 +32,7 @@ We would like to keep the discussion "reasonably non technical and more focused 
     - How do you request a specific `variant` to be installed: `I would like an ARMv8.1a package please`
     - How do you build `lockfiles`. Shall it contain any `variant` information ?
 <br><br>
-- **[UX: Packaging Building Workflow]:**
+- **[UX: Package Building Workflow]:**
     - What would be a "good approach" for a `Provider Plugin` to "inform the build backend" what Variant Metadata to inject.
     - Arbitrary metadata will lead to some chaos. How do we keep a sense of "structure" without
     a centralized entity (shall it be decentralized)?
