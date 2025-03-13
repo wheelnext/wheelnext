@@ -76,6 +76,6 @@ index usage.
 
 ## Open issues
 
-- Ensuring that different indexes do not have conflicting metadata for the same package.
+- Ensuring that different indexes do not have conflicting metadata for the same package, or de-conflicting the metadata by treating the metadata for each index independently (caching scheme change).
 - Communicating potential issues with index priority, such as lack of updates from higher-priority indexes.
 - Developing tools to validate the sanity of a set of indexes and support installers in identifying confusing issues.
