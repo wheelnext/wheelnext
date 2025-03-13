@@ -54,7 +54,7 @@ Tools with existing index priority schemes may choose to migrate to these propos
 ## Security Implications
 
 Index priority allows users to specify a trust hierarchy among indexes, limiting dependency confusion attacks. It
-complements but does not replace PEP 708, which addresses dependency confusion attacks from a different angle.
+complements but does not replace PEP 708. Index priority addresses dependency confusion attacks from the client configuration side, while PEP 708 addresses these attacks from the package maintainer/package index side.
 
 ## How to teach this
 
