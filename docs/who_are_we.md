@@ -31,6 +31,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Anaconda: <https://www.anaconda.com/>
 - Astral: <https://astral.sh/>
 - Google: <https://about.google/>
+- Intel: <https://www.intel.com/>
 - Meta: <https://about.meta.com/>
 - NVIDIA: <https://www.nvidia.com/en-us/>
 - OpenAI: <https://openai.com/>
