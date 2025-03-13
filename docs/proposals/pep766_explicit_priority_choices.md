@@ -49,7 +49,7 @@ issues of trust, security, and user expectations.
 ## Backward Compatibility
 
 This proposal does not mandate changes for any installer but introduces new terminology and behaviors that tools can adopt.
-Compatibility concerns may arise if tools choose to implement index priority differently from their current behavior.
+Tools with existing index priority schemes may choose to migrate to these proposed behaviors, or keep on their current paths.
 
 ## Security Implications
 
