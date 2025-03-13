@@ -35,5 +35,5 @@ Below you will find the list of communities, projects and companies involved in 
 - NVIDIA: <https://www.nvidia.com/en-us/>
 - OpenAI: <https://openai.com/>
 - Probabl.ai: <https://probabl.ai/>
-- QuanSight: <https://quansight.com/>
+- Quansight: <https://quansight.com/>
 - Red Hat: <https://www.redhat.com/en>
