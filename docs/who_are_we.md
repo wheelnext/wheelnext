@@ -12,7 +12,7 @@ Below you will find the list of communities, projects and companies involved in 
 
 - AstroPy: https://www.astropy.org/
 - Conda: <https://docs.conda.io/projects/conda/en/stable/>
-- GPU-Mode: <https://github.com/gpu-mode>
+- GPU MODE: <https://github.com/gpu-mode>
 - JAX: <https://docs.jax.dev/en/latest/>
 - NumFocus: <https://numfocus.org/>
 - NumPy: <https://numpy.org/>
