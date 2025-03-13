@@ -436,6 +436,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version Priority
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#index-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      Index Priority
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mirroring" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mirroring
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -939,6 +972,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version Priority
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#index-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      Index Priority
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mirroring" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mirroring
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1038,15 +1104,71 @@
 </tbody>
 </table>
 <h2 id="abstract">Abstract<a class="headerlink" href="#abstract" title="Permanent link">&para;</a></h2>
+<p>This proposal addresses the behavior of Python package installers when handling multiple indexes. It introduces the concepts
+of "version priority" and "index priority" to create a common vocabulary for community discussions and tool
+implementations. "Version priority" combines indexes before resolving distributions, while "index priority" handles
+each index individually in order.</p>
 <h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
+<p>Python package users often need to specify indexes other than PyPI due to various reasons such as file size limitations,
+implementation variants, corporate policies, and local builds. Current installer behavior with multiple indexes,
+particularly in pip, can lead to unexpected outcomes. This proposal aims to provide clarity and predictability in
+handling multiple indexes by defining explicit priority choices.</p>
 <h2 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h2>
+<p>The divergence in handling multiple indexes among Python installers, such as pip and uv, necessitates a standardized
+approach. This proposal seeks to create a common vocabulary and predictable behavior for package resolution, addressing
+issues of trust, security, and user expectations.</p>
 <h2 id="specification">Specification<a class="headerlink" href="#specification" title="Permanent link">&para;</a></h2>
+<h3 id="version-priority">Version Priority<a class="headerlink" href="#version-priority" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Combines indexes before selecting the best package version.</li>
+<li>Suitable when all indexes are equally trusted and well-behaved.</li>
+<li>Can lead to unexpected outcomes if indexes have different content or trust levels.</li>
+</ul>
+<h3 id="index-priority">Index Priority<a class="headerlink" href="#index-priority" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Resolves packages one index at a time, preferring packages from higher-priority indexes.</li>
+<li>Provides stability and predictability, avoiding "surprise" updates.</li>
+<li>Requires modification of caching and lockfile schemes to include the index origin of a package.</li>
+<li>Relaxes the assumption that all files with the same filename will be identical.</li>
+</ul>
+<h3 id="mirroring">Mirroring<a class="headerlink" href="#mirroring" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Index priority can break the use case of identical content across multiple indexes.</li>
+<li>User-definable index groups can help preserve mirroring functionality.</li>
+</ul>
 <h2 id="backward-compatibility">Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Permanent link">&para;</a></h2>
+<p>This proposal does not mandate changes for any installer but introduces new terminology and behaviors that tools can adopt.
+Tools with existing index priority schemes may choose to migrate to these proposed behaviors, or keep on their current paths.</p>
 <h2 id="security-implications">Security Implications<a class="headerlink" href="#security-implications" title="Permanent link">&para;</a></h2>
+<p>Index priority allows users to specify a trust hierarchy among indexes, limiting dependency confusion attacks. It
+complements but does not replace <a href="https://peps.python.org/pep-0708/">PEP 708</a>. Index priority addresses dependency
+confusion attacks from the client configuration side, while PEP 708 addresses these attacks from the package
+maintainer/package index side.</p>
 <h2 id="how-to-teach-this">How to teach this<a class="headerlink" href="#how-to-teach-this" title="Permanent link">&para;</a></h2>
+<p>Promotion of the concepts should occur through message boards, GitHub issue trackers, and chat channels. Documentation
+should be updated across various platforms, including PyPI and pip's documentation, to explain the behaviors and their implications.</p>
 <h2 id="reference-implementation">Reference Implementation<a class="headerlink" href="#reference-implementation" title="Permanent link">&para;</a></h2>
+<p>The uv project demonstrates index priority, albeit without the notion of "index groups" with its default behavior. A
+reference implementation for a Python-based tool is underway at https://github.com/pypa/pip/pull/13210. The plan
+includes opt-in settings, enhanced output, and tracking of index usage.</p>
 <h2 id="rejected-ideas">Rejected Ideas<a class="headerlink" href="#rejected-ideas" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Setting up a proxy/mirror server, as it requires hosting and may not be accessible in all environments.</li>
+<li>Using build tags and local version specifiers, which are not always viable and have limitations.</li>
+<li>Relying solely on PEP 708, which does not address implementation variants among indexes and does not allow sufficient
+user control of valid indexes.</li>
+<li>Namespacing, which does not improve trust expression among indexes as effectively as this proposal.</li>
+</ul>
 <h2 id="open-issues">Open issues<a class="headerlink" href="#open-issues" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Ensuring that different indexes do not have conflicting metadata for the same package, or de-conflicting the metadata
+by treating the metadata for each index independently (caching scheme change).</li>
+<li>Communicating potential unintuitive behaviors with index priority, such as lack of updates from higher-priority
+indexes. This issue has already been socialized to some extent thanks to uv's implementation of index priority.</li>
+<li>Developing tools to validate the sanity of a set of indexes and support installers in identifying confusing issues.
+This problem is not unique to index priority, and these kinds of tools would help avoid confusion with any handling of
+more than one index.</li>
+</ul>
 
 
 
@@ -1069,7 +1191,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="February 12, 2025 20:53:54">February 12, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 13, 2025 19:34:01">March 13, 2025</span>
   </span>
 
     
