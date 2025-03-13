@@ -77,5 +77,5 @@ index usage.
 ## Open issues
 
 - Ensuring that different indexes do not have conflicting metadata for the same package, or de-conflicting the metadata by treating the metadata for each index independently (caching scheme change).
-- Communicating potential issues with index priority, such as lack of updates from higher-priority indexes.
+- Communicating potential unintuitive behaviors with index priority, such as lack of updates from higher-priority indexes. This issue has already been socialized to some extent thanks to uv's implementation of index priority.
 - Developing tools to validate the sanity of a set of indexes and support installers in identifying confusing issues. This problem is not unique to index priority, and these kinds of tools would help avoid confusion with any handling of more than one index.
