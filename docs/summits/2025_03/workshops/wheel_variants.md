@@ -56,7 +56,7 @@ By the end of the workshop, we aim to converge to some ideas, strategies and con
 
 - **Jonathan Dekhtiar:** NVIDIA - jdekhtiar @ nvidia.com
 - **Ralf Gommers:** Quansight - [Email - if you want to share]
-- **Eli Uriegas:** Meta - [Email - if you want to share]
+- **Eli Uriegas:** Meta - eliuriegas @ meta.com
 
 <hr>
 
