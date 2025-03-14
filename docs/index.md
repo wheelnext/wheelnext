@@ -6,7 +6,7 @@
 WheelNext is an open-source initiative (<https://github.com/wheelnext> & <https://wheelnext.dev/>) aiming to improve the
 user experience in the Python packaging ecosystem, specifically around the scientific computing and machine/deep learning space.
 The current state of Python packaging was designed and implemented at a time before the increasingly complex needs these use-cases demand were prevalent.
-Through WheelNext, we aim to evolve Python packaging standards to better address the needs of this important segement, while retaining its effectiveness for the overall ecosystem.
+Through WheelNext, we aim to evolve Python packaging standards to better address the needs of this important segment, while retaining its effectiveness for the overall ecosystem.
 
 Many of the problems and gaps are summarized on the following website: <https://pypackaging-native.github.io/>
 Objective: To improve the state of packaging for Python native code, making it easier to build, distribute, and install
