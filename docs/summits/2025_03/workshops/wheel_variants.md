@@ -6,8 +6,8 @@ In this workshop, we will focus on brainstorming about the best way to deliver t
 Python [Wheel Variant proposal](/proposals/pepxxx_wheel_variant_support/), which enables
 hardware-specific and platform-dependent package variants to address modern hardware diversity. It proposes a system for
 building, packaging, publishing and installing the most suitable package variant for a given platform without
-fragmenting the Python ecosystem. As well this proposal also focuses on how to minimize the maintenance impact towards
-`pip` maintainers while attempting to enabling the most flexible ecosystem possible.
+fragmenting the Python ecosystem. It also focuses on how to minimize the maintenance impact for
+build frontend (`pip`, `uv`, installer`) maintainers while attempting to enabling the most flexible ecosystem possible.
 
 ## Definition
 
