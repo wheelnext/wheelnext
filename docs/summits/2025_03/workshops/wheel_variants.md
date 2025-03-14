@@ -35,6 +35,7 @@ We would like to keep the discussion "reasonably non technical and more focused 
     - Shall there be a flag to "enable" variants: `pip install --allow_variants <package>`
     - How do you request a specific `variant` to be installed: `I would like an ARMv8.1a package please`
     - How do you build `lockfiles`. Shall it contain any `variant` information ?
+    - Shall you "inform the user" a Variant was installed and which one ? Only in `--verbose` ?
 
 <br>
 
@@ -45,6 +46,12 @@ We would like to keep the discussion "reasonably non technical and more focused 
     - How do we help package maintainers select a "reasonable set of variants" to build instead of every projects doing
     something wildly different.
     - How shall we provide a "build matrix experience" for a given project (build my project for these X many variants).
+
+<br>
+
+- **[UX: Package Indexes & Distribution]:**
+    - What metadata should they expose through APIs and through web UI, and any other packaging tools
+    (uploaders like twine, auditing and vendoring tools like auditwheel, etc.).
 
 ## Expected Deliverables
 
