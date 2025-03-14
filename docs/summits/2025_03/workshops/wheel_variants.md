@@ -20,7 +20,7 @@ A **Wheel Variant** is a Python Wheel specialized for a given platform at a fine
 hardware-specific attributes using hash-based unique identifier.
 
 - **Provider Plugins:** Dynamically detect platform attributes and recommend suitable wheels. Plugins can interface
-with any Python installer so long as they implement the interface. They could be in any language so long the interface
+with any Python installer as long as they implement the interface. They could be in any language as long the interface
 is respected.
 
 - **Backward Compatibility and Security:** Ensures compatibility with existing Python tooling by guaranteeing that Wheel
