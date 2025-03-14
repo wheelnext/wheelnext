@@ -56,5 +56,6 @@ The content for this website is [maintained on GitHub](https://github.com/wheeln
 
 ## Acknowledgements
 
-- Initial kickoff effort was led by [NVIDIA](http://nvidia.com/), now aggregating efforts from many companies.
+- Initial kickoff effort was led by [NVIDIA](http://nvidia.com/), now aggregating efforts from many companies,
+ maintainers of open source projects, and other contributors.
 - Many ideas, formulations and this template are inherited from [PyPackaging Native](https://github.com/pypackaging-native/pypackaging-native)
