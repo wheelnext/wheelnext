@@ -30,6 +30,7 @@ Below you will find the list of communities, projects and companies involved in 
 
 - AMD: <https://www.amd.com/>
 - Anaconda: <https://www.anaconda.com/>
+- Aperio Software <https://aperiosoftware.com/>
 - Astral: <https://astral.sh/>
 - Google: <https://about.google/>
 - Intel: <https://www.intel.com/>
