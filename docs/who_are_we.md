@@ -12,6 +12,7 @@ Below you will find the list of communities, projects and companies involved in 
 ## Open-Source Projects (alphabetic order)
 
 - Conda: <https://conda.org>
+- CuPy: <https://cupy.dev/>
 - GPU MODE: <https://github.com/gpu-mode>
 - JAX: <https://docs.jax.dev/en/latest/>
 - NumFocus: <https://numfocus.org/>
