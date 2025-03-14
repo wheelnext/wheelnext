@@ -3,15 +3,15 @@
 
 ## Foreword
 
-We are excited to count among our ranks numerous key contributors to so many key projects of the Python Open Source Ecosystem, and
-so many companies / groups / organizations who recognized the value of advancing the state of Python packaging through the WheelNext initiative.
+We are excited to count among our ranks numerous key contributors to so many key projects of the Python Open Source
+Ecosystem, and so many companies / groups / organizations who recognized the value of advancing the state of Python
+packaging through the WheelNext initiative.
 
 Below you will find the list of communities, projects and companies involved in making WheelNext great!
 
 ## Open-Source Projects (alphabetic order)
 
-- AstroPy: https://www.astropy.org/
-- Conda: <https://docs.conda.io/projects/conda/en/stable/>
+- Conda: <https://conda.org>
 - GPU MODE: <https://github.com/gpu-mode>
 - JAX: <https://docs.jax.dev/en/latest/>
 - NumFocus: <https://numfocus.org/>
