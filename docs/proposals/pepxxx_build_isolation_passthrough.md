@@ -23,7 +23,7 @@ scenarios involving C/C++/Rust/CUDA/etc. dependencies.
 
 With the adoption of `pyproject.toml` as specified in [PEP 518](http://peps.python.org/pep-0518/), build isolation has
 become a standard practice in Python packaging. However, there are cases where build isolation can be counterproductive,
-especially when dealing with packages that depend on the ABI of other packages. This proposal aims to provide a solution
+especially when dealing with packages that depend on the (unstable) ABI of other packages. This proposal aims to provide a solution
 for such cases, improving the efficiency and flexibility of the build process.
 
 ## Rationale
