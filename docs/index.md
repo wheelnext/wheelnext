@@ -13,28 +13,41 @@ these use cases demand were prevalent. Through WheelNext, we aim to evolve Pytho
 the needs of this important segment, while retaining its effectiveness for the overall ecosystem.
 
 Many of the problems and gaps are summarized on the following website: <https://pypackaging-native.github.io/>
-Objective: To improve the state of packaging for Python native code, making it easier to build, distribute, and install
-Python packages with complex native dependencies.
+The WheelNext objective is to improve the state of packaging for Python native
+code, making it easier to build, distribute, and install Python packages with
+complex native dependencies.
 
 ### Key Issues Identified:
 
-- **Complexity:** Due to the wide variety of microarchitectures, execution environments, and highly specialized
-dependencies, building and packaging native code in Python is complex and often inconsistent across different platforms.
-- **Tooling Fragmentation:** Multiple tools and standards exist, leading to confusion and inefficiency.
-- **Dependency Management:** Managing dependencies, especially for native code, is challenging.
-- **Installation Issues:** Users often face difficulties installing packages with native code due to environment
-specific issues.
-- **Lack of Standardization:** There is no single, standardized way to handle native packaging in Python.
-- **No Package Index Prioritization:** The main package installer `pip` is lacking ability to prioritize a given package
-index over another.
+Due to the wide variety of GPUs, CPU microarchitectures, execution environments, and highly specialized dependencies,
+building and packaging native code as Python wheels is complex and often inconsistent across different platforms.
+
+*Authors* of Python packages that need to support:
+
+- GPUs and other hardware accelerators
+- CPU capabilities beyond the CPU family (SIMD instruction sets)
+- dependencies meant to be used as a single runtime or shared library rather than vendored (e.g., OpenMP, MPI, BLAS, LAPACK)
+- dependencies that rely on symlinks
+
+are struggling with how to produce and distribute wheels.
+
+*Users* of such Python packages get a very suboptimal user experience, because the wheels often are not (or cannot)
+be hosted on PyPI as of today, and they have to use package installers that don't offer ways to select wheels that
+match their local hardware or installation preferences.
+
+WheelNext aims to solve these wheel format and usability issues to the extent possible. Concrete issues already being
+worked on include:
+
 - **Lack of Symlink Support:** Very important to reduce package and better support native code. Yet it is lacking in the
 packaging standard.
 - **No ability to build a binary for a specific microarchitecture:** We are lacking the ability to describe with
 specificity the platform, microarchitecture, or other execution environment details is supported by a given binary
 (ARMv7, ARMv8, etc.)
+- **No Package Index Prioritization:** The main package installer `pip` is lacking ability to prioritize a given package
+index over another.
 - **No clear path to support non-default package indexes:** Using private / corporate package indexes is common
 practice, yet the tooling ecosystem does not have a solid and reliable way to support these workflows. Namely,
-since it's difficult to safely and precisely specify how multiply enabled indices interoperate to resolve the requested
+since it's difficult to safely and precisely specify how multiple enabled indices interoperate to resolve the requested
 top-level and transitive dependencies
 
 ### Approach to Proposed Solutions:
