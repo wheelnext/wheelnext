@@ -36,6 +36,9 @@ We would like to keep the discussion "reasonably non technical and more focused 
     - How do you request a specific `variant` to be installed: `I would like an ARMv8.1a package please`
     - How do you build `lockfiles`. Shall it contain any `variant` information ?
     - Shall you "inform the user" a Variant was installed and which one ? Only in `--verbose` ?
+    - Shall the installer prioritize the "highest version" available or the "best variant" available (even if it means
+    lower version - how much lower ?)
+    - How shall we define "best variant match" ?
 
 <br>
 
