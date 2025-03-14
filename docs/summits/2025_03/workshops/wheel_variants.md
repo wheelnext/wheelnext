@@ -61,7 +61,7 @@ By the end of the workshop, we aim to converge to some ideas, strategies and con
 ## Workshop Organizers
 
 - **Jonathan Dekhtiar:** NVIDIA - jdekhtiar @ nvidia.com
-- **Ralf Gommers:** Quansight - [Email - if you want to share]
+- **Ralf Gommers:** Quansight - rgommers @ quansight.com
 - **Eli Uriegas:** Meta - eliuriegas @ meta.com
 
 <hr>
