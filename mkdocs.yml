@@ -32,7 +32,7 @@ nav:
       - "Default Extra": "proposals/pep771_default_extras.md"
       - "How To Reinvent the Wheel": "proposals/pep777_how_to_reinvent_the_wheel.md"
       - "Symlink Support in Wheel": "proposals/pep778_symlink_support.md"
-      - "Build Isolation Bypass": "proposals/pepxxx_build_isolation_bypass.md"
+      - "Build Isolation Passthrough": "proposals/pepxxx_build_isolation_passthrough.md"
       - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
   - "WheelNext Summits":
       - "2025 Summit":
