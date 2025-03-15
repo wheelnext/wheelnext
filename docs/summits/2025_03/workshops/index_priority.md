@@ -25,9 +25,9 @@ Several elements of the proposal require thorough analysis and discussion. We ai
     - How important is it that tools implement a common index priority scheme? Are there any guidelines we can offer to package authors as far as "we think your tool would benefit your users because _____ and ____"
 
 - **[UX: Open issues]:**
-    - How to ensure that different indexes do not have conflicting metadata for the same package, or de-conflicting the metadata by treating the metadata for each index independently (caching scheme change).
-    - How to communicate potential unintuitive behaviors with index priority, such as lack of updates from higher-priority indexes.
-    - Should we develop tools to validate the sanity of a set of indexes and support installers in identifying confusing issues. This problem is not unique to index priority, and these kinds of tools would help avoid confusion with any handling of more than one index.
+    - How to ensure that different indexes do not have conflicting metadata for the same package, or de-conflicting the metadata by treating the metadata for each index independently (caching scheme change) ?
+    - How to communicate potential unintuitive behaviors with index priority, such as lack of updates from higher-priority indexes ?
+    - Should we develop tools to validate the sanity of a set of indexes and support installers in identifying confusing issues ? This problem is not unique to index priority, and these kinds of tools would help avoid confusion with any handling of more than one index.
 
 - **[UX: Specifying and configuring Index Priority groups]:**
     Existing configuration will continue to work exactly as-is. Users wishing to utilize the priority feature would need to add new configuration.
