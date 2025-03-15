@@ -15,7 +15,7 @@ solutions.
 Concretely, here are ways to contribute. During the event:
 
 - Share your own goals, pain points, and ideas
-- Pick one of the 3 workshops to attend and collaborate on a small concrete deliverable
+- Pick one of the two workshops to attend and collaborate on a small concrete deliverable
 - Find out how you can help accelerate WheelNext development (prototypes, PEPs,
   working out use cases & user stories, etc.)
 
@@ -30,3 +30,6 @@ After the event:
 - If you're a package author affected by limitations in Python packaging that
   seem in scope for WheelNext: please ensure that your use case is captured and
   addressed.
+- Participate in Python packaging [community discussions on Discourse](https://discuss.python.org/c/packaging/14)
+  for the PEPs you care about when they get submitted. This is quite important
+  for moving PEPs forward - **if you only can do one thing, please do this**.
