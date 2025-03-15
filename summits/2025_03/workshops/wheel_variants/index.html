@@ -729,6 +729,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#rapid-summary-of-the-solution" class="md-nav__link">
     <span class="md-ellipsis">
       Rapid Summary of the Solution
@@ -765,9 +774,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#organizers" class="md-nav__link">
+  <a href="#workshop-organizers" class="md-nav__link">
     <span class="md-ellipsis">
-      Organizers
+      Workshop Organizers
     </span>
   </a>
   
@@ -883,6 +892,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#rapid-summary-of-the-solution" class="md-nav__link">
     <span class="md-ellipsis">
       Rapid Summary of the Solution
@@ -919,9 +937,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#organizers" class="md-nav__link">
+  <a href="#workshop-organizers" class="md-nav__link">
     <span class="md-ellipsis">
-      Organizers
+      Workshop Organizers
     </span>
   </a>
   
@@ -948,69 +966,85 @@
 
 <h1 id="workshop-python-wheel-variants">Workshop - Python Wheel Variants<a class="headerlink" href="#workshop-python-wheel-variants" title="Permanent link">&para;</a></h1>
 <h2 id="abstract">Abstract<a class="headerlink" href="#abstract" title="Permanent link">&para;</a></h2>
-<p>In this workshop, we address the critical challenges in [Problem Being Addressed]. Our goal is to bring together
-community members to collaborate on solutions that will improve the overall ecosystem.</p>
+<p>In this workshop, we will focus on brainstorming about the best way to deliver the
+Python <a href="/proposals/pepxxx_wheel_variant_support/">Wheel Variant proposal</a>, which enables
+hardware-specific and platform-dependent package variants to address modern hardware diversity. It proposes a system for
+building, packaging, publishing and installing the most suitable package variant for a given platform without
+fragmenting the Python ecosystem. It also focuses on how to minimize the maintenance impact for
+build frontend (<code>pip</code>, <code>uv</code>, installer`) maintainers while attempting to enabling the most flexible ecosystem possible.</p>
+<h2 id="definition">Definition<a class="headerlink" href="#definition" title="Permanent link">&para;</a></h2>
+<p>A <strong>Wheel Variant</strong> is a Python Wheel specialized for a given platform at a finer level than what existing tags provide
+(hardware, software, etc.).</p>
 <h2 id="rapid-summary-of-the-solution">Rapid Summary of the Solution<a class="headerlink" href="#rapid-summary-of-the-solution" title="Permanent link">&para;</a></h2>
-<p>During this workshop, we will explore and discuss several key points:</p>
 <ul>
-<li><strong>[Point of Discussion 1]:</strong> [Brief Description]</li>
-<li><strong>[Point of Discussion 2]:</strong> [Brief Description]</li>
-<li><strong>[Point of Discussion 3]:</strong> [Brief Description]</li>
-<li><strong>[Point of Discussion 4]:</strong> [Brief Description]</li>
+<li>
+<p><strong>Wheel Variants System:</strong> Enables multiple wheels for the same Python package name &amp; version, distinguished by
+hardware-specific attributes using hash-based unique identifier.</p>
+</li>
+<li>
+<p><strong>Provider Plugins:</strong> Dynamically detect platform attributes and recommend suitable wheels. Plugins can interface
+with any Python installer as long as they implement the interface. They could be in any language as long the interface
+is respected.</p>
+</li>
+<li>
+<p><strong>Backward Compatibility and Security:</strong> Ensures compatibility with existing Python tooling by guaranteeing that Wheel
+Variants will be ignored by non Wheel Variant enabled installers.</p>
+</li>
 </ul>
 <h2 id="points-of-discussion">Points of Discussion<a class="headerlink" href="#points-of-discussion" title="Permanent link">&para;</a></h2>
+<p>Many aspects of the proposal need some in-depth thinking and discussions.
+We would like to keep the discussion "reasonably non technical and more focused on user experience".</p>
 <ul>
-<li>
-<p><strong>[Discussion Topic 1]:</strong></p>
-<ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
+<li><strong>[UX: Package Installation Workflow]:</strong><ul>
+<li>Shall there be a flag to "enable" variants: <code>pip install --allow_variants &lt;package&gt;</code></li>
+<li>How do you request a specific <code>variant</code> to be installed: <code>I would like an ARMv8.1a package please</code></li>
+<li>How do you build <code>lockfiles</code>. Shall it contain any <code>variant</code> information ?</li>
+<li>Shall you "inform the user" a Variant was installed and which one ? Only in <code>--verbose</code> ?</li>
+<li>Shall the installer prioritize the "highest version" available or the "best variant" available (even if it means
+lower version - how much lower ?)</li>
+<li>How shall we define "best variant match" ?</li>
 </ul>
 </li>
-<li>
-<p><strong>[Discussion Topic 2]:</strong></p>
+</ul>
+<p><br></p>
 <ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
+<li><strong>[UX: Package Building Workflow]:</strong><ul>
+<li>What would be a "good approach" for a <code>Provider Plugin</code> to "inform the build backend" what Variant Metadata to inject.</li>
+<li>Arbitrary metadata will lead to some chaos. How do we keep a sense of "structure" without
+a centralized entity (shall it be decentralized)?</li>
+<li>How do we help package maintainers select a "reasonable set of variants" to build instead of every projects doing
+something wildly different.</li>
+<li>How shall we provide a "build matrix experience" for a given project (build my project for these X many variants).</li>
 </ul>
 </li>
-<li>
-<p><strong>[Discussion Topic 3]:</strong></p>
-<ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
 </ul>
-</li>
-<li>
-<p><strong>[Discussion Topic 4]:</strong></p>
+<p><br></p>
 <ul>
-<li>[Sub-topic or Detail 1]</li>
-<li>[Sub-topic or Detail 2]</li>
+<li><strong>[UX: Package Indexes &amp; Distribution]:</strong><ul>
+<li>What metadata should they expose through APIs and through web UI, and any other packaging tools
+(uploaders like twine, auditing and vendoring tools like auditwheel, etc.).</li>
 </ul>
 </li>
 </ul>
 <h2 id="expected-deliverables">Expected Deliverables<a class="headerlink" href="#expected-deliverables" title="Permanent link">&para;</a></h2>
-<p>By the end of the workshop, we aim to achieve the following deliverables:</p>
-<ul>
-<li>[Deliverable 1]</li>
-<li>[Deliverable 2]</li>
-<li>[Deliverable 3]</li>
-<li>[Deliverable 4]</li>
-</ul>
+<p>By the end of the workshop, we aim to converge to some ideas, strategies and consensus to tackle the aforementioned questions.</p>
 <h2 id="useful-links">Useful Links<a class="headerlink" href="#useful-links" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://wheelnext.dev">Link Title 1</a></li>
-<li><a href="https://wheelnext.dev/">Link Title 2</a></li>
-<li><a href="https://wheelnext.dev/">Link Title 3</a></li>
-<li><a href="https://wheelnext.dev/">Link Title 4</a></li>
+<li><a href="/proposals/pepxxx_wheel_variant_support/">Wheel Variant Proposal</a></li>
+<li><a href="https://discuss.python.org/t/implementation-variants-rehashing-and-refocusing/54884">Discussion on discuss.python.org</a></li>
+<li><a href="https://github.com/wheelnext/pep_xxx_wheel_variants">Tutorial and Working Demo of Wheel Variants</a></li>
+<li><a href="https://pypackaging-native.github.io/key-issues/gpus/">PyPackaging Native ~ Packaging projects with GPU code</a></li>
+<li><a href="https://pypackaging-native.github.io/key-issues/simd_support/">PyPackaging Native ~ Distributing a package containing SIMD code</a></li>
 </ul>
-<h2 id="organizers">Organizers<a class="headerlink" href="#organizers" title="Permanent link">&para;</a></h2>
+<h2 id="workshop-organizers">Workshop Organizers<a class="headerlink" href="#workshop-organizers" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Organizer 1:</strong> [Name, Company, Email - if want to share]</li>
-<li><strong>Organizer 2:</strong> [Name, Company, Email - if want to share]</li>
-<li><strong>Organizer 3:</strong> [Name, Company, Email - if want to share]</li>
+<li><strong>Jonathan Dekhtiar:</strong> NVIDIA - jdekhtiar @ nvidia.com</li>
+<li><strong>Ralf Gommers:</strong> Quansight - rgommers @ quansight.com</li>
+<li><strong>Eli Uriegas:</strong> Meta - eliuriegas @ meta.com</li>
 </ul>
-<p>We look forward to your participation and contributions to making [Subject of Workshop] more efficient and robust!</p>
+<hr>
+
+<p>We look forward to your participation and contributions to making Wheel Variants a reality!</p>
 
 
 
@@ -1033,7 +1067,7 @@ community members to collaborate on solutions that will improve the overall ecos
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 10, 2025 16:38:19">March 10, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 15, 2025 05:58:34">March 15, 2025</span>
   </span>
 
     
