@@ -52,8 +52,9 @@ The proposed feature would allow specifying packages that should bypass build is
 For example:
 
 ```toml
-[tool.uv]
-no-build-isolation-package = ["package1", "package2"]
+[build-system]
+# [...]
+build_isolation_passthrough = ["package1", "package2"]
 ```
 
 If the specified packages are present on the user's machine, they will be used directly without downloading them during
