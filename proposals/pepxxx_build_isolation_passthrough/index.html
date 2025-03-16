@@ -20,7 +20,7 @@
     
     
       
-        <title>Build Isolation Bypass - WheelNext</title>
+        <title>Build Isolation Passthrough - WheelNext</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pep-build-isolation-bypass" class="md-skip">
+        <a href="#pep-build-isolation-passthrough" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Build Isolation Bypass
+              Build Isolation Passthrough
             
           </span>
         </div>
@@ -456,7 +456,7 @@
           
   
   <span class="md-ellipsis">
-    Build Isolation Bypass
+    Build Isolation Passthrough
     
   </span>
   
@@ -468,7 +468,7 @@
         
   
   <span class="md-ellipsis">
-    Build Isolation Bypass
+    Build Isolation Passthrough
     
   </span>
   
@@ -515,12 +515,60 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Rationale">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Challenges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Proposed Solution
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
   <a href="#specification" class="md-nav__link">
     <span class="md-ellipsis">
       Specification
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pyprojecttoml-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      pyproject.toml Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Details
     </span>
   </a>
   
@@ -551,9 +599,28 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="How to teach this">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
+  <a href="#tutorials-and-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tutorials and Examples
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reference-implementation" class="md-nav__link">
     <span class="md-ellipsis">
       Reference Implementation
@@ -561,11 +628,49 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#rejected-ideas" class="md-nav__link">
     <span class="md-ellipsis">
       Rejected Ideas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rejected Ideas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#disabling-build-isolation-entirely" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disabling Build Isolation Entirely
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Dependency Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
     </span>
   </a>
   
@@ -930,12 +1035,60 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Rationale">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current Challenges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Proposed Solution
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
   <a href="#specification" class="md-nav__link">
     <span class="md-ellipsis">
       Specification
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pyprojecttoml-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      pyproject.toml Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Details
     </span>
   </a>
   
@@ -966,9 +1119,28 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="How to teach this">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
+  <a href="#tutorials-and-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tutorials and Examples
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reference-implementation" class="md-nav__link">
     <span class="md-ellipsis">
       Reference Implementation
@@ -976,11 +1148,49 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#rejected-ideas" class="md-nav__link">
     <span class="md-ellipsis">
       Rejected Ideas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rejected Ideas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#disabling-build-isolation-entirely" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disabling Build Isolation Entirely
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Dependency Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
     </span>
   </a>
   
@@ -1014,7 +1224,7 @@
   
 
 
-<h1 id="pep-build-isolation-bypass">PEP ### - Build Isolation Bypass<a class="headerlink" href="#pep-build-isolation-bypass" title="Permanent link">&para;</a></h1>
+<h1 id="pep-build-isolation-passthrough">PEP ### - Build Isolation Passthrough<a class="headerlink" href="#pep-build-isolation-passthrough" title="Permanent link">&para;</a></h1>
 <table>
 <thead>
 <tr>
@@ -1038,15 +1248,89 @@
 </tbody>
 </table>
 <h2 id="abstract">Abstract<a class="headerlink" href="#abstract" title="Permanent link">&para;</a></h2>
+<p>In modern software development, build isolation is a critical practice that ensures the consistency and reliability of
+builds. It involves creating an isolated environment where dependencies and build tools are controlled and do not
+interfere with the system or other projects. However, there are scenarios where certain tools or dependencies need to
+be accessed directly from the host environment.</p>
+<p>This proposal outlines a strategy to enhance the build isolation mechanism introduced by
+<a href="http://peps.python.org/pep-0518/">PEP 518</a>. Build isolation passthrough is a mechanism that allows
+selective access to host resources while maintaining the integrity of the isolated environment.
+This feature aims to address the challenges faced when a package depends on the ABI of another package, particularly in
+scenarios involving C/C++/Rust/CUDA/etc. dependencies.</p>
 <h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
+<p>With the adoption of <code>pyproject.toml</code> as specified in <a href="http://peps.python.org/pep-0518/">PEP 518</a>, build isolation has
+become a standard practice in Python packaging. However, there are cases where build isolation can be counterproductive,
+especially when dealing with packages that depend on the (unstable) ABI of other packages. This proposal aims to provide a solution
+for such cases, improving the efficiency and flexibility of the build process.</p>
 <h2 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h2>
+<h3 id="current-challenges">Current Challenges<a class="headerlink" href="#current-challenges" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Version Mismatch</strong>: During the build phase, pip may download a different version of a dependency than the one
+present on the user's machine, leading to potential compatibility issues.</li>
+<li><strong>Unreleased/Local Dependencies</strong>: Some dependencies may not be publicly released or may exist only as development versions
+on a developer's machine.</li>
+<li><strong>Large Dependencies</strong>: Downloading large dependencies repeatedly can significantly increase build times, especially
+for packages with large binary dependencies like Artificial Intelligence libraries and frameworks.</li>
+</ol>
+<h3 id="proposed-solution">Proposed Solution<a class="headerlink" href="#proposed-solution" title="Permanent link">&para;</a></h3>
+<p>Allowing specific packages to opt-in to bypass build isolation for a one or many packages already present on the user's
+machine can mitigate these issues. This approach would reduce unnecessary downloads, ensure compatibility with the
+user's environment, and decrease build times.</p>
 <h2 id="specification">Specification<a class="headerlink" href="#specification" title="Permanent link">&para;</a></h2>
+<h3 id="pyprojecttoml-configuration">pyproject.toml Configuration<a class="headerlink" href="#pyprojecttoml-configuration" title="Permanent link">&para;</a></h3>
+<p>The proposed feature would allow specifying packages that should bypass build isolation in the <code>pyproject.toml</code> file.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[build-system]</span>
+<span class="c1"># [...]</span>
+<span class="n">build_isolation_passthrough</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;package1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package2&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>If the specified packages are present on the user's machine, they will be used directly without downloading them during
+the build phase. If they are not present, the build process will proceed as usual, downloading the necessary packages.</p>
+<h2 id="implementation-details">Implementation Details<a class="headerlink" href="#implementation-details" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Detection:</strong> The build system should detect the presence of the specified packages on the user's machine.</li>
+<li><strong>Fallback:</strong> If the packages are not found, the build system should fall back to the standard behavior of downloading
+the packages.</li>
+<li><strong>Compatibility:</strong> This feature should be compatible with existing build isolation mechanisms and should not require
+significant changes to the current build process.</li>
+</ul>
 <h2 id="backward-compatibility">Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Permanent link">&para;</a></h2>
+<p>The proposed feature is fully backward compatible, as it introduces an optional configuration in <code>pyproject.toml</code>. Existing
+projects that do not use this feature will continue to operate as before.</p>
 <h2 id="security-implications">Security Implications<a class="headerlink" href="#security-implications" title="Permanent link">&para;</a></h2>
+<p>There is no known security implication associated with this proposal as this proposal is about using packages already
+present on the user's machine.</p>
 <h2 id="how-to-teach-this">How to teach this<a class="headerlink" href="#how-to-teach-this" title="Permanent link">&para;</a></h2>
-<h2 id="reference-implementation">Reference Implementation<a class="headerlink" href="#reference-implementation" title="Permanent link">&para;</a></h2>
+<h3 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h3>
+<p>Comprehensive documentation should be provided, including:</p>
+<ol>
+<li>An overview of the feature and its benefits.</li>
+<li>Detailed instructions on configuring pyproject.toml to use the feature.</li>
+</ol>
+<h3 id="tutorials-and-examples">Tutorials and Examples<a class="headerlink" href="#tutorials-and-examples" title="Permanent link">&para;</a></h3>
+<p>Providing tutorials and examples will help users understand how to effectively use this feature in their projects.</p>
+<h3 id="reference-implementation">Reference Implementation<a class="headerlink" href="#reference-implementation" title="Permanent link">&para;</a></h3>
+<p>A reference implementation can be found in the <code>uv</code> tool, which already supports a similar feature:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[tool.uv]</span>
+<span class="n">no-build-isolation-package</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;package1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;package2&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>This implementation can serve as a basis for integrating the feature into <code>pip</code>.</p>
 <h2 id="rejected-ideas">Rejected Ideas<a class="headerlink" href="#rejected-ideas" title="Permanent link">&para;</a></h2>
+<h3 id="disabling-build-isolation-entirely">Disabling Build Isolation Entirely<a class="headerlink" href="#disabling-build-isolation-entirely" title="Permanent link">&para;</a></h3>
+<p>Disabling build isolation entirely (<code>--no-isolation</code>) is not a viable solution, as it negates the benefits of build
+isolation, such as ensuring a clean build environment and avoiding conflicts with the user's installed packages.</p>
+<h3 id="manual-dependency-management">Manual Dependency Management<a class="headerlink" href="#manual-dependency-management" title="Permanent link">&para;</a></h3>
+<p>Requiring users to manually manage dependencies is error-prone and can lead to inconsistent build environments.
+Automating the process through <code>pyproject.toml</code> configuration is a more reliable and user-friendly approach.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://peps.python.org/pep-0518/">PEP 518 – Specifying Minimum Build System Requirements for Python Projects</a></li>
+<li><a href="https://docs.astral.sh/uv/reference/settings/#no-build-isolation-package"><code>uv</code> Documentation ~ <code>no-build-isolation-package</code></a></li>
+</ul>
 <h2 id="open-issues">Open issues<a class="headerlink" href="#open-issues" title="Permanent link">&para;</a></h2>
+<ul>
+<li>No known issue</li>
+</ul>
 
 
 
@@ -1069,7 +1353,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="February 12, 2025 20:53:54">February 12, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 16, 2025 06:43:46">March 16, 2025</span>
   </span>
 
     
@@ -1079,7 +1363,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="February 12, 2025 20:53:54">February 12, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 16, 2025 06:43:46">March 16, 2025</span>
   </span>
 
     
