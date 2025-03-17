@@ -9,7 +9,7 @@ packaging through the WheelNext initiative.
 
 Below you will find the list of communities, projects and companies involved in making WheelNext great!
 
-## Open-Source Projects (alphabetic order)
+## Open-Source Projects
 
 - CuPy: <https://cupy.dev/>
 - GPU MODE: <https://github.com/gpu-mode>
@@ -17,12 +17,12 @@ Below you will find the list of communities, projects and companies involved in 
 - NumPy: <https://numpy.org/>
 - PyTorch: <https://pytorch.org/>
 - RAPIDS: <https://rapids.ai/>
-- scikit-build: https://scikit-build.readthedocs.io/en/latest/
-- scikit-learn: https://scikit-learn.org/
+- scikit-build: <https://scikit-build.readthedocs.io/>
+- scikit-learn: <https://scikit-learn.org/>
 - uv: <https://docs.astral.sh/uv/>
 - XGBoost: <https://xgboost.readthedocs.io/en/stable/>
 
-## Companies (alphabetic order)
+## Companies
 
 - AMD: <https://www.amd.com/>
 - Aperio Software <https://aperiosoftware.com/>
