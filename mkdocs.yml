@@ -24,6 +24,7 @@ theme:
 
 nav:
   - "index.md"
+  - "who_are_we.md"
   - "philosophy_and_design_space.md"
   # - "Python Packaging Governance": packaging_governance.md
   - "WheelNext Proposals":
