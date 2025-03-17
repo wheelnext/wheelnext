@@ -65,7 +65,29 @@ of a wide range of users and use cases.
 
 ## Contributing
 
-All contributions are very welcome and appreciated! Ways to contribute include:
+All contributions are very welcome and appreciated!
+
+| Newsletter & Monthly Meetings                                               | Project & Task Tracker                                                      |
+|:---------------------------------------------------------------------------:|:--------------------------------------------------------------------------: |
+|![contribute.wheelnext.dev](/assets/images/wheelnext_group.png){width=342px} | ![tracker.wheelnext.dev](/assets/images/wheelnext_tracker.png){width=342px} |
+| <https://contribute.wheelnext.dev>                                          |  <https://tracker.wheelnext.dev>                                            |
+
+### Ways to contribute include:
+
+#### Within WheelNext
+
+- Share news about WheelNext with others who might find it interesting or may want to pitch in
+- Help review or improve PEP drafts, website materials, and other content
+- Test current prototypes on your own use cases and provide feedback or fixes
+- If you're a maintainer of a packaging-related tool: please think about how the designs being developed in WheelNext
+will be implemented in or affect your tool, and ensure you're happy with the design and impact of it!
+- If you're a package author affected by limitations in Python packaging that seem in scope for WheelNext: please ensure
+that your use case is captured and addressed.
+- Participate in Python packaging community discussions on [Discourse](https://discuss.python.org/c/packaging/14) for
+the PEPs you care about when they get submitted. This is quite important for moving PEPs forward:
+**if you only can do one thing, please do this**.
+
+#### On this website
 
 - Improving existing content on the website: extending or clarifying
   descriptions, adding relevant references, diagrams, etc.
