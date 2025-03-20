@@ -21,6 +21,7 @@ Below you will find the list of communities, projects and companies involved in 
 - scikit-learn: <https://scikit-learn.org/>
 - uv: <https://docs.astral.sh/uv/>
 - XGBoost: <https://xgboost.readthedocs.io/en/stable/>
+- Backend.AI: <https://github.com/lablup/backend.ai/>
 
 ## Companies
 
@@ -32,3 +33,4 @@ Below you will find the list of communities, projects and companies involved in 
 - NVIDIA: <https://www.nvidia.com/en-us/>
 - Probabl.ai: <https://probabl.ai/>
 - Quansight: <https://quansight.com/>
+- Lablup Inc.: <https://lablup.com/>
