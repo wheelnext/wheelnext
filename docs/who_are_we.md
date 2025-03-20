@@ -11,10 +11,10 @@ Below you will find the list of communities, projects and companies involved in 
 
 ## Open-Source Projects
 
-- Conda: <https://conda.org>
+- Conda: <https://conda.org/>
 - CuPy: <https://cupy.dev/>
-- GPU MODE: <https://github.com/gpu-mode>
-- JAX: <https://docs.jax.dev/en/latest/>
+- GPU MODE: <https://github.com/gpu-mode/>
+- JAX: <https://docs.jax.dev/>
 - Numba: <https://numba.pydata.org/>
 - NumPy: <https://numpy.org/>
 - PyTorch: <https://pytorch.org/>
@@ -22,7 +22,7 @@ Below you will find the list of communities, projects and companies involved in 
 - scikit-build: <https://scikit-build.readthedocs.io/>
 - scikit-learn: <https://scikit-learn.org/>
 - uv: <https://docs.astral.sh/uv/>
-- XGBoost: <https://xgboost.readthedocs.io/en/stable/>
+- XGBoost: <https://xgboost.readthedocs.io/>
 
 ## Companies
 
@@ -32,8 +32,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Google: <https://about.google/>
 - Intel: <https://www.intel.com/>
 - Meta: <https://about.meta.com/>
-- NVIDIA: <https://www.nvidia.com/en-us/>
-- OpenAI: <https://openai.com/>
+- NVIDIA: <https://www.nvidia.com/>
 - Probabl.ai: <https://probabl.ai/>
 - Quansight: <https://quansight.com/>
-- Red Hat: <https://www.redhat.com/en>
+- Red Hat: <https://www.redhat.com/>
