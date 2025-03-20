@@ -11,6 +11,7 @@ Below you will find the list of communities, projects and companies involved in 
 
 ## Open-Source Projects
 
+- Backend.AI: <https://github.com/lablup/backend.ai/>
 - CuPy: <https://cupy.dev/>
 - GPU MODE: <https://github.com/gpu-mode>
 - Numba: <https://numba.pydata.org/>
@@ -28,6 +29,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Aperio Software <https://aperiosoftware.com/>
 - Astral: <https://astral.sh/>
 - Intel: <https://www.intel.com/>
+- Lablup Inc.: <https://lablup.com/>
 - Meta: <https://about.meta.com/>
 - NVIDIA: <https://www.nvidia.com/en-us/>
 - Probabl.ai: <https://probabl.ai/>
