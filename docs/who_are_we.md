@@ -16,7 +16,6 @@ Below you will find the list of communities, projects and companies involved in 
 - GPU MODE: <https://github.com/gpu-mode>
 - JAX: <https://docs.jax.dev/en/latest/>
 - Numba: <https://numba.pydata.org/>
-- NumFocus: <https://numfocus.org/>
 - NumPy: <https://numpy.org/>
 - PyTorch: <https://pytorch.org/>
 - RAPIDS: <https://rapids.ai/>
@@ -29,7 +28,6 @@ Below you will find the list of communities, projects and companies involved in 
 ## Companies
 
 - AMD: <https://www.amd.com/>
-- Anaconda: <https://www.anaconda.com/>
 - Aperio Software <https://aperiosoftware.com/>
 - Astral: <https://astral.sh/>
 - Google: <https://about.google/>
