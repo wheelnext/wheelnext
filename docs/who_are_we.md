@@ -21,7 +21,6 @@ Below you will find the list of communities, projects and companies involved in 
 - RAPIDS: <https://rapids.ai/>
 - scikit-build: <https://scikit-build.readthedocs.io/>
 - scikit-learn: <https://scikit-learn.org/>
-- Triton: <https://openai.com/index/triton/>
 - uv: <https://docs.astral.sh/uv/>
 - XGBoost: <https://xgboost.readthedocs.io/en/stable/>
 
