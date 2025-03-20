@@ -1,10 +1,10 @@
 # PEP 777 - How to Re-invent the Wheel
 
-| Resource            | Link                                                                    |
-| ------------------- | ----------------------------------------------------------------------- |
-| `PEP Link`          | <https://peps.python.org/pep-0777/>                                     |
+| Resource            | Link                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `PEP Link`          | <https://peps.python.org/pep-0777/>                                                                          |
 | `DPO Discussion`    | [PEP 777: How to Re-invent the Wheel](https://discuss.python.org/t/pep-777-how-to-re-invent-the-wheel/67484) |
-| `Github Repository` |                                                                         |
+| `Github Repository` |                                                                                                              |
 
 ## Abstract
 
@@ -24,6 +24,7 @@ is because older installers **MUST** reject wheels with unsupported major versio
 many users who haven't updated their tools.
 
 This strict requirement has blocked several valuable improvements to the wheel format, including:
+
 - Better compression methods
 - Enhanced data format capabilities
 - Improved wheel content information
@@ -40,28 +41,35 @@ changes.
 This PEP introduces several key changes to how wheel versions are handled:
 
 ### Core Metadata Changes
+
 - A new `Wheel-Version` field will be added to the Core Metadata Specification
 - This field must match the version specified in the wheel's `WHEEL` file
 - If `Wheel-Version` is absent, tools must assume the wheel version is 1.0
 - This field is not allowed in source distribution metadata
 
 ### Installation Requirements
+
 Installers must follow these steps:
+
 1. Verify that `Wheel-Version` matches between core metadata and wheel metadata
 2. Check installer compatibility with the wheel version
 3. Proceed with installation according to the Binary Distribution Format specification
 
 ### Resolver Behavior
+
 - Resolvers must check and filter out incompatible wheel versions
 - When multiple compatible wheels exist, prioritize the highest compatible version
 - Installers should warn users when skipping incompatible wheels
 
 ### File Extension Change
+
 - Future wheel versions (2.0 and beyond) will use the `.whlx` extension instead of `.whl`
 - This change allows for immediate adoption of new wheel features without breaking existing installers
 
 ### Compatibility Requirements
+
 Future wheel revisions must maintain these compatibility promises:
+
 - Stay compatible with `importlib.metadata` for all supported CPython versions
 - Maintain ZIP format as the outer container
 - Keep `.dist-info` metadata directory at the root of the zip archive without further compression
@@ -88,24 +96,30 @@ migration period.
 Several alternative approaches were considered but ultimately rejected:
 
 ### Keeping the Current Wheel Format
+
 While the wheel format has served well for over a decade, modern Python packages have evolved
 significantly. The current format can't efficiently handle larger packages with Rust or C extensions,
 nor can it properly express modern hardware acceleration requirements. Better compression and finer-grained
 compatibility tagging are needed to handle scaling of package indices.
 
 ### Tying Wheel Changes to CPython Releases
+
 This approach would make adoption predictable but has significant drawbacks:
+
 - Slower adoption for users on LTS systems
 - Unfair or unclear to users of alternative Python implementations
 - Many wheel improvements don't actually require Python version changes
 
 ### Keeping the `.whl` Extension
+
 While appealing, this would cause problems:
+
 - Current installers would try to install incompatible wheels, raising confusing errors
 - The current filename format is too restrictive for future changes such as variants
 - Build tag placement makes extending the wheel filename ambiguous
 
 ### Version-Specific Extensions (`.whl2`, `.whl3`, etc.)
+
 Using version-specific extensions like `.whl2` or `.whl3` would eliminate the need for `Wheel-Version`
 metadata and allow different wheel versions to coexist side by side. However, this approach comes with
 significant drawbacks: it would require updating system file associations for each new version, reinforce
@@ -113,12 +127,14 @@ the problematic practice of storing metadata in filenames, and could cause confu
 and internal version numbers diverge.
 
 ### Changing the Outer Container Format
+
 While changing the wheel format to something like `tar.zst` could improve compression, this approach
 would require non-standard library dependencies. Additionally, making such a fundamental change to the
 container format would make it harder to iteratively adopt changes to wheels. Future improvements can
 achieve similar benefits within the existing ZIP format, making this change unnecessary.
 
 ### Including Wheel 2.0 Specification
+
 This PEP intentionally focuses solely on establishing compatibility rules, leaving specific
 wheel 2.0 features for future proposals. This separation allows for better discussion of
 individual features and maintains focus on the core compatibility framework.
