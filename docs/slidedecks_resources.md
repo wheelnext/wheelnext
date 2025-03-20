@@ -11,3 +11,7 @@ dives, or strategic updates, you'll find a curated collection of resources to ke
 ## Engineering Presentations
 
 - [2025/02] [Wheel Variant ~ Engineering Review - SlideShow](assets/slidedecks/engineering/2025_02-WheelNext_Engineering_Review-Wheel_Variants.pdf){:target="_blank"}
+
+## Summits
+
+- [2025/03] [WheelNext Community Summit ~ Slides & Resources](summits/2025_03/slidedecks_and_resources.md)

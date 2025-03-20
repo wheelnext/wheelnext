@@ -11,6 +11,7 @@ Below you will find the list of communities, projects and companies involved in 
 
 ## Open-Source Projects
 
+- Backend.AI: <https://github.com/lablup/backend.ai/>
 - Conda: <https://conda.org/>
 - CuPy: <https://cupy.dev/>
 - GPU MODE: <https://github.com/gpu-mode/>
@@ -31,6 +32,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Astral: <https://astral.sh/>
 - Google: <https://about.google/>
 - Intel: <https://www.intel.com/>
+- Lablup Inc.: <https://lablup.com/>
 - Meta: <https://about.meta.com/>
 - NVIDIA: <https://www.nvidia.com/>
 - Probabl.ai: <https://probabl.ai/>
