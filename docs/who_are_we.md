@@ -12,8 +12,10 @@ Below you will find the list of communities, projects and companies involved in 
 ## Open-Source Projects
 
 - Backend.AI: <https://github.com/lablup/backend.ai/>
+- Conda: <https://conda.org/>
 - CuPy: <https://cupy.dev/>
-- GPU MODE: <https://github.com/gpu-mode>
+- GPU MODE: <https://github.com/gpu-mode/>
+- JAX: <https://docs.jax.dev/>
 - Numba: <https://numba.pydata.org/>
 - NumPy: <https://numpy.org/>
 - PyTorch: <https://pytorch.org/>
@@ -21,16 +23,18 @@ Below you will find the list of communities, projects and companies involved in 
 - scikit-build: <https://scikit-build.readthedocs.io/>
 - scikit-learn: <https://scikit-learn.org/>
 - uv: <https://docs.astral.sh/uv/>
-- XGBoost: <https://xgboost.readthedocs.io/en/stable/>
+- XGBoost: <https://xgboost.readthedocs.io/>
 
 ## Companies
 
 - AMD: <https://www.amd.com/>
 - Aperio Software <https://aperiosoftware.com/>
 - Astral: <https://astral.sh/>
+- Google: <https://about.google/>
 - Intel: <https://www.intel.com/>
 - Lablup Inc.: <https://lablup.com/>
 - Meta: <https://about.meta.com/>
-- NVIDIA: <https://www.nvidia.com/en-us/>
+- NVIDIA: <https://www.nvidia.com/>
 - Probabl.ai: <https://probabl.ai/>
 - Quansight: <https://quansight.com/>
+- Red Hat: <https://www.redhat.com/>
