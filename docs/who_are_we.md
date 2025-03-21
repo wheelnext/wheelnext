@@ -35,6 +35,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Lablup Inc.: <https://lablup.com/>
 - Meta: <https://about.meta.com/>
 - NVIDIA: <https://www.nvidia.com/>
+- Preferred Networks: <https://www.preferred.jp/en/>
 - Probabl.ai: <https://probabl.ai/>
 - Quansight: <https://quansight.com/>
 - Red Hat: <https://www.redhat.com/>
