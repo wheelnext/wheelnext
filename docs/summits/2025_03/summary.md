@@ -279,3 +279,64 @@ in the `conda` ecosystem.
     - Draft governance model (similar to PEP 13).
     - Solicit feedback on initial council membership.
     - Participate on the discourse thread: <https://discuss.python.org/t/pep-772-packaging-governance-process/79724>
+
+<!-- ------------------------------------------------------------------------------------------------------ -->
+
+## 3. Wheel Variants - Jonathan Dekhtiar
+
+**Key Actors & Contributors:** NVIDIA, Quansight, META/PyTorch
+
+**Details on the [Full Proposal](site:proposals/pepxxx_wheel_variant_support)**
+
+- **Takeaways**
+    - Key points:
+        - Python packaging limitations.
+        - Wheel Variant concept in Python packaging.
+        - Importance of feedback in development.
+
+    - Challenges:
+        - Current packaging solutions are unsufficient to support the scientific computing / AI / ML / DL ecosystems.
+        - Python package managers are totally hardware-unaware.
+        - No ability to describe a wheel beside extremely high level "tags" (python ABI, GCC version, OS, CPU Arch Family)
+
+    - Future considerations:
+        - Future-proof design for variants.
+        - Combination of arbitrary metadata.
+        - Shall not Impact on non-variant users.
+        - Compatibility with existing installers.
+
+- **Variant Concept in Python Packaging**
+    - Key characteristics:
+        - Variants should be arbitrary and combinable.
+        - Design should be future-proof.
+
+    - Benefits:
+        - Addresses limitations of current Python packaging.
+        - Allows for more specific hardware and software configurations.
+
+- **Feedback Importance**
+    - Value of feedback:
+        - User feedback is valuable.
+        - Feedback helps identify design issues.
+
+    - Importance in development:
+        - Crucial in identifying small issues.
+        - Improves design and functionality of the packaging system.
+
+- **Compatibility with Existing Installers**
+    - Requirements:
+        - Ensure compatibility with current installers.
+        - Avoid breaking existing systems.
+
+    - Considerations:
+        - New variant system should not break existing installers.
+        - Compatibility with non-variant aware installers.
+
+- **Technical Proposal for Variants**
+    - Definition:
+        - Variants are wheels with additional metadata.
+        - Metadata describes hardware and software configurations.
+
+    - Implementation:
+        - Allows for arbitrary and combinable specifications.
+        - Enables more specific and flexible packaging solutions.
