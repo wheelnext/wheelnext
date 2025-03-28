@@ -38,6 +38,7 @@ nav:
   - "WheelNext Summits":
       - "2025 Summit":
           - "Welcome !": "summits/2025_03/index.md"
+          - "Summary": "summits/2025_03/summary.md"
           - "Slides & Resources": "summits/2025_03/slidedecks_and_resources.md"
           - "We need your help !": "summits/2025_03/call_to_action.md"
           - "Workshops":
