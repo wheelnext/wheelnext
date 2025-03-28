@@ -1,10 +1,10 @@
 # Workshop - Python Packaging Governance
 
-| Resource            | Link                                                                |
-| ------------------- | ------------------------------------------------------------------- |
-| `PEP Link`          | <https://peps.python.org/pep-0772/>                                 |
+| Resource            | Link                                                                                                             |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `PEP Link`          | <https://peps.python.org/pep-0772/>                                                                              |
 | `DPO Discussion`    | [PEP 772, Packaging governance process](https://discuss.python.org/t/pep-772-packaging-governance-process/79724) |
-| `Github Repository` |                                                                     |
+| `Github Repository` |                                                                                                                  |
 
 ## Abstract
 
@@ -64,7 +64,6 @@ While the PyPA would -- at least initially -- continue to exist, both the Packag
 PyPA would be tasked with establishing decision making processes for projects under the PyPA
 umbrella.
 
-
 ## Workshop Goals
 
 During the [DPO
@@ -84,12 +83,12 @@ Council members themselves.
 
 During this workshop, we will explore and discuss several key points:
 
-- **Initial Seeding of the Voting Membership:** This is probably the most critical issue to resolve
+* **Initial Seeding of the Voting Membership:** This is probably the most critical issue to resolve
   before the PEP can be pronounced upon.  Much of the evolving responsibility of the Packaging
   Council will be determined over time, including how the voting membership will grow to be fully
   representative of the Python packaging community, while still maintaining a functional voting membership.
   However, the initial seeding of that membership is critically important.
-- **Communication and Inclusion of the Wider Community:** The landscape of packaging stakeholders is
+* **Communication and Inclusion of the Wider Community:** The landscape of packaging stakeholders is
   vast and likely unknowable.  Included are individual package maintainers and producers, large
   corporate users, a multitude of package consumers, packaging tool builders, maintainers of systems
   and services such as PyPI and other third party indexes, etc.  Very likely, most of these
@@ -101,9 +100,9 @@ During this workshop, we will explore and discuss several key points:
 
 ## Organizers
 
-- **Organizer 1:** Barry Warsaw, NVIDIA / Python Core Developer / Python Steering Council member; barry@python.org
-- **Organizer 2:** [Name, Company, Email - if want to share]
-- **Organizer 3:** [Name, Company, Email - if want to share]
+* **Organizer 1:** Barry Warsaw, NVIDIA / Python Core Developer / Python Steering Council member; barry@python.org
+* **Organizer 2:** [Name, Company, Email - if want to share]
+* **Organizer 3:** [Name, Company, Email - if want to share]
 
 We look forward to your participation and contributions to making the Python Packaging Council
 discussions more efficient and robust!

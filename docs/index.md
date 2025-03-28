@@ -67,10 +67,10 @@ of a wide range of users and use cases.
 
 All contributions are very welcome and appreciated!
 
-| Newsletter & Monthly Meetings                                               | Project & Task Tracker                                                      |
-|:---------------------------------------------------------------------------:|:--------------------------------------------------------------------------: |
-|![contribute.wheelnext.dev](/assets/images/wheelnext_group.png){width=342px} | ![tracker.wheelnext.dev](/assets/images/wheelnext_tracker.png){width=342px} |
-| <https://contribute.wheelnext.dev>                                          |  <https://tracker.wheelnext.dev>                                            |
+| Newsletter & Monthly Meetings                                                   | Project & Task Tracker                                                          |
+|:-------------------------------------------------------------------------------:|:------------------------------------------------------------------------------: |
+|![contribute.wheelnext.dev](site:assets/images/wheelnext_group.png){width=342px} | ![tracker.wheelnext.dev](site:assets/images/wheelnext_tracker.png){width=342px} |
+| <https://contribute.wheelnext.dev>                                              |  <https://tracker.wheelnext.dev>                                                |
 
 ### Ways to contribute include:
 

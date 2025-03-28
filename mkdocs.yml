@@ -26,7 +26,7 @@ nav:
   - "index.md"
   - "who_are_we.md"
   - "philosophy_and_design_space.md"
-  # - "Python Packaging Governance": packaging_governance.md
+  - "Python Packaging Governance": packaging_governance.md
   - "WheelNext Proposals":
       - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
       - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
@@ -50,10 +50,11 @@ plugins:
   - search
   - git-revision-date-localized:
       enable_creation_date: true
-# - git-authors
-# - git-committers:
-#     repository: rgommers/pypi-painpoints
-#     token: !ENV GH_TOKEN
+  # - git-authors
+  # - git-committers:
+  #     repository: rgommers/pypi-painpoints
+  #     token: !ENV GH_TOKEN
+  - site-urls
 
 markdown_extensions:
   - admonition

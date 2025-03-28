@@ -25,6 +25,9 @@ MD013:
 # Inline HTML: https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md033.md
 MD033: false # no-inline-html
 
+# https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md024.md
+MD024: false # Multiple headers with the same content
+
 # Without this rule suppression, the linter flags trailing punctuation in
 # headers like "## What makes Gridsome sites fast?" but we allow headers
 # like that.

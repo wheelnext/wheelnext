@@ -22,10 +22,6 @@
 			"extensions": [
 				// Python
 				"ms-python.python",
-				// Git & Github
-				"GitHub.vscode-pull-request-github",
-				// Github Actions
-				"GitHub.vscode-github-actions",
 				// GitLens
 				"eamodio.gitlens",
 				// Makefile

@@ -10,7 +10,7 @@
 
 Wheels currently do not handle symlinks well, copying content instead of making symlinks when installed. To properly
 handle distributing libraries in wheels, we propose a new `LINKS` metadata file to handle symlinks in a platform
-portable manner. This specification requires a new wheel major version, discussed in [PEP 777 - How to Re-Invent The Wheel](/proposals/pep777_how_to_reinvent_the_wheel/).
+portable manner. This specification requires a new wheel major version, discussed in [PEP 777 - How to Re-Invent The Wheel](site:proposals/pep777_how_to_reinvent_the_wheel/).
 
 ## Motivation
 
