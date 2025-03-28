@@ -20,18 +20,10 @@
 				}
 			},
 			"extensions": [
-				// Python
-				"ms-python.python",
-				// GitLens
-				"eamodio.gitlens",
-				// Makefile
-				"ms-vscode.makefile-tools",
 				// Markdown
 				"davidanson.vscode-markdownlint",
 				// YAML
 				"redhat.vscode-yaml"
-				// Add further extensions, e.g., spell checker
-				// "znck.grammarly"
 			]
 		}
 	},
