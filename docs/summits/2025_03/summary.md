@@ -191,3 +191,55 @@
         - Provide guidance on CUDA toolkit installation via Conda and address PyTorch binary size concerns
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
+
+## 2. Python Packaging Governance - Barry Warsaw
+
+### Supporting PEP 772: Establish a Packaging Council
+
+<https://peps.python.org/pep-0772/>
+
+1. Set packaging standards and roadmaps.
+2. Improve diversity of input (beyond PyPA).
+3. Partner with Python Steering Council.
+
+### Expected outcomes
+
+- A Packaging Summit at PyCon.
+- Increased community involvement in packaging decisions.
+
+### Transition from PEP 609 to PEP 772
+
+- **Background**:
+    - [PEP 609](https://peps.python.org/pep-0609/) (2019) defined Python Packaging Authority (PyPA) infrastructure and policies.
+    - Limitations of [PEP 609](https://peps.python.org/pep-0609/):
+        - Lack of a structured decision-making body.
+        - Limited authority of PyPA.
+
+- **Proposed Changes**:
+    - Establish a five-member Packaging Council to make binding decisions on packaging standards.
+    - Improve continuity with two-year terms and a focus on packaging standards.
+
+- **Importance of Packaging**
+    - **Role of PyPI**:
+        - Essential for Python's popularity.
+        - Provides necessary "batteries" for Python's functionality.
+    - **Benefits of Diverse Decision Making**:
+        - Leads to better solutions.
+        - Increases community involvement and representation.
+
+- **Community Involvement and Representation**
+    - **Initial Voting Membership**:
+        - Includes current PyPA members, packaging working group members, and core developers.
+        - Discussion on including voices from:
+            - Nonprofit organizations.
+            - Commercial entities involved in packaging.
+
+    - **Communication and Feedback**:
+        - Open PR for comments on the WheelNext repo.
+        - Effective communication channels to inform the community about packaging standards and updates.
+
+- **Action Items**
+    - Follow up on Packaging Summit details at PyCon.
+    - Draft governance model (similar to PEP 13).
+    - Solicit feedback on initial council membership.
+    - Participate on the discourse thread: <https://discuss.python.org/t/pep-772-packaging-governance-process/79724>
