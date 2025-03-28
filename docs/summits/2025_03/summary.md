@@ -460,3 +460,26 @@ Here's an executive summary in bullet points with multiple levels per category:
     - Clearly inform users that new wheel features require installer updates.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
+
+## 6. Community Contributions
+
+**Presenter:** Ralf Gommers, Eli Uriegas, Jonathan Dekhtiar
+
+### Call to Action
+
+1. Join [#wheelnext](https://discord.com/channels/803025117553754132/1279204588196597811) on PyPA Discord.
+2. Test prototypes
+3. Voice your opinion on <https://discuss.python.org/c/packaging/>
+4. Contribute to <https://github.com/orgs/wheelnext/>.
+5. Join us at PyCon for an engineering spring.
+6. Join the Google for monthly meetings: <https://contribute.wheelnext.dev>
+
+## 7. Summit Workshops
+
+### Wheel Variant Workshop
+
+Work in progress
+
+### Index Group Priority Workshop
+
+Work in progress
