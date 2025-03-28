@@ -304,58 +304,63 @@ in the `conda` ecosystem.
 
 **Details on the [Full Proposal](site:proposals/pepxxx_wheel_variant_support)**
 
-- **Takeaways**
-    - Key points:
-        - Python packaging limitations.
-        - Wheel Variant concept in Python packaging.
-        - Importance of feedback in development.
+### Takeaways
 
-    - Challenges:
-        - Current packaging solutions are unsufficient to support the scientific computing / AI / ML / DL ecosystems.
-        - Python package managers are totally hardware-unaware.
-        - No ability to describe a wheel beside extremely high level "tags" (python ABI, GCC version, OS, CPU Arch Family)
+- Key points:
+    - Python packaging limitations.
+    - Wheel Variant concept in Python packaging.
+    - Importance of feedback in development.
 
-    - Future considerations:
-        - Future-proof design for variants.
-        - Combination of arbitrary metadata.
-        - Shall not Impact on non-variant users.
-        - Compatibility with existing installers.
+- Challenges:
+    - Current packaging solutions are unsufficient to support the scientific computing / AI / ML / DL ecosystems.
+    - Python package managers are totally hardware-unaware.
+    - No ability to describe a wheel beside extremely high level "tags" (python ABI, GCC version, OS, CPU Arch Family)
 
-- **Variant Concept in Python Packaging**
-    - Key characteristics:
-        - Variants should be arbitrary and combinable.
-        - Design should be future-proof.
+- Future considerations:
+    - Future-proof design for variants.
+    - Combination of arbitrary metadata.
+    - Shall not Impact on non-variant users.
+    - Compatibility with existing installers.
 
-    - Benefits:
-        - Addresses limitations of current Python packaging.
-        - Allows for more specific hardware and software configurations.
+### Variant Concept in Python Packaging
 
-- **Feedback Importance**
-    - Value of feedback:
-        - User feedback is valuable.
-        - Feedback helps identify design issues.
+- Key characteristics:
+    - Variants should be arbitrary and combinable.
+    - Design should be future-proof.
 
-    - Importance in development:
-        - Crucial in identifying small issues.
-        - Improves design and functionality of the packaging system.
+- Benefits:
+    - Addresses limitations of current Python packaging.
+    - Allows for more specific hardware and software configurations.
 
-- **Compatibility with Existing Installers**
-    - Requirements:
-        - Ensure compatibility with current installers.
-        - Avoid breaking existing systems.
+### Feedback Importance
 
-    - Considerations:
-        - New variant system should not break existing installers.
-        - Compatibility with non-variant aware installers.
+- Value of feedback:
+    - User feedback is valuable.
+    - Feedback helps identify design issues.
 
-- **Technical Proposal for Variants**
-    - Definition:
-        - Variants are wheels with additional metadata.
-        - Metadata describes hardware and software configurations.
+- Importance in development:
+    - Crucial in identifying small issues.
+    - Improves design and functionality of the packaging system.
 
-    - Implementation:
-        - Allows for arbitrary and combinable specifications.
-        - Enables more specific and flexible packaging solutions.
+### Compatibility with Existing Installers
+
+- Requirements:
+    - Ensure compatibility with current installers.
+    - Avoid breaking existing systems.
+
+- Considerations:
+    - New variant system should not break existing installers.
+    - Compatibility with non-variant aware installers.
+
+### Technical Proposal for Variants
+
+- Definition:
+    - Variants are wheels with additional metadata.
+    - Metadata describes hardware and software configurations.
+
+- Implementation:
+    - Allows for arbitrary and combinable specifications.
+    - Enables more specific and flexible packaging solutions.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
 
@@ -367,66 +372,69 @@ in the `conda` ecosystem.
 
 **Details on the [Full Proposal](site:proposals/pep766_explicit_priority_choices)**
 
-Here's an executive summary in bullet points with multiple levels per category:
+### Problem and Requirements
 
-- **Problem and Requirements**
-    - Current limitations:
-        - PIP only supports the "latest and greatest" package.
-        - No option to disable auto-advance behavior.
+- Current limitations:
+    - PIP only supports the "latest and greatest" package.
+    - No option to disable auto-advance behavior.
 
-    - Requirements:
-        - Enable users to prioritize trust in a source or the latest package version.
-        - Maintain PIP’s assumption that all indexes are equal by merging them into one meta index.
+- Requirements:
+    - Enable users to prioritize trust in a source or the latest package version.
+    - Maintain PIP’s assumption that all indexes are equal by merging them into one meta index.
 
-- **Proposed Solution: Index Groups**
-    - Concept:
-        - Introduces "index groups" to allow different behaviors within and between groups.
-    - Behavior:
-        - Within a group: behavior remains as in current PIP.
-        - Between groups: a priority order is enforced (user-controlled)
-    - User experience (UX):
-        - New method for defining groups aims to be intuitive.
-        - If a package is found in the first group, subsequent indexes are not searched.
-    - Generalization:
-        - Supports both using one big group or multiple unary sequential groups.
-        - Simple for common use cases, allows complex configurations if needed.
+### Proposed Solution: Index Groups
 
-- **Challenges and Controversies**
-    - Risks:
-        - Users adding extra index URLs risk unpredictable outcomes and dependency resolution issues.
-    - Historical issues:
-        - Problems encountered by PyTorch due to index mirroring and specific wheel versions.
-    - Debate:
-        - Whether to support a union grouping behavior intentionally or to have a single flag.
-    - Criticism:
-        - Proposal not presented as a formal PEP due to the need for uniform, predictable behavior across environments.
+- Concept:
+    - Introduces "index groups" to allow different behaviors within and between groups.
+- Behavior:
+    - Within a group: behavior remains as in current PIP.
+    - Between groups: a priority order is enforced (user-controlled)
+- User experience (UX):
+    - New method for defining groups aims to be intuitive.
+    - If a package is found in the first group, subsequent indexes are not searched.
+- Generalization:
+    - Supports both using one big group or multiple unary sequential groups.
+    - Simple for common use cases, allows complex configurations if needed.
 
-- **Implementation Considerations and UX Focus**
-    - Priorities:
-        - Protect against dependency confusion.
-        - Provide a mechanism to define trusted indexes.
+### Challenges and Controversies
 
-    - Features:
-        - Index groups allow prioritizing based on security attributes.
+- Risks:
+    - Users adding extra index URLs risk unpredictable outcomes and dependency resolution issues.
+- Historical issues:
+    - Problems encountered by PyTorch due to index mirroring and specific wheel versions.
+- Debate:
+    - Whether to support a union grouping behavior intentionally or to have a single flag.
+- Criticism:
+    - Proposal not presented as a formal PEP due to the need for uniform, predictable behavior across environments.
 
-    - Flexibility:
-        - Default one-group behavior for simplicity.
-        - Support for more complex configurations if desired.
+### Implementation Considerations and UX Focus**
 
-    - Controversy:
-        - Acknowledgment of potential controversy but seen as a step toward greater flexibility.
+- Priorities:
+    - Protect against dependency confusion.
+    - Provide a mechanism to define trusted indexes.
 
-- **Discussion on Legacy and Adoption**
-    - Previous implementations:
-        - Reference to UB index priority that prompted user complaints and reversion to PIP behavior.
-    - User expectations:
-        - Some users, like those from PyTorch, might have differing expectations for package resolution.
-    - Emphasis:
-        - Consolidating behavior across different installers and environment managers to improve uniformity.
+- Features:
+    - Index groups allow prioritizing based on security attributes.
+
+- Flexibility:
+    - Default one-group behavior for simplicity.
+    - Support for more complex configurations if desired.
+
+- Controversy:
+    - Acknowledgment of potential controversy but seen as a step toward greater flexibility.
+
+### Discussion on Legacy and Adoption**
+
+- Previous implementations:
+    - Reference to UB index priority that prompted user complaints and reversion to PIP behavior.
+- User expectations:
+    - Some users, like those from PyTorch, might have differing expectations for package resolution.
+- Emphasis:
+    - Consolidating behavior across different installers and environment managers to improve uniformity.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
 
-## 5. Wheel Format Modernization
+## 5. How to Re-Invent the Wheel
 
 **Presenter:** Emma Smith
 
@@ -434,30 +442,35 @@ Here's an executive summary in bullet points with multiple levels per category:
 
 **Details on the [Full Proposal](site:proposals/pep777_how_to_reinvent_the_wheel)**
 
-- **Wheel Ecosystem Compatibility**
-    - Avoid ecosystem disruption by:
-        - Preventing errors for users not using new features.
-        - Maintaining compatibility with existing outer containers.
+### Wheel Ecosystem Compatibility
 
-- **Rationale for Changing the Wheel Specification**
-    - Current wheel spec is over a decade old.
-    - Increased demands and changes since original release:
-        - Accelerated computing and more libraries.
-        - Expanded number of supported platforms.
+- Avoid ecosystem disruption by:
+    - Preventing errors for users not using new features.
+    - Maintaining compatibility with existing outer containers.
 
-- **Limitations of the Existing Wheel Specification**
-    - Wheel versioning forces errors if major version changes are unsupported.
-    - Alternate compression formats lack support.
+### Rationale for Changing the Wheel Specification
 
-- **Proposed Approaches for Enhancements**
-    - Introduce feature-based changes instead of incrementing the wheel version.
-    - Serve full wheel files including metadata.
-    - Decouple metadata source from the filename.
+- Current wheel spec is over a decade old.
+- Increased demands and changes since original release:
+    - Accelerated computing and more libraries.
+    - Expanded number of supported platforms.
 
-- **Considerations for Adoption and User Experience**
-    - Recognize not all users are on the latest pip versions.
-    - Minimize disruption and reduce CI breakage across projects.
-    - Clearly inform users that new wheel features require installer updates.
+### Limitations of the Existing Wheel Specification
+
+- Wheel versioning forces errors if major version changes are unsupported.
+- Alternate compression formats lack support.
+
+### Proposed Approaches for Enhancements
+
+- Introduce feature-based changes instead of incrementing the wheel version.
+- Serve full wheel files including metadata.
+- Decouple metadata source from the filename.
+
+### Considerations for Adoption and User Experience
+
+- Recognize not all users are on the latest pip versions.
+- Minimize disruption and reduce CI breakage across projects.
+- Clearly inform users that new wheel features require installer updates.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
 
