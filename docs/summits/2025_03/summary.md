@@ -1,6 +1,18 @@
 # 2025 WheelNext Community Summit - Summary
 
-## **1. Lightning Talks - Key Points**
+## **Slides and Resources:** [Link](site:summits/2025_03/slidedecks_and_resources)
+
+## **Key Highlights**
+
+- **Wheel Variants**
+    - Critical for the scientific computing / machine and deep learning ecosystems.
+    - This ecosystem represent a very significant of python users, package downloads, etc.
+- **Index Group Priority** Priority-based resolution to mitigate supply chain risks.
+- **Wheel Evolution** Modernize metadata and compression without breaking users.
+- **Governance** Push for a Packaging Council to unify standards.
+- **Tooling** `uv` and `pixi` emerging as key innovators.
+
+## 1. Lightning Talks - Key Points
 
 ### **NVIDIA** - Andy Terrel
 
@@ -228,7 +240,9 @@ in the `conda` ecosystem.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
 
-## 2. Python Packaging Governance - Barry Warsaw
+## 2. Python Packaging Governance
+
+**Presenter:** Barry Warsaw
 
 ### Supporting PEP 772: Establish a Packaging Council
 
@@ -282,7 +296,9 @@ in the `conda` ecosystem.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
 
-## 3. Wheel Variants - Jonathan Dekhtiar
+## 3. Wheel Variants
+
+**Presenter:** Jonathan Dekhtiar
 
 **Key Actors & Contributors:** NVIDIA, Quansight, META/PyTorch
 
