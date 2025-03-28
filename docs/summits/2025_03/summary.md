@@ -425,3 +425,38 @@ Here's an executive summary in bullet points with multiple levels per category:
         - Consolidating behavior across different installers and environment managers to improve uniformity.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
+
+## 5. Wheel Format Modernization
+
+**Presenter:** Emma Smith
+
+**Key Actors & Contributors:**  NVIDIA, Quansight
+
+**Details on the [Full Proposal](site:proposals/pep777_how_to_reinvent_the_wheel)**
+
+- **Wheel Ecosystem Compatibility**
+    - Avoid ecosystem disruption by:
+        - Preventing errors for users not using new features.
+        - Maintaining compatibility with existing outer containers.
+
+- **Rationale for Changing the Wheel Specification**
+    - Current wheel spec is over a decade old.
+    - Increased demands and changes since original release:
+        - Accelerated computing and more libraries.
+        - Expanded number of supported platforms.
+
+- **Limitations of the Existing Wheel Specification**
+    - Wheel versioning forces errors if major version changes are unsupported.
+    - Alternate compression formats lack support.
+
+- **Proposed Approaches for Enhancements**
+    - Introduce feature-based changes instead of incrementing the wheel version.
+    - Serve full wheel files including metadata.
+    - Decouple metadata source from the filename.
+
+- **Considerations for Adoption and User Experience**
+    - Recognize not all users are on the latest pip versions.
+    - Minimize disruption and reduce CI breakage across projects.
+    - Clearly inform users that new wheel features require installer updates.
+
+<!-- ------------------------------------------------------------------------------------------------------ -->
