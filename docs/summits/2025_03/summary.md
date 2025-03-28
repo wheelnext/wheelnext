@@ -356,3 +356,72 @@ in the `conda` ecosystem.
     - Implementation:
         - Allows for arbitrary and combinable specifications.
         - Enables more specific and flexible packaging solutions.
+
+<!-- ------------------------------------------------------------------------------------------------------ -->
+
+## 4. Index Priority & Security
+
+**Presenter:** Michael Sarahan
+
+**Key Actors & Contributors:**  NVIDIA, META, PyTorch, Red Hat, Anaconda
+
+**Details on the [Full Proposal](site:proposals/pep766_explicit_priority_choices)**
+
+Here's an executive summary in bullet points with multiple levels per category:
+
+- **Problem and Requirements**
+    - Current limitations:
+        - PIP only supports the "latest and greatest" package.
+        - No option to disable auto-advance behavior.
+
+    - Requirements:
+        - Enable users to prioritize trust in a source or the latest package version.
+        - Maintain PIP’s assumption that all indexes are equal by merging them into one meta index.
+
+- **Proposed Solution: Index Groups**
+    - Concept:
+        - Introduces "index groups" to allow different behaviors within and between groups.
+    - Behavior:
+        - Within a group: behavior remains as in current PIP.
+        - Between groups: a priority order is enforced (user-controlled)
+    - User experience (UX):
+        - New method for defining groups aims to be intuitive.
+        - If a package is found in the first group, subsequent indexes are not searched.
+    - Generalization:
+        - Supports both using one big group or multiple unary sequential groups.
+        - Simple for common use cases, allows complex configurations if needed.
+
+- **Challenges and Controversies**
+    - Risks:
+        - Users adding extra index URLs risk unpredictable outcomes and dependency resolution issues.
+    - Historical issues:
+        - Problems encountered by PyTorch due to index mirroring and specific wheel versions.
+    - Debate:
+        - Whether to support a union grouping behavior intentionally or to have a single flag.
+    - Criticism:
+        - Proposal not presented as a formal PEP due to the need for uniform, predictable behavior across environments.
+
+- **Implementation Considerations and UX Focus**
+    - Priorities:
+        - Protect against dependency confusion.
+        - Provide a mechanism to define trusted indexes.
+
+    - Features:
+        - Index groups allow prioritizing based on security attributes.
+
+    - Flexibility:
+        - Default one-group behavior for simplicity.
+        - Support for more complex configurations if desired.
+
+    - Controversy:
+        - Acknowledgment of potential controversy but seen as a step toward greater flexibility.
+
+- **Discussion on Legacy and Adoption**
+    - Previous implementations:
+        - Reference to UB index priority that prompted user complaints and reversion to PIP behavior.
+    - User expectations:
+        - Some users, like those from PyTorch, might have differing expectations for package resolution.
+    - Emphasis:
+        - Consolidating behavior across different installers and environment managers to improve uniformity.
+
+<!-- ------------------------------------------------------------------------------------------------------ -->
