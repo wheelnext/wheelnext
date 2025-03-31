@@ -380,7 +380,7 @@ in the `conda` ecosystem.
 
 - Requirements:
     - Enable users to prioritize trust in a source or the latest package version.
-    - Maintain PIP’s assumption that all indexes are equal by merging them into one meta index.
+   - Maintain pip’s assumption that all indexes are equal by merging them into one meta index.
 
 ### Proposed Solution: Index Groups
 
