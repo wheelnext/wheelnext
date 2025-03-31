@@ -314,7 +314,7 @@ in the `conda` ecosystem.
 - Challenges:
     - Current packaging solutions are unsufficient to support the scientific computing / AI / ML / DL ecosystems.
     - Python package managers are totally hardware-unaware.
-    - No ability to describe a wheel beside extremely high level "tags" (python ABI, GCC version, OS, CPU Arch Family)
+   - No ability to describe a wheel beside extremely high level "tags" (Python ABI, GCC version, OS, CPU architecture family)
 
 - Future considerations:
     - Future-proof design for variants.
