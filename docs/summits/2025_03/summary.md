@@ -151,7 +151,7 @@ strategies for other projects and communities
 #### **Future Directions**:
 
 - Expanding ROCm package offerings and improving user experience through variant packages and community engagement
-- Collaborating with experts (e.g. Viya, Anoush) to improve documentation and compatibility support
+- Collaborating with experts to improve documentation and compatibility support
 
 ### **Astral.sh** - Charlie Marsh
 
