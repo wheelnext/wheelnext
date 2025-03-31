@@ -6,10 +6,11 @@
 
 - **Wheel Variants**
     - Critical for the scientific computing / machine and deep learning ecosystems.
-    - This ecosystem represent a very significant of Python users, package downloads, etc.
+    - This ecosystem represents a very significant number of Python users, package downloads, etc.
 - **Index Group Priority** Priority-based resolution to mitigate supply chain risks.
-- **Wheel Evolution** Modernize metadata and compression without breaking users.
-- **Governance** support formation of a Packaging Council, this will improve capacity of the community to review/absorb larger packaging PEPs.
+- **Wheel Evolution** Modernizes metadata and compression without breaking users.
+- **Governance** support formation of a Packaging Council, this will improve capacity of the community to review/absorb
+larger packaging PEPs.
 - **Tooling** `uv` and `pixi` emerging as key innovators.
 
 ## 1. Lightning Talks - Key Points
@@ -28,7 +29,7 @@
         - There is a call for increased engagement from the AI and scientific computing communities within the
         broader Python language community.
         - Participation in conferences, language summits, and CPython core sprints is encouraged.
-        - More support for organization such as PSF and NumFocus.
+        - More support for organizations such as PSF and NumFocus.
 
 - **Technical Challenges**
     - Difficulty to ship and distribute packages containing large binaries.
@@ -312,9 +313,9 @@ in the `conda` ecosystem.
     - Importance of feedback in development.
 
 - Challenges:
-    - Current packaging solutions are unsufficient to support the scientific computing / AI / ML / DL ecosystems.
+    - Current packaging solutions are insufficient to support the scientific computing / AI / ML / DL ecosystems.
     - Python package managers are totally hardware-unaware.
-   - No ability to describe a wheel beside extremely high level "tags" (Python ABI, GCC version, OS, CPU architecture family)
+    - No ability to describe a wheel beside extremely high level "tags" (Python ABI, GCC version, OS, CPU architecture family)
 
 - Future considerations:
     - Future-proof design for variants.
@@ -380,17 +381,17 @@ in the `conda` ecosystem.
 
 - Requirements:
     - Enable users to prioritize trust in a source or the latest package version.
-   - Maintain pip’s assumption that all indexes are equal by merging them into one meta index.
+    - Maintain pip’s assumption that all indexes are equal by merging them into one meta index.
 
 ### Proposed Solution: Index Groups
 
 - Concept:
     - Introduces "index groups" to allow different behaviors within and between groups.
 - Behavior:
-   - Within a group: behavior remains as in current pip.
+    - Within a group: behavior remains as in current pip.
     - Between groups: a priority order is enforced (user-controlled)
 - User experience (UX):
-    - New method for defining groups aims to be intuitive.
+    - The new method for defining groups aims to be intuitive.
     - If a package is found in the first group, subsequent indexes are not searched.
 - Generalization:
     - Supports both using one big group or multiple unary sequential groups.
@@ -450,7 +451,7 @@ in the `conda` ecosystem.
 
 ### Rationale for Changing the Wheel Specification
 
-- Current wheel spec is over a decade old.
+- The current wheel spec is over a decade old.
 - Increased demands and changes since original release:
     - Accelerated computing and more libraries.
     - Expanded number of supported platforms.
