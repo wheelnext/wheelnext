@@ -64,7 +64,7 @@
 
 #### **Current Successes and Areas for Improvement**:
 
-- Adoption of ManyLinux 228 standard
+- Adoption of `manylinux_2_28` standard
 - Need for improved build systems (e.g. conda-like system)
 - Ongoing progress in handling multiple indices, pending completion of certain PEPs
 
