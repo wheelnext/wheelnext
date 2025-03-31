@@ -387,7 +387,7 @@ in the `conda` ecosystem.
 - Concept:
     - Introduces "index groups" to allow different behaviors within and between groups.
 - Behavior:
-    - Within a group: behavior remains as in current PIP.
+   - Within a group: behavior remains as in current pip.
     - Between groups: a priority order is enforced (user-controlled)
 - User experience (UX):
     - New method for defining groups aims to be intuitive.
