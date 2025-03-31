@@ -170,7 +170,7 @@ relocatable Python distributions
 
 #### **Growth Opportunities**:
 
-- Collaborating with the CPython community to upstream changes and simplify future development
+- Collaborating with the CPython community to upstream python-build-standalone changes and simplify future development
 - Improving packaging and distribution processes to increase project availability and adoption
 - Exploring ways to improve metadata handling and dependency variance
 
@@ -220,7 +220,7 @@ in the `conda` ecosystem.
 
 #### **Challenges and Concerns**:
 
-- Interoperability issues between PyTorch and custom CPP code
+- Interoperability issues between PyTorch and custom C++ code
 - Multi-backend Python packaging challenges
 - JIT compilation time concerns for LLMs
 - PyTorch binary size and CUDA toolkit installation issues
@@ -229,12 +229,12 @@ in the `conda` ecosystem.
 
 - Encouraging adoption of Wheelnext and growing its user base
 - Addressing challenges and concerns to improve user experience
-- Providing resources and support for GPUmode community members
+- Providing resources and support for GPU MODE community members
 
 #### **Action Items**:
 
-- Organizing talks with the GPU Mode community to prove the ground of ideas defined within wheelnext.
-- Explore solutions for interoperability issues between PyTorch and custom CPP code
+- Organizing talks with the GPU MODE community to prove the ground of ideas defined within WheelNext.
+- Explore solutions for interoperability issues between PyTorch and custom C++ code
 - Investigate ways to reduce JIT compilation time for LLMs
 - Provide guidance on CUDA toolkit installation via Conda and address PyTorch binary size concerns
 
