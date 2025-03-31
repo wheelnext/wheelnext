@@ -319,7 +319,7 @@ in the `conda` ecosystem.
 - Future considerations:
     - Future-proof design for variants.
     - Combination of arbitrary metadata.
-    - Shall not Impact on non-variant users.
+    - Shall not impact on non-variant users.
     - Compatibility with existing installers.
 
 ### Variant Concept in Python Packaging
