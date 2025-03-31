@@ -120,7 +120,7 @@ community learning
 
 #### **Growth Opportunities**:
 
-- Collaborating with community (Quansight, PEPs) to address impedance matching and flexibility
+- Collaborating with community (working with/through Quansight at the moment) to address impedance matching and flexibility
 - Prioritizing customer feedback and business model alignment
 
 #### **Lessons from Kubernetes**:
