@@ -9,7 +9,7 @@
     - This ecosystem represent a very significant of Python users, package downloads, etc.
 - **Index Group Priority** Priority-based resolution to mitigate supply chain risks.
 - **Wheel Evolution** Modernize metadata and compression without breaking users.
-- **Governance** Push for a Packaging Council to unify standards.
+- **Governance** support formation of a Packaging Council, this will improve capacity of the community to review/absorb larger packaging PEPs.
 - **Tooling** `uv` and `pixi` emerging as key innovators.
 
 ## 1. Lightning Talks - Key Points
