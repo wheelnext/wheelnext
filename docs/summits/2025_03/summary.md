@@ -6,7 +6,7 @@
 
 - **Wheel Variants**
     - Critical for the scientific computing / machine and deep learning ecosystems.
-    - This ecosystem represent a very significant of python users, package downloads, etc.
+    - This ecosystem represent a very significant of Python users, package downloads, etc.
 - **Index Group Priority** Priority-based resolution to mitigate supply chain risks.
 - **Wheel Evolution** Modernize metadata and compression without breaking users.
 - **Governance** Push for a Packaging Council to unify standards.
