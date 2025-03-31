@@ -375,7 +375,7 @@ in the `conda` ecosystem.
 ### Problem and Requirements
 
 - Current limitations:
-    - PIP only supports the "latest and greatest" package.
+    - pip only supports the "latest and greatest" package.
     - No option to disable auto-advance behavior.
 
 - Requirements:
