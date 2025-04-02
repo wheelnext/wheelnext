@@ -2,16 +2,25 @@
 
 ## **Slides and Resources:** [Link](site:summits/2025_03/slidedecks_and_resources)
 
-## **Key Highlights**
+## **Mission**
 
-- **Wheel Variants**
+To bring together leaders across the Python Open Source packaging ecosystem, improving and advancing the state of the
+Python wheel packages for the unique and complex needs of AI, machine and deep learning, data science, and scientific
+and accelerated computing.
+
+## **Key Topics**
+
+- **Wheel Variants:** Wheels tailored to fine-grained execution environments, such as GPUs, CPU microarchitectures, etc.
     - Critical for the scientific computing / machine and deep learning ecosystems.
-    - This ecosystem represents a very significant number of Python users, package downloads, etc.
-- **Index Group Priority** Priority-based resolution to mitigate supply chain risks.
-- **Wheel Evolution** Modernizes metadata and compression without breaking users.
-- **Governance** support formation of a Packaging Council, this will improve capacity of the community to review/absorb
-larger packaging PEPs.
-- **Tooling** `uv` and `pixi` emerging as key innovators.
+    - This ecosystem represents a significant number of Python users, package downloads, etc.
+- **Index Group Priority:** Define standard installer behavior for handling multiple indexes. This is seen as an
+improvement for simplifying maintenance and usage of third party indexes, part of which is mitigating supply chain risks.
+- **Wheel 2.0:** Modernizes wheel packaging formats, including metadata and compression without breaking users.
+- **Governance:** support formation of a formal Python Packaging Council, this will improve capacity of the community to
+review/absorb larger packaging PEPs.
+- **Tooling:** `uv` and `pixi` emerged as key innovators, PyPI as the primary package index (with cooperation among
+other index implementations).
+- **User Experience:** cross-cutting focuses on improving the experience for consumers and producers of relevant packages.
 
 ## 1. Lightning Talks - Key Points
 
@@ -32,16 +41,18 @@ larger packaging PEPs.
         - More support for organizations such as PSF and NumFocus.
 
 - **Technical Challenges**
-    - Difficulty to ship and distribute packages containing large binaries.
-    - JIT becomes increasingly demanded - especially as binaries grow in size.
-    - No install-time hardware/system detection (drivers, accelerator, networking, CPU instructions, system libraries).
+    - Difficulty shipping, distributing, and consuming packages containing large binaries.
+    - JIT becomes increasingly demanded - especially as binaries grow in size (CUDA Jit, Numba, Numba-CUDA, Triton Lang,
+    etc.)
+    - No install-time hardware/system detection (drivers, accelerators, networking, CPU microarchitecture instructions,
+    system libraries).
     - Address security concerns (e.g. dependency confusion attacks)
     - No ability to "bypass build isolation" - difficulty to extend libraries depending on specific ABIs.
     - ZStandard compression would be a significant step forward
 
 #### **Action Items**
 
-- Keep being a driving force in the WheelNext Open-Source initiative.
+- Continue driving the WheelNext OpenSource initiative.
 - Keep driving forward the state of scientific computing, machine and deep learning.
 - Commitment to support the Python Ecosystem at large and support the open source organizations behind it.
 
@@ -49,11 +60,11 @@ larger packaging PEPs.
 
 #### **PyTorch Foundation**:
 
-- Aims to build a strong foundation for ML applications, encouraging community collaboration
+- Building a strong foundation for machine learning applications, encouraging community collaboration
 
 #### **Challenges**:
 
-- Space limitations on PyPI
+- Project and Package quota limitations on PyPI
 - Currently need for a dedicated package index to support multiple hardware accelerators (we should do better!)
 - Lack of features in packaging and installers (e.g. default extras, index priority, package variants, etc.)
 
@@ -84,7 +95,7 @@ larger packaging PEPs.
 #### **Ecosystem & Community Opportunities**:
 
 - Expanding JAX's ecosystem of libraries to support additional application logic
-- Increasing community engagement and fee~dback to drive improvements and adoption
+- Increasing community engagement and feedback to drive improvements and adoption
 
 ### **Quansight** - Ralf Gommers
 
@@ -96,14 +107,16 @@ larger packaging PEPs.
 
 #### **Improvement Opportunities**:
 
-- Adoption of new standards and best practices (e.g. WheelNext, [PEP 739](https://peps.python.org/pep-0739/))
+- Adoption of new standards and best practices (e.g. WheelNext, [PEP 739](https://peps.python.org/pep-0739/) -
+`build-details.json` files)
 - Enhanced accelerator support and binary size management
 - Increased community collaboration and knowledge sharing
 
 #### **Planned Contributions**:
 
 - Active involvement in WheelNext development and PEP reviews
-- Updates to [PyPackaging native](https://pypackaging-native.github.io/) website and completion of [PEP 725](https://peps.python.org/pep-0725/)
+- Updates to [PyPackaging native](https://pypackaging-native.github.io/) website and completion of
+[PEP 725](https://peps.python.org/pep-0725/) - specifying external dependencies
 - Community building and outreach to improve packaging practices and standards
 
 ### **Red Hat** - Jeremy Eder
@@ -142,7 +155,7 @@ strategies for other projects and communities
 #### **Improvement Opportunities**:
 
 - Developing variant packages for seamless user experience and smart defaults
-- Increasing community presence and contributions from the packaging team
+- Increasing community presence and contributions from AMD’s packaging team
 
 #### **Growth Opportunities**:
 
@@ -158,7 +171,7 @@ strategies for other projects and communities
 
 #### **Key Projects**:
 
-- [Ruff](https://github.com/astral-sh/ruff): a static analysis toolchain with 45 million downloads per month
+- [ruff](https://github.com/astral-sh/ruff): a static analysis toolchain with 45 million downloads per month
 - [uv](https://github.com/astral-sh/uv): a Python package and project manager with 12.5% of PyPI download requests
 - [python-build-standalone](https://github.com/astral-sh/python-build-standalone): creating portable,
 relocatable Python distributions
@@ -200,14 +213,13 @@ and distribution processes
 
 - Sharing experiences and aligning efforts with Python packaging
 - Exploring package signing and verification methods
-- Helping the community by sharing the learning accumulated with years of experience in variant related topics
-in the `conda` ecosystem.
+- Sharing learnings accumulated with years of experience from the `conda` ecosystem in related topics.
 
 #### **Action Items**:
 
 - Creating self-service wheel channels/indices for experimentation
 - Improve interoperability between Conda and other Python packaging tools
-- Investigate declaring non-Python dependencies in wheels
+- Investigate declaring non-Python dependencies in wheels (e.g. [PEP 725](https://peps.python.org/pep-0725/))
 - Address security implications and user communication regarding channel priorities
 - Facilitate self-service wheel channels on anaconda.org for experimentation
 
@@ -228,7 +240,7 @@ in the `conda` ecosystem.
 
 #### **Growth Opportunities**:
 
-- Encouraging adoption of Wheelnext and growing its user base
+- Encouraging adoption of WheelNext and growing its user base
 - Addressing challenges and concerns to improve user experience
 - Providing resources and support for GPU MODE community members
 
@@ -249,13 +261,16 @@ in the `conda` ecosystem.
 
 <https://peps.python.org/pep-0772/>
 
-1. Set packaging standards and roadmaps.
-2. Improve diversity of input (beyond PyPA).
-3. Partner with Python Steering Council.
+1. Establish formal governance over Python packaging standards, documentation, interoperability, and roadmaps.
+2. Improve diversity of input and reduce the “bus factor”.
+3. Accountable to community by annual council election.
+4. Partner with Python Steering Council.
 
 ### Expected outcomes
 
-- A Packaging Summit at PyCon.
+- Final round of comments at the PyCon 2025 Packaging Summit.
+- Request PEP pronouncement shortly thereafter.
+- If accepted, first round of elections likely in early 2026
 - Increased community involvement in packaging decisions.
 
 ### Transition from PEP 609 to PEP 772
@@ -267,15 +282,15 @@ in the `conda` ecosystem.
         - Limited authority of PyPA.
 
 - **Proposed Changes**:
-    - Establish a five-member Packaging Council to make binding decisions on packaging standards.
+    - Establish a five-members Packaging Council to make binding decisions on packaging standards.
     - Improve continuity with two-year terms and a focus on packaging standards.
 
 - **Importance of Packaging**
     - **Role of PyPI**:
         - Essential for Python's popularity.
-        - Provides necessary "batteries" for Python's functionality.
+        - Provides necessary “extra batteries” for Python’s functionality.
     - **Benefits of Diverse Decision Making**:
-        - Leads to better solutions.
+        - Leads to better, more timely solutions.
         - Increases community involvement and representation.
 
 - **Community Involvement and Representation**
@@ -291,7 +306,7 @@ in the `conda` ecosystem.
 
 - **Action Items**
     - Follow up on Packaging Summit details at PyCon.
-    - Draft governance model (similar to PEP 13).
+    - Draft governance model in [PEP 772](https://peps.python.org/pep-0772/) (similar to [PEP 13](https://peps.python.org/pep-0013/)).
     - Solicit feedback on initial council membership.
     - Participate on the discourse thread: <https://discuss.python.org/t/pep-772-packaging-governance-process/79724>
 
@@ -307,59 +322,60 @@ in the `conda` ecosystem.
 
 ### Takeaways
 
-- Key points:
+- **Key points:**
     - Python packaging limitations.
-    - Wheel Variant concept in Python packaging.
+    - Wheel variant concept in Python packaging.
     - Importance of feedback in development.
 
-- Challenges:
-    - Current packaging solutions are insufficient to support the scientific computing / AI / ML / DL ecosystems.
-    - Python package managers are totally hardware-unaware.
+- **Challenges:**
+    - Current packaging solutions are insufficient to support the scientific computing / Artificial Intelligence (AI) /
+    Machine Learning (ML) / Deep Learning (DL) ecosystems.
+    - Python package managers are unaware of hardware and other operating environment characteristics.
     - No ability to describe a wheel beside extremely high level "tags" (Python ABI, GCC version, OS, CPU architecture family)
 
-- Future considerations:
+- **Future considerations:**
     - Future-proof design for variants.
     - Combination of arbitrary metadata.
-    - Shall not impact on non-variant users.
+    - No impact on non-variant users.
     - Compatibility with existing installers.
 
 ### Variant Concept in Python Packaging
 
-- Key characteristics:
+- **Key characteristics:**
     - Variants should be arbitrary and combinable.
     - Design should be future-proof.
 
-- Benefits:
+- **Benefits:**
     - Addresses limitations of current Python packaging.
     - Allows for more specific hardware and software configurations.
 
 ### Feedback Importance
 
-- Value of feedback:
+- **Value of feedback:**
     - User feedback is valuable.
     - Feedback helps identify design issues.
 
-- Importance in development:
+- **Importance in development:**
     - Crucial in identifying small issues.
     - Improves design and functionality of the packaging system.
 
 ### Compatibility with Existing Installers
 
-- Requirements:
+- **Requirements:**
     - Ensure compatibility with current installers.
     - Avoid breaking existing systems.
 
-- Considerations:
+- **Considerations:**
     - New variant system should not break existing installers.
     - Compatibility with non-variant aware installers.
 
 ### Technical Proposal for Variants
 
-- Definition:
+- **Definition:**
     - Variants are wheels with additional metadata.
     - Metadata describes hardware and software configurations.
 
-- Implementation:
+- **Implementation:**
     - Allows for arbitrary and combinable specifications.
     - Enables more specific and flexible packaging solutions.
 
@@ -375,62 +391,97 @@ in the `conda` ecosystem.
 
 ### Problem and Requirements
 
-- Current limitations:
-    - pip only supports the "latest and greatest" package.
-    - No option to disable auto-advance behavior.
+- **Current limitations:**
+    - `pip` combines all indexes into one before resolving packages. This precludes any notion of preferred or trusted indexes. 
+    It only supports the best-matching package from among all indexes.
+    - Lack of index preference can lead to unexpected behavior, including dependency confusion attacks
 
-- Requirements:
-    - Enable users to prioritize trust in a source or the latest package version.
-    - Maintain pip’s assumption that all indexes are equal by merging them into one meta index.
+- **Requirements:**
+    - Enable users to prioritize either trust in a source or the overall best match among all sources.
+    - Maintain `pip`'s current behavior to avoid breaking the many users who rely on the current behavior
 
 ### Proposed Solution: Index Groups
 
-- Concept:
-    - Introduces "index groups" to allow different behaviors within and between groups.
-- Behavior:
-    - Within a group: behavior remains as in current pip.
-    - Between groups: a priority order is enforced (user-controlled)
-- User experience (UX):
-    - The new method for defining groups aims to be intuitive.
-    - If a package is found in the first group, subsequent indexes are not searched.
-- Generalization:
-    - Supports both using one big group or multiple unary sequential groups.
-    - Simple for common use cases, allows complex configurations if needed.
+- **Concept:**
+    - Introduces “index groups” to allow different behaviors within and between groups as a bridge between version
+    priority and index priority behaviors
+
+- **Behavior:**
+    - _Within a group:_ behavior remains as in current pip. All sources within a group are combined prior to resolution.
+    - _Between groups:_ groups are considered serially, according to a user-controlled priority order. A match for a given
+    spec in an earlier group will preclude a match in a later group.
+
+- **User experience (UX):**
+    - The new method for defining groups needs to be intuitive. This includes both CLI flags and configuration files.
+    - If a package is found in the first group, subsequent indexes are not searched.This can be considered “shadowing”
+    of lower priority groups, and it may be unintuitive to users. It will be very important to provide feedback to users
+    during the iteration through groups, so that they can understand why they are getting a given resolution result.
+    - There are several configuration options that affect pip’s resolution aside from index urls, such as exclusion of
+    sdist packages. Should these be generalized to being per-group?
+
+- **Generalization:**
+    - Supports both using one big group (pip’s current behavior) or multiple unary sequential groups (`uv`’s current behavior).
+    - Must be simple for common use cases, must allow complex configurations as needed.
 
 ### Challenges and Controversies
 
-- Risks:
-    - Users adding extra index URLs risk unpredictable outcomes and dependency resolution issues.
-- Historical issues:
-    - Problems encountered by PyTorch due to index mirroring and specific wheel versions.
-- Debate:
-    - Whether to support a union grouping behavior intentionally or to have a single flag.
-- Criticism:
-    - Proposal not presented as a formal PEP due to the need for uniform, predictable behavior across environments.
+- **Risks:**
+    - Users adding extra index URLs risk unpredictable outcomes and dependency resolution issues. This is already the
+    status quo, but we would be adding more cognitive load to understanding issues.
+
+- **Historical issues:**
+    - `uv` has elicited with its index priority implementation:
+        - Users happy with change to index priority:
+            - <https://github.com/astral-sh/uv/issues/10099>
+        - Users who seem to prefer pip’s behavior in uv:
+            - <https://github.com/astral-sh/uv/issues/5096>
+            - <https://github.com/astral-sh/uv/issues/6653>
+        - Fine details and bugs discovered:
+            - <https://github.com/astral-sh/uv/issues/8922>
+            - <https://github.com/astral-sh/uv/issues/5001> user needed to use pip’s behavior to avoid an older or
+            conflicting package on pytorch index
+
+- **Debate:**
+    - _Involved parties:_
+        - 3rd party index maintainers want more predictability and lower need for maintaining mirrors of their
+        dependencies. They want to be able to document install instructions that reliably provide a working environment.
+        - Clients want environments to behave predictably when adding packages to an environment. They may not
+        understand how bringing multiple indexes into an install command affects the predictability of that install
+        command. They may want to add package sources from many different tutorials/docs. They may want to use multiple
+        indexes ephemerally (CLI flags) or more permanently (system-wide, user-wide, or environment-wide config files).
+        - Installer maintainers want freedom to innovate in any aspect of their tools
+    - Whether multiple index behavior can/should be captured in a standard that installer tools “should” implement (to what
+    degree is a standard helpful without being overly constraining on installer tools)
+    - Whether the notion of index pools should be a standard, so that switching between version priority and index priority
+    is less of a “mode” switch
+    - What should UX look like? Does it make sense to try to standardize configuration of multiple indexes, and have the
+    configuration content be usable by multiple tools
+    - From a 3rd party index maintainer point of view, what does an optimal user experience look like? What tool support
+    is needed for that user experience? Can that tool support coexist with simultaneously supporting other less-ideal tools?
 
 ### Implementation Considerations and UX Focus**
 
-- Priorities:
-    - Protect against dependency confusion.
-    - Provide a mechanism to define trusted indexes.
-
-- Features:
-    - Index groups allow prioritizing based on security attributes.
-
-- Flexibility:
-    - Default one-group behavior for simplicity.
-    - Support for more complex configurations if desired.
-
-- Controversy:
-    - Acknowledgment of potential controversy but seen as a step toward greater flexibility.
+- **Priorities:**
+    - Provide a mechanism to express relative trust among multiple indexes.
+    - Provide an installer behavior that 3rd party index maintainers can more easily reason about, and remove the need
+    for them to maintain mirrors as means of preventing dependency confusion attacks
+    - In tandem with PEP 708 implementations, provide protection against dependency confusion.
+    - Avoid disruptive hard breaks with existing behaviors
 
 ### Discussion on Legacy and Adoption**
 
-- Previous implementations:
-    - Reference to UB index priority that prompted user complaints and reversion to PIP behavior.
-- User expectations:
-    - Some users, like those from PyTorch, might have differing expectations for package resolution.
-- Emphasis:
+- **Previous implementations:**
+    - `uv` has implemented index priority that is very similar to the proposed solution (without groups). It has fixed some
+    things, but also prompted user complaints. To work around those complaints, uv added optional reversion to pip behavior.
+
+- **User expectations:**
+    - Project maintainers would like their documented instructions to behave in predictable ways.
+    - Many users falsely assume that pip has some notion of priority among indexes
+    - Installer behavior should allow third-party index maintainers to host only their packages without concern for
+    dependency confusion attacks.
+
+- **Emphasis:**
+    - Index priority has proven helpful in uv, but it has also been a disruptive change
     - Consolidating behavior across different installers and environment managers to improve uniformity.
 
 <!-- ------------------------------------------------------------------------------------------------------ -->
