@@ -13,13 +13,15 @@ and accelerated computing.
 - **Wheel Variants:** Wheels tailored to fine-grained execution environments, such as GPUs, CPU microarchitectures, etc.
     - Critical for the scientific computing / machine and deep learning ecosystems.
     - This ecosystem represents a significant number of Python users, package downloads, etc.
+  
 - **Index Group Priority:** Define standard installer behavior for handling multiple indexes. This is seen as an
 improvement for simplifying maintenance and usage of third party indexes, part of which is mitigating supply chain risks.
+
 - **Wheel 2.0:** Modernizes wheel packaging formats, including metadata and compression without breaking users.
+
 - **Governance:** support formation of a formal Python Packaging Council, this will improve capacity of the community to
 review/absorb larger packaging PEPs.
-- **Tooling:** `uv` and `pixi` emerged as key innovators, PyPI as the primary package index (with cooperation among
-other index implementations).
+
 - **User Experience:** cross-cutting focuses on improving the experience for consumers and producers of relevant packages.
 
 ## 1. Lightning Talks - Key Points
@@ -47,7 +49,7 @@ other index implementations).
     - No install-time hardware/system detection (drivers, accelerators, networking, CPU microarchitecture instructions,
     system libraries).
     - Address security concerns (e.g. dependency confusion attacks)
-    - No ability to "bypass build isolation" - difficulty to extend libraries depending on specific ABIs.
+    - No ability to "bypass build isolation" - difficulty to extend libraries exposing unstable or non-public ABIs.
     - ZStandard compression would be a significant step forward
 
 #### **Action Items**
@@ -65,7 +67,7 @@ other index implementations).
 #### **Challenges**:
 
 - Project and Package quota limitations on PyPI
-- Currently need for a dedicated package index to support multiple hardware accelerators (we should do better!)
+- Currently need a dedicated package index to support multiple hardware accelerators (we should do better!)
 - Lack of features in packaging and installers (e.g. default extras, index priority, package variants, etc.)
 
 #### **Future Improvements**:
@@ -77,7 +79,7 @@ other index implementations).
 #### **Current Successes and Areas for Improvement**:
 
 - Adoption of `manylinux_2_28` standard
-- Need for improved build systems (e.g. conda-like system)
+- Need for improved build system support for code compilation (e.g. `conda`-like system for toolchain specification)
 - Ongoing progress in handling multiple indices, pending completion of certain PEPs
 
 ### **Google/JAX** - Skye Wanderman-Milne
@@ -174,7 +176,7 @@ strategies for other projects and communities
 - [ruff](https://github.com/astral-sh/ruff): a static analysis toolchain with 45 million downloads per month
 - [uv](https://github.com/astral-sh/uv): a Python package and project manager with 12.5% of PyPI download requests
 - [python-build-standalone](https://github.com/astral-sh/python-build-standalone): creating portable,
-relocatable Python distributions
+relocatable CPython distributions
 
 #### **Improvement Opportunities**:
 
@@ -423,7 +425,7 @@ and distribution processes
     - Supports both using one big group (pip’s current behavior) or multiple unary sequential groups (`uv`’s current behavior).
     - Must be simple for common use cases, must allow complex configurations as needed.
 
-### Challenges and Controversies
+### Challenges and Discussions
 
 - **Risks:**
     - Users adding extra index URLs risk unpredictable outcomes and dependency resolution issues. This is already the
@@ -503,19 +505,22 @@ and distribution processes
 ### Rationale for Changing the Wheel Specification
 
 - The current wheel spec is over a decade old.
+    - Usage has changed significantly (e.g. shipping native libraries)
+    - Yet there have been minimal changes
+
 - Increased demands and changes since original release:
     - Accelerated computing and more libraries.
     - Expanded number of supported platforms.
 
 ### Limitations of the Existing Wheel Specification
 
-- Wheel versioning forces errors if major version changes are unsupported.
-- Alternate compression formats lack support.
+- Wheel versioning requires an error if major version changes are unsupported.
+- No support for alternate compression formats beyond zlib/DEFLATE
 
 ### Proposed Approaches for Enhancements
 
 - Introduce feature-based changes instead of incrementing the wheel version.
-- Serve full wheel files including metadata.
+- Serve full WHEEL metadata file.
 - Decouple metadata source from the filename.
 
 ### Considerations for Adoption and User Experience
