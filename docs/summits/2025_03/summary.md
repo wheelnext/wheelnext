@@ -154,13 +154,13 @@ strategies for other projects and communities
 - Expanding ROCm package offerings and improving user experience through variant packages and community engagement
 - Collaborating with experts to improve documentation and compatibility support
 
-### **Astral.sh** - Charlie Marsh
+### **Astral** - Charlie Marsh
 
 #### **Key Projects**:
 
-- [Ruff](https://github.com/astral-sh/ruff): a static analysis tool chain with 45 million downloads per month
-- [UV](https://github.com/astral-sh/uv): a Python package and project manager with 12.5% of PyPI download requests
-- [Python Build Standalone](https://github.com/astral-sh/python-build-standalone): creating portable,
+- [Ruff](https://github.com/astral-sh/ruff): a static analysis toolchain with 45 million downloads per month
+- [uv](https://github.com/astral-sh/uv): a Python package and project manager with 12.5% of PyPI download requests
+- [python-build-standalone](https://github.com/astral-sh/python-build-standalone): creating portable,
 relocatable Python distributions
 
 #### **Improvement Opportunities**:
