@@ -264,7 +264,7 @@ and distribution processes
 <https://peps.python.org/pep-0772/>
 
 1. Establish formal governance over Python packaging standards, documentation, interoperability, and roadmaps.
-2. Improve diversity of input and reduce the “bus factor”.
+2. Improve diversity of opinions and reduce the “bus factor”.
 3. Accountable to community by annual council election.
 4. Partner with Python Steering Council.
 
