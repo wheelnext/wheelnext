@@ -394,7 +394,7 @@ and distribution processes
 ### Problem and Requirements
 
 - **Current limitations:**
-    - `pip` combines all indexes into one before resolving packages. This precludes any notion of preferred or trusted indexes. 
+    - `pip` combines all indexes into one before resolving packages. This precludes any notion of preferred or trusted indexes.
     It only supports the best-matching package from among all indexes.
     - Lack of index preference can lead to unexpected behavior, including dependency confusion attacks
 
@@ -543,13 +543,3 @@ and distribution processes
 4. Contribute to <https://github.com/orgs/wheelnext/>.
 5. Join us at PyCon for an engineering spring.
 6. Join the Google for monthly meetings: <https://contribute.wheelnext.dev>
-
-## 7. Summit Workshops
-
-### Wheel Variant Workshop
-
-Work in progress
-
-### Index Group Priority Workshop
-
-Work in progress
