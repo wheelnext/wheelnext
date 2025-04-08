@@ -86,6 +86,7 @@ that your use case is captured and addressed.
 - Participate in Python packaging community discussions on [Discourse](https://discuss.python.org/c/packaging/14) for
 the PEPs you care about when they get submitted. This is quite important for moving PEPs forward:
 **if you only can do one thing, please do this**.
+- Join the [PyPA Discord](https://discord.com/invite/pypa) and chat with folks on the `#wheelnext` channel.
 
 #### On this website
 
