@@ -15,6 +15,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Conda: <https://conda.org/>
 - CuPy: <https://cupy.dev/>
 - GPU MODE: <https://github.com/gpu-mode/>
+- Hatch: <https://hatch.pypa.io/>
 - JAX: <https://docs.jax.dev/>
 - Numba: <https://numba.pydata.org/>
 - NumPy: <https://numpy.org/>
