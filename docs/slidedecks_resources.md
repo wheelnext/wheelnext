@@ -6,7 +6,8 @@ dives, or strategic updates, you'll find a curated collection of resources to ke
 
 ## Monthly Presentations
 
-- [2025/02] [WheelNext Community Update - SlideShow](site:assets/slidedecks/monthly_meetings/2025_02-WheelNext_OSS_Initiative.pdf){:target="_blank"}
+- [2025/04] [Community Update - PyCon - Native Lib Loader - Wheel Variants - SlideShow](site:assets/slidedecks/monthly_meetings/2025_04-WheelNext_Community_Update.pdf){:target="_blank"}
+- [2025/02] [Community Update - Scope - Problem Statements - Proposals - SlideShow](site:assets/slidedecks/monthly_meetings/2025_02-WheelNext_OSS_Initiative.pdf){:target="_blank"}
 
 ## Engineering Presentations
 
