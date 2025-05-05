@@ -11,7 +11,8 @@ are invaluable to us.
 
 Here are a few ways you can participate and stay connected with our community:
 
-- **Discord**: Join our discussions and collaborate with us on [Discord](https://discord.com/channels/803025117553754132/1279204588196597811){:target="_blank"}.
+- **Discord**: Join our discussions on the [PyPA Discord](https://discord.gg/pypa){:target="_blank"} Server -
+[#WheelNext](https://discord.com/channels/803025117553754132/1279204588196597811){:target="_blank"} channel.
 - **GitHub**: Contribute to our codebase and explore our projects/prototypes on [GitHub](https://github.com/wheelnext){:target="_blank"}.
 - **Website**: Learn more about our mission and proposals on our [website](https://wheelnext.dev){:target="_blank"}.
 - **Mailing List**: Stay informed about the news and meeting by subscribing to our [mailing list](https://mail.python.org/mailman3/lists/wheelnext-announce.python.org/){:target="_blank"}.
