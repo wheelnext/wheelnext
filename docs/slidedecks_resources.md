@@ -15,4 +15,4 @@ dives, or strategic updates, you'll find a curated collection of resources to ke
 
 ## Summits
 
-- [2025/03] [WheelNext Community Summit ~ Slides & Resources](site:summits/2025_03/slidedecks_and_resources/)
+- [2025/03] [WheelNext Community Summit ~ Slides & Resources](site:summits/2025_03/slidedecks_and_resources/){:target="_blank"}
