@@ -29,13 +29,14 @@ nav:
   - "philosophy_and_design_space.md"
   - "Python Packaging Governance": packaging_governance.md
   - "WheelNext Proposals":
-      - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
-      - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
+      - "Build Isolation Passthrough": "proposals/pepxxx_build_isolation_passthrough.md"
       - "Default Extra": "proposals/pep771_default_extras.md"
+      - "External Wheel Hosting": "proposals/pep759_external_wheel_hosting.md"
       - "How To Reinvent the Wheel": "proposals/pep777_how_to_reinvent_the_wheel.md"
+      - "Index Prioritization": "proposals/pep766_explicit_priority_choices.md"
+      - "Native Library Loader": "proposals/pepxxx_native_lib_loader.md"
       - "Symlink Support in Wheel": "proposals/pep778_symlink_support.md"
       - "Upload 2.0 API for Python Package Indexes": "proposals/pep694_upload_api.md"
-      - "Build Isolation Passthrough": "proposals/pepxxx_build_isolation_passthrough.md"
       - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
   - "WheelNext Summits":
       - "2025 Summit":
