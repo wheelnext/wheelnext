@@ -15,4 +15,5 @@ dives, or strategic updates, you'll find a curated collection of resources to ke
 
 ## Summits
 
+- [2025/05] [PyCon 2025 - Packaging Summit - Wheel Variants - SlideShow](site:assets/slidedecks/pycon/2025/PyCon_2025_-_Packaging_Summit_-_Wheel_Variants.pdf){:target="_blank"}
 - [2025/03] [WheelNext Community Summit ~ Slides & Resources](site:summits/2025_03/slidedecks_and_resources/){:target="_blank"}
