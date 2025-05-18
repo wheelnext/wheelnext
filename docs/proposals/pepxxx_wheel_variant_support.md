@@ -158,9 +158,9 @@ User documentation will be updated to:
 
 A prototype implementation has been developed, demonstrating:
 
-- `variantlib`, the library handling plugin registration and variant selection.
+- [`variantlib`](https://github.com/wheelnext/variantlib), the library handling plugin registration and variant selection.
 
-- Demo `Provider Plugins` capable of detecting `fictional  hardware` and `fictional technology`.
+- Demo [`Provider Plugins`](https://github.com/wheelnext/pep_xxx_wheel_variants) capable of detecting [`fictional  hardware`](https://github.com/wheelnext/provider_fictional_hw) and [`fictional technology`](https://github.com/wheelnext/provider_fictional_tech).
 
 - A modified version of `pip` integrating variant-aware package resolution.
 
