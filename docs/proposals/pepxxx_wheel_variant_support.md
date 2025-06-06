@@ -60,7 +60,7 @@ compiled in.
 - SciPy wants to provide packages built against different BLAS libraries, like OpenBLAS and Accelerate on macOS. This is
 something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull/2#discussion_r1957200935)
 
-- Manylinux standard doesn’t cover all use-cases: [github.com/pypa/manylinux/issues/1725](https://github.com/pypa/manylinux/issues/1725)
+The existing Python standards for platform metadata do not cover all use-cases, and several suboptimal workarounds have been used: [github.com/pypa/manylinux/issues/1725](https://github.com/pypa/manylinux/issues/1725)
 
 ## Specification
 
@@ -106,9 +106,9 @@ class MyVariantPlugin:
 
 ### Integration with `installers`
 
-Upon package installation, `pip/uv/etc.` will:
+Assuming that the user has pre-installed the `variantlib` package in their active environment, upon package installation, `pip/uv/<other wheel installer>.` will:
 
-1. Query `variantlib` for installed `Provider Plugins`.
+1. Query `variantlib` for pre-installed `Provider Plugins`.
 
 2. Generate a list of possible variant hashes based on detected attributes.
 
@@ -180,6 +180,7 @@ Several alternative approaches were considered and ultimately rejected:
 4. **One index per configuration**
     - Significant user complexity. Force the user to carefully read the documentation.
     - Totally breaks the dependency tree: `transformers => pytorch`
+    - Different installer tools have varying implementation of [index priority](https://peps.python.org/pep-0766/), which makes the user experience fragile when more than one index is involved.
 
 ![pytorch selector](../assets/images/pytorch_variant_selector.webp)
 
