@@ -66,17 +66,86 @@ something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull
 
 ### Wheel Variants
 
-A `Wheel Variant` is a Python Wheel designed to support a specific platform configuration. Wheel Variants will
-follow an extended filename pattern, incorporating an additional hash to indicate a specific variant:
+Wheel Variants provide the ability to parametrize built wheels beyond the scope currently permitted by wheel tags.
+Every variant is described by zero or more properties that are defined and controlled by provider plugins. The plugins
+provide a standardized Python API to determine which variants are supported by the system, and to order them according
+to preference in installing.
 
-```bash
-mypackage-0.0.1~abcd1234-py3-none-any.whl
+### Wheel filename
+
+This specification extends the wheel filename to include an optional variant label. The complete filename follows
+the following pattern:
+
+```
+{distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}(-{variant label})?.whl
 ```
 
-This `~abcd1234` hash is computed based on platform attributes detected by the user-installed `provider plugins` and
-aggregated by `variantlib`, ensuring uniqueness and scalability while maintaining compatibility with existing tooling.
-The `variantlib` library will generate these hashes using `hashlib.shake_128()`, providing a lightweight and
-deterministic method of identifying platform-specific variants.
+Files not featuring the `variant label` part are regular wheels. Variant wheels use it to uniquely identify each
+variant. It can either be a 8-character variant hash, or a custom string of 1 to 8 ASCII characters from the range
+`[a-z0-9._]`.
+
+For example, the following are valid wheel variant names:
+
+```
+mypackage-0.0.1-py3-none-any-fa7c1393.whl
+mypackage-0.0.1-cp310-abi3-manylinux_2_28_x86_64-fast.whl
+mypackage-0.0.1-3-py3-none-any-fa7c1393.whl
+```
+
+### Variant properties
+
+Each variant is described using zero or more properties. A property is a string of the following form:
+
+```
+namespace :: feature :: value
+```
+
+The `namespace` is defined by the provider plugin, and all properties defined by the provider use the same namespace.
+The `feature` specifies the property name, and `value` the corresponding property value. Both `namespace` and `feature`
+are ASCII strings of characters in the range `[a-z0-9_]`, while `value` of characters in the range `[a-z0-9_.,!>~<=]`.
+
+A single variant can include multiple features from a namespace, and multiple values for the feature.
+For a feature to be considered compatible with the sytem, the provider must indicate that *at least one* of its values
+is compatible. For a wheel to be considered compatible, *all* of its features must be compatible.
+
+For example, the following set of features:
+
+```
+myprovider :: version :: 1.1
+myprovider :: version :: 1.2
+myprovider :: accelerated :: yes
+```
+
+indicates that `myprovider :: version :: 1.1` *or* `1.2` must be supported, *and* that `myprovider :: accelerated :: yes`
+must be supported.
+
+
+### Variant hash
+
+Variant hash is computed using the following algorithm, where `properties` is given as a list of property tuples:
+
+```python
+import hashlib
+import typing
+
+
+def variant_hash(properties: typing.Iterable[tuple[str, str, str]]) -> str:
+    if not properties:
+        return "00000000"
+    hash_obj = hashlib.new("sha256")
+    for namespace, feature, value in sorted(properties):
+        hash_obj.update(f"{namespace} :: {feature} :: {value}\n".encode())
+    return hash_obj.hexdigest()[:8]
+```
+
+
+### Null variant
+
+A null variant is a special case of a wheel variant. It has no properties, and its variant label is always `00000000`.
+It is distinct from non-variants, as it still requires the package manager to explicitly support variants, and therefore
+it can be used to provide distinct fallbacks for package managers predating variant support and for systems where none
+of the other variants is supported.
+
 
 ### Provider Plugins
 
