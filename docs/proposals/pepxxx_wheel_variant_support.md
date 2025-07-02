@@ -212,29 +212,138 @@ of the other variants is supported.
 
 ### Provider Plugins
 
-A `Provider Plugin` detects the characteristics of the host platform and provides relevant metadata to `variantlib`.
-Each plugin must implement a standard entry point:
+Provider plugins define the valid variant properties and provide the logic for detecting which properties are compatible
+with the user's system. They are Python packages providing an API for installers to call into. Each plugin defines
+a namespace for all its properties.
 
-```toml
-[project.entry-points."variantlib.plugins"]
-my_plugin = "my_plugin.plugin:MyVariantPlugin"
+
+#### API endpoint
+
+The API can be either implemented as top-level variables and functions in a Python module, or as a class. The API
+endpoint is specified using the same syntax as object references in the [entry points specification](
+https://packaging.python.org/en/latest/specifications/entry-points/), that is:
+
+```
+{import path}(:{object path})?
 ```
 
-The plugin itself follows a minimal interface:
+where import path specifies the module to import, as for the Python `import` statement, and object path specifies
+the class to use. If object path is omitted, the whole module is used as the endpoint.
+
+If the API endpoint specifies a callable, it is called to instantiate the provider object. Otherwise, it is used as-is.
+
+For example, `importable.module:ProviderClass` where `ProviderClass` is a class corresponds to the following Python
+code:
 
 ```python
-from variantlib.config import ProviderConfig
-from my_plugin import __version__
+import importable.module
 
-class MyVariantPlugin:
-    __provider_name__ = "my_plugin"
-    __version__ = __version__
-
-    def run(self) -> ProviderConfig | None:
-        """
-        Detects platform attributes and returns a ProviderConfig if applicable.
-        """
+provider = importable.module.ProviderClass()
 ```
+
+whereas `importable.module` corresponds to:
+
+```python
+import importable.module
+
+provider = importable.module
+```
+
+Additionally, a plugin provider can install an entry point in the `variant_plugins` group that can be used
+by development tools to discover available providers. However, wheels must be installable without the presence of entry
+points.
+
+#### Plugin API
+
+The plugin API needs to conform to the following protocol:
+
+```python
+from abc import abstractmethod
+from typing import Protocol
+from typing import runtime_checkable
+
+
+# Type aliases for readability
+VariantNamespace = str
+VariantFeatureName = str
+VariantFeatureValue = str
+
+
+@runtime_checkable
+class VariantFeatureConfigType(Protocol):
+    """A protocol for VariantFeature configs"""
+
+    @property
+    @abstractmethod
+    def name(self) -> VariantFeatureName:
+        """Feature name"""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def values(self) -> list[VariantFeatureValue]:
+        """Ordered list of values, most preferred first"""
+        raise NotImplementedError
+
+
+@runtime_checkable
+class VariantPropertyType(Protocol):
+    """A protocol for variant properties"""
+
+    @property
+    @abstractmethod
+    def namespace(self) -> VariantNamespace:
+        """Namespace (from plugin)"""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def feature(self) -> VariantFeatureName:
+        """Feature name (within the namespace)"""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def value(self) -> VariantFeatureValue:
+        """Feature value"""
+        raise NotImplementedError
+
+
+@runtime_checkable
+class PluginType(Protocol):
+    """A protocol for plugin classes"""
+
+    @property
+    @abstractmethod
+    def namespace(self) -> VariantNamespace:
+        """Plugin namespace"""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def dynamic(self) -> bool:
+        """
+        Is this a dynamic plugin?
+
+        This property / attribute should return True if the configs
+        returned `get_supported_configs()` depend on `known_properties`
+        input.  If it is False, `known_properties` will be `None`.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_supported_configs(
+        self, known_properties: frozenset[VariantPropertyType] | None
+    ) -> list[VariantFeatureConfigType]:
+        """Get supported configs for the current system"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def validate_property(self, variant_property: VariantPropertyType) -> bool:
+        """Validate variant property, returns True if it's valid"""
+        raise NotImplementedError
+```
+
 
 ### Integration with `installers`
 
