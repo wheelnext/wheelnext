@@ -93,6 +93,35 @@ meant to provide some flexibility in designating variant compatibility while avo
 boolean logic. This flexibility is further extended via the concept of dynamic plugins, permitting the values to
 be dynamically interpreted, e.g. as version ranges.
 
+### Variant hash
+
+Variant hash is used as a stable and unique identifier for every set of variant properties. It is truncated to
+8 characters in order to ensure that filenames remain short. SHA256 algorithm was chosen, because it is already widely
+used in wheels, in the `RECORD` file and therefore the package managers do not have to implement an additional
+algorithm.
+
+To ensure reproducible hash values, properties are sorted before hashing. They are then serialized into a canonical
+string form, and each one is terminated with a newline character to ensure their separation.
+
+As a special case, a variant hash of `00000000` is used for the null variant, in order to make it easily distinguishable
+from other variants.
+
+### Null variant
+
+The concept of a null variant was added to make it possible to distinguish a fallback wheel variant from a regular wheel
+published for backwards compatibility. For example, a package that features optional GPU support could publish
+the following wheels:
+
+1. One or more GPU wheel variants that is installed on systems with wheel variant support and a suitable GPU.
+
+2. A CPU-only null variant that is installed on systems with wheel variant support but without suitable GPU.
+
+3. A GPU+CPU regular wheel that is installed on systems without wheel variant support.
+
+In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable GPUs,
+with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
+and therefore GPU support cannot be determined.
+
 
 ## Specification
 
@@ -311,6 +340,15 @@ Several alternative approaches were considered and ultimately rejected:
   rejected as not very generic and it was hard to define a single good variant precedence sorting. Instead, support
   for dynamic plugins was added, that makes it possible for plugins to implement a similar logic if they need one,
   and implement it in the way best fitted to their particular needs.
+
+### Variant hash
+
+- Originally, the SHAKE-128 algorithm was used, as it permitted choosing an arbitrary hash length. However, it was
+  pointed out that the same result can be achieved by using a more common hash algorithm, and truncating it.
+
+- The initial implementation lacked separation between serialized variant properties. As a result, different
+  combinations of properties could have yielded the same hash value (`a :: b :: c` + `de :: f :: g` = `a :: b :: cd` +
+  `e :: f :: g`).
 
 ## Open Issues
 
