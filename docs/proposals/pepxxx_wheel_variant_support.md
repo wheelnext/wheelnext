@@ -62,7 +62,9 @@ something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull
 
 - Manylinux standard doesn’t cover all use-cases: [github.com/pypa/manylinux/issues/1725](https://github.com/pypa/manylinux/issues/1725)
 
-### Wheel filename
+### Wheel Variants
+
+#### Wheel filename
 
 In order to distinguish different variants, a variant label was added to the filename. The label is added as the very
 last component in order to make it easy to distinguish different variants.
@@ -79,7 +81,7 @@ Both the current specification and some implementations are very permissive abou
 reject wheels if there are more than six components, or the build tag does not start with a digit. A limitation of this
 choice is that it assumes that the python tag will never start with a digit.
 
-### Variant properties
+#### Variant properties
 
 Variant properties follow a key-value design, where namespace and feature name constitute the key. Namespaces are used
 to group features defined by a single provider, and avoid conflicts should multiple providers define a feature with
@@ -93,7 +95,7 @@ meant to provide some flexibility in designating variant compatibility while avo
 boolean logic. This flexibility is further extended via the concept of dynamic plugins, permitting the values to
 be dynamically interpreted, e.g. as version ranges.
 
-### Variant hash
+#### Variant hash
 
 Variant hash is used as a stable and unique identifier for every set of variant properties. It is truncated to
 8 characters in order to ensure that filenames remain short. SHA256 algorithm was chosen, because it is already widely
@@ -132,7 +134,7 @@ Every variant is described by zero or more properties that are defined and contr
 provide a standardized Python API to determine which variants are supported by the system, and to order them according
 to preference in installing.
 
-### Wheel filename
+#### Wheel filename
 
 This specification extends the wheel filename to include an optional variant label. The complete filename follows
 the following pattern:
@@ -153,7 +155,7 @@ mypackage-0.0.1-cp310-abi3-manylinux_2_28_x86_64-fast.whl
 mypackage-0.0.1-3-py3-none-any-fa7c1393.whl
 ```
 
-### Variant properties
+#### Variant properties
 
 Each variant is described using zero or more properties. A property is a string of the following form:
 
@@ -181,7 +183,7 @@ indicates that `myprovider :: version :: 1.1` *or* `1.2` must be supported, *and
 must be supported.
 
 
-### Variant hash
+#### Variant hash
 
 Variant hash is computed using the following algorithm, where `properties` are given as a list of property tuples:
 
@@ -200,7 +202,7 @@ def variant_hash(properties: typing.Iterable[tuple[str, str, str]]) -> str:
 ```
 
 
-### Null variant
+#### Null variant
 
 A null variant is a special case of a wheel variant. It has no properties, and its variant label is always `00000000`.
 It is distinct from non-variants, as it still requires the package manager to explicitly support variants, and therefore
@@ -315,7 +317,9 @@ Several alternative approaches were considered and ultimately rejected:
 
 ![pytorch selector](../assets/images/pytorch_variant_selector.webp)
 
-### Wheel filename
+### Wheel Variants
+
+#### Wheel filename
 
 - Adding the variant label as a third component (before the build tag) with additional `~` characters. This approach
   was ultimately rejected, as adding it as a last component made it easier to distinguish different variants,
@@ -328,7 +332,7 @@ Several alternative approaches were considered and ultimately rejected:
 - Automatically generating human-readable labels by providers. This idea did not fit well with very limited variant
   label length.
 
-### Variant properties
+#### Variant properties
 
 - Originally, only a single value was permitted for a property. This assumed that variants designate a specific
   property of the wheel (e.g. a CPU version it was built for), while the provider plugins indicate which of these
@@ -341,7 +345,7 @@ Several alternative approaches were considered and ultimately rejected:
   for dynamic plugins was added, that makes it possible for plugins to implement a similar logic if they need one,
   and implement it in the way best fitted to their particular needs.
 
-### Variant hash
+#### Variant hash
 
 - Originally, the SHAKE-128 algorithm was used, as it permitted choosing an arbitrary hash length. However, it was
   pointed out that the same result can be achieved by using a more common hash algorithm, and truncating it.
