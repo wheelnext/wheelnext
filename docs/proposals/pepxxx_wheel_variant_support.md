@@ -62,6 +62,24 @@ something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull
 
 - Manylinux standard doesn’t cover all use-cases: [github.com/pypa/manylinux/issues/1725](https://github.com/pypa/manylinux/issues/1725)
 
+### Wheel filename
+
+In order to distinguish different variants, a variant label was added to the filename. The label is added as the very
+last component in order to make it easy to distinguish different variants.
+
+The model defaults to using a hash in order to provide unique and reproducible filenames out of the box. However, it
+permits explicitly choosing a different label in order to make variants easy to recognize by humans. The label length
+is strictly limited in order to prevent the wheel filenames to become much longer than they are now, and causing issues
+on systems with smaller filename or path length limits.
+
+The same `-` character is used as the separator in order to reduce the risk of existing package manager implementations
+accidentally choosing a potentially unsupported wheel variant instead of a regular wheel. This was based on a survey
+of wheel filename verification methods used by different package managers and libraries (packaging, poetry, pip, uv).
+Both the current specification and some implementations are very permissive about different components, yet they all
+reject wheels if there are more than six components, or the build tag does not start with a digit. A limitation of this
+choice is that it assumes that the python tag will never start with a digit.
+
+
 ## Specification
 
 ### Wheel Variants
@@ -122,7 +140,7 @@ must be supported.
 
 ### Variant hash
 
-Variant hash is computed using the following algorithm, where `properties` is given as a list of property tuples:
+Variant hash is computed using the following algorithm, where `properties` are given as a list of property tuples:
 
 ```python
 import hashlib
@@ -235,6 +253,8 @@ A prototype implementation has been developed, demonstrating:
 
 ## Rejected Ideas
 
+### Alternative approaches
+
 Several alternative approaches were considered and ultimately rejected:
 
 1. **Explicit Package Naming (`mypackage-gpu`, `mypackage-cpu`)**
@@ -251,6 +271,21 @@ Several alternative approaches were considered and ultimately rejected:
     - Totally breaks the dependency tree: `transformers => pytorch`
 
 ![pytorch selector](../assets/images/pytorch_variant_selector.webp)
+
+### Wheel filename
+
+During the development, multiple alternative approaches to wheel naming were tested or suggested:
+
+- Adding the variant label as a third component (before the build tag) with additional `~` characters. This approach
+  was ultimately rejected, as adding it as a last component made it easier to distinguish different variants,
+  and achieved the same goals.
+
+- Using labels in addition to the variant hash. This approach was rejected because it caused unnecessary increase
+  of filename length. As the specification evolved and made it unnecessary to include the hash in the filename,
+  it was suggested to replace it with a human-readable label instead.
+
+- Automatically generating human-readable labels by providers. This idea did not fit well with very limited variant
+  label length.
 
 ## Open Issues
 
