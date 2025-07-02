@@ -79,6 +79,20 @@ Both the current specification and some implementations are very permissive abou
 reject wheels if there are more than six components, or the build tag does not start with a digit. A limitation of this
 choice is that it assumes that the python tag will never start with a digit.
 
+### Variant properties
+
+Variant properties follow a key-value design, where namespace and feature name constitute the key. Namespaces are used
+to group features defined by a single provider, and avoid conflicts should multiple providers define a feature with
+the same name. The character sets for all components are restricted in order to make it easier to preserve consistency
+between different providers, in particular uppercase characters are rejected to avoid different spellings of the same
+name. The character set for values is more relaxed, in order to permit values resembling versions and version
+specifications.
+
+Multiple values are permitted as a logical disjunction, while different features are treated conjunctively. This is
+meant to provide some flexibility in designating variant compatibility while avoiding having to implement a complete
+boolean logic. This flexibility is further extended via the concept of dynamic plugins, permitting the values to
+be dynamically interpreted, e.g. as version ranges.
+
 
 ## Specification
 
@@ -274,8 +288,6 @@ Several alternative approaches were considered and ultimately rejected:
 
 ### Wheel filename
 
-During the development, multiple alternative approaches to wheel naming were tested or suggested:
-
 - Adding the variant label as a third component (before the build tag) with additional `~` characters. This approach
   was ultimately rejected, as adding it as a last component made it easier to distinguish different variants,
   and achieved the same goals.
@@ -286,6 +298,19 @@ During the development, multiple alternative approaches to wheel naming were tes
 
 - Automatically generating human-readable labels by providers. This idea did not fit well with very limited variant
   label length.
+
+### Variant properties
+
+- Originally, only a single value was permitted for a property. This assumed that variants designate a specific
+  property of the wheel (e.g. a CPU version it was built for), while the provider plugins indicate which of these
+  properties are supported by the system. However, during discussion the need for an opposite approach was indicated,
+  where the wheel designates its compatibility (e.g. as a multiple compatible runtime versions), and the plugin verifies
+  whether it matches the system.
+
+- Interpreting the value as a version specifier, and matching the supported values (as versions) against it. It was
+  rejected as not very generic and it was hard to define a single good variant precedence sorting. Instead, support
+  for dynamic plugins was added, that makes it possible for plugins to implement a similar logic if they need one,
+  and implement it in the way best fitted to their particular needs.
 
 ## Open Issues
 
