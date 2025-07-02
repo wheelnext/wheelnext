@@ -255,7 +255,7 @@ points.
 
 #### Plugin API
 
-The plugin API needs to conform to the following protocol:
+The plugin API needs to conform to the `PluginType` protocol as declared in the following snippet:
 
 ```python
 from abc import abstractmethod
@@ -343,6 +343,51 @@ class PluginType(Protocol):
         """Validate variant property, returns True if it's valid"""
         raise NotImplementedError
 ```
+
+The plugin must implement the following attributes or properties:
+
+- `namespace` stating the namespace used by the provider
+
+- `dynamic` indicating whether the plugin is dynamic
+
+It must also implement two methods or functions:
+
+- `get_supported_configs()` that returns a list of feature names and values that are compatible with the current
+  environment, in their order of preference (i.e. a wheel with such a property can be installed)
+
+- `validate_property()` that checks whether the specified property name and value is valid (i.e. a wheel can be built
+  with a such a property)
+
+#### `get_supported_configs()`
+
+The `get_supported_configs()` method is used to obtain the list of configurations that are supported by the current
+environment. Its exact semantics depends on whether the provider plugin is declared as dynamic or not.
+
+If the provider is static (`dynamic = False`), the list of supported configurations is expected to be fixed.
+The `known_properties` parameter is always `None`, and the method must return all configurations supported
+by the system. The package manager may cache that list and reuse it for other packages using the same plugin.
+
+If the provider is dynamic (`dynamic = True`), `known_properties` is an unordered container of all properties found
+in installable wheel variants for the package or packages in question. The provider must verify whether each
+of the listed properties is supported, and return configurations that include these of them that are. Since the return
+value may depend on `known_properties`, package managers cannot cache it across different packages, and instead must
+call the method separately for every value of `known_properties`.
+
+The `known_properties` option will be passed a type meeting the `VariantPropertyType` prototype, that is having three
+attributes or properties: `namespace` with the property namespace, `feature` with its feature name, and `value` with
+its value. Only properties using the provider's namespace must be passed.
+
+The return value is an unordered list of "feature configuration types". These types must implement two attributes
+or properties: `name` stating the feature name, and `value` being an ordered list of supported values. The values
+should be ordered from the most preferred to the least preferred. When selecting variants to install, variants with
+property values of higher precedence will be preferred.
+
+#### `validate_property()`
+
+The `validate_property()` method is used to determine whether the specified property is valid. It is passed a type
+matching the `VariantPropertyType` prototype, and must return `True` if it is valid or `False` if it is not. When
+a wheel variant is being built with multiple properties from a given namespace, the function will be called separately
+for each of them. It will only be called with properties whose namespace matches the plugin's namespace.
 
 
 ### Integration with `installers`
