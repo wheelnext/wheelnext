@@ -732,6 +732,10 @@ Several alternative approaches were considered and ultimately rejected:
   arbitrarily low limits on the variants. Rejecting it enabled further extensions, such as dynamic plugins and arbitrary
   labels.
 
+- Using `Range` requests to fetch variant information straight out of wheels. Wheels use the Zip format that supports
+  efficient random access, so it would be possible to avoid a large fetching overhead. Nevertheless, the resulting logic
+  would be much more complex and still less efficient than using `*-variants.json`.
+
 - Making variants optional by skipping them from `default-priorities.namespace` list. It was pointed out that this
   is confusing: why a priority list controls whether something is optional or not? It also required the users to
   explicitly control namespace ordering for optional providers. Other options included an additional explicit list
