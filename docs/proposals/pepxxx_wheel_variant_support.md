@@ -166,6 +166,75 @@ easier to convert plugin from one type to another. The only difference is in the
 to `get_supported_configs()`, that explicitly takes `None` for static plugins to avoid accidentally depending on this
 data in static plugins.
 
+### Variant information
+
+#### Format and locations
+
+The variant information format is meant to cover the complete pipeline from building wheels to installing them. It
+includes both information needed to build wheel variants and to install them. The information is initially included
+in project's `pyproject.toml` file, then copied verbatim into `variant.json` in the built wheel. From there, it is
+copied to `*-variants.json` file on the index, where it enables installers to filter and sort supported wheel variants
+without having to fetch all of them.
+
+For project-level configuration, the `pyproject.toml` format was selected as specified in [PEP 518](
+https://peps.python.org/pep-0518/), and frequently used for project metadata and tool configuration. For wheel-level
+information, a JSON file is used instead, as a format intended exclusive for machine processing and supported by all
+Python versions. The same format is used e.g. in [PEP 770](https://peps.python.org/pep-0770/) that is also included
+in the `.dist-info` directory. For the same reasons, JSON is also used for `*-variants.json` on the index.
+
+A separate `variant.json` file is used in the `.dist-info` directory in order to minimize the risk of interoperability
+issues and to make the implementation as simple as possible. In particular, given different implementations of code
+responsible for reading and writing `METADATA` and `WHEEL` files in different package managers (some expecting
+dictionaries, others serialized data), a solution that uses a separate file made providing the data via a single
+reusable library easier.
+
+All files use the same (deserialized) structure to make the respective implementation code reusable, and to make
+transitioning the data between files as easy as possible. The `pyproject.toml` file includes data that is not strictly
+relevant to building, to keep all the configuration in a single location. The complete information is copied verbatim
+into the wheel, to facilitate the ability of constructing `*-variants.json` for index using prebuilt wheels alone.
+
+The `*-variants.json` files are generated separately for every package version. This makes it possible to upload them
+along with every new version without having to update the previous file. It may be particularly necessary if the index
+does not permit overwriting files.
+
+#### Provider information
+
+All providers are keyed on their namespaces, in order to permit matching them easily to variant properties. The two
+most important data are the `requires` key that is necessary to automatically install the provider plugin and therefore
+enable automatic selection of variants, and the `plugin-api` key that provides flexibility in layouting the plugin
+to the author's wishes.
+
+The `requires` key permits uses standard Python dependency specifier syntax, and permits multiple values similarly
+to the dependency specifiers used elsewhere in package management context. For user convenience, `plugin-api` is
+optional and defaults to the value inferred from the first package in `requires` — this aims to reduce the need
+of having to explicitly look up the correct `plugin-api` value when using a provider plugin. Ideally, `plugin-api` would
+only be explicitly declared in special cases.
+
+The `enable-if` key was added in order to enable cleanly restricting the systems on which the provider is used,
+and therefore avoiding installing unnecessary provider plugins on systems where they always report no compatible
+variant properties. For example, providers handling compatibility with specific CPU features need only to be installed
+on systems with specific CPU architectures.
+
+The `optional` key was added to add an ability to make some of the variant providers optional. The requested use case
+is the ability to avoid installing plugins for rarely used variants by default.
+
+#### Default priorities
+
+Provider plugins define the features and their values in a specific order. However, the ordering between different
+plugins is undefined. Therefore, it is necessary for every package to specify the requested ordering for namespaces.
+
+The format also permits overriding the preference order for features within every namespace, and for property value for
+every feature. The overrides are scoped in order to allow specifying features or property values that have higher
+significance without needing to explicitly cover all the features or properties used by the package.
+
+#### Variants
+
+The built variant properties are not fixed and therefore are not part of `pyproject.toml`. However, they are added
+to the same structure in `variant.json` to avoid introducing additional variant information files. The same format
+is reused both in `*.dist-info/variant.json` and `*-variants.json` files, with the difference that in the former file
+it specifies only the single variant, while in the latter all wheel variants available. This makes it possible to easily
+construct the latter file by merging the JSON from individual wheels.
+
 
 ## Specification
 
@@ -416,10 +485,10 @@ The `known_properties` option will be passed a type meeting the `VariantProperty
 attributes or properties: `namespace` with the property namespace, `feature` with its feature name, and `value` with
 its value. Only properties using the provider's namespace must be passed.
 
-The return value is an unordered list of "feature configuration types". These types must implement two attributes
-or properties: `name` stating the feature name, and `value` being an ordered list of supported values. The values
-should be ordered from the most preferred to the least preferred. When selecting variants to install, variants with
-property values of higher precedence will be preferred.
+The return value is an ordered list of "feature configuration types". These types must implement two attributes
+or properties: `name` stating the feature name, and `value` being an ordered list of supported values. The configuration
+objects and their corresponding values should be ordered from the most preferred to the least preferred. When selecting
+variants to install, variants with features and properties of higher precedence will be preferred.
 
 #### `validate_property()`
 
@@ -427,6 +496,91 @@ The `validate_property()` method is used to determine whether the specified prop
 matching the `VariantPropertyType` prototype, and must return `True` if it is valid or `False` if it is not. When
 a wheel variant is being built with multiple properties from a given namespace, the function will be called separately
 for each of them. It will only be called with properties whose namespace matches the plugin's namespace.
+
+### Variant information
+
+Variant information is stored in three contexts:
+
+1. As a top-level table called `[variant]` in `pyproject.toml`, where it specifies the variant providers that are used
+   to build and install wheels, as well as provides the default priorities used when installing wheels.
+
+2. As a JSON file called `variant.json` stored inside the wheel's `.dist-info` directory, where it includes a copy
+   of the aforementioned information that is used while determining whether to install the wheel, as well as the list
+   of variant properties used by the wheel.
+
+3. As a JSON file called `{package}-{version}-variants.json` on the wheel index, where it includes a copy
+   of the aforementioned information that is used while determining which of the available wheel variants to install,
+   as well as list of all available wheel variants along with their respective properties. The `{package}`
+   and `{version}` templates correspond to the normalized project name and version, per the rules specified
+   in [binary distribution format
+   specification](https://packaging.python.org/en/latest/specifications/binary-distribution-format/).
+
+All these contexts use the same data structure that is defined in terms of Python dictionary below, and serialized
+using the standard TOML serialization, as sub-tables using the `[variant]` table as an anchor, or the standard JSON
+serialization as a top-level object.
+
+The following keys are defined:
+
+- `providers` containing a dictionary of used variant providers, with the names of their namespaces as keys
+
+- `default-priorities` specifying the default priorities used to order wheels by preference
+
+- `variants` containing a dictionary of wheel variants, with their labels as keys and properties as values
+  (not present in `pyproject.toml`)
+
+#### Provider information
+
+The provider information dictionary provides information on how to install and use variant providers. It must be
+specified in `pyproject.toml` for every variant namespace that is supported. It must be copied to `variant.json` as-is,
+including data for providers that are not used in the particular wheel. The dictionary keys are namespaces, while
+the values are dictionaries.  They must include the following key:
+
+- `requires: list[str]` specifying a list of one or more package dependency specifiers. When installing the provider,
+  all the dependencies are installed (provided their environment markers match).
+
+Additionally, they may include the following keys:
+
+- `enable-if: str` specifying an environment marker defining when the plugin should be used. If the environment marker
+  does not match the running environment, the provider will be disabled and the variants using its properties will
+  deemed incompatible.
+
+- `optional: bool` specifying whether the provider is optional, as a boolean value. If it is true, the provider
+  is considered optional and it should not be used unless the user opts in to it, effectively rendering the variants
+  using its properties incompatible. If it is false or missing, the provider is considered required.
+
+- `plugin-api: str` specifying the API endpoint for the plugin. If it is specified, it must be an object reference
+  as explained in the "API endpoint" section. If it is missing, the package name from the first dependency specifier
+  in `requires` is used, after replacing all the `-` characters with `_`.
+
+#### Default priorities
+
+The default priorities dictionary controls the preference ordering of variants. It has a single required key:
+
+- `namespace: list[str]` listing all the namespaces used by the wheel variants, from the most important to the least
+  important. This list must have the same members as keys of the `providers` dictionary.
+
+It may have the following optional keys:
+
+- `feature: dict[str, list[str]]` with namespaces as keys, and ordered list of corresponding feature names as values.
+  The values present on the list override the default ordering specified by the provider itself, and are listed
+  from the most important to the least important. Features not present on the list are considered of lower importance
+  than these present, and their relative importance is defined by the plugin.
+
+- `property: dict[str, dict[str, list[str]]]` with namespaces as first-level keys, feature names as second-level keys
+  and ordered lists of corresponding property values as second-level values. The values present on the list override
+  the default ordering specified by the provider itself, and are listed from the most important to the least important.
+  Properties not present on the list are considered of lower importance than these present, and their relative
+  importance is defined by the plugin.
+
+#### Variants
+
+The `variants` dictionary is present in `variant.json` file to indicate the variant that the wheel was built for,
+and in `*-variants.json` file to indicate all the wheel variants available. Its keys are variant labels, while values
+list used variant properties.
+
+The values themselves are nested dictionaries, with first-level keys specifying namespace names, and second-level keys
+specifying feature names within given namespace. The second-level value is a list of property values that the wheel
+was built for.
 
 
 ### Integration with `installers`
