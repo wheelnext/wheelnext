@@ -108,7 +108,7 @@ string form, and each one is terminated with a newline character to ensure their
 As a special case, a variant hash of `00000000` is used for the null variant, in order to make it easily distinguishable
 from other variants.
 
-### Null variant
+#### Null variant
 
 The concept of a null variant was added to make it possible to distinguish a fallback wheel variant from a regular wheel
 published for backwards compatibility. For example, a package that features optional GPU support could publish
@@ -123,6 +123,48 @@ the following wheels:
 In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable GPUs,
 with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
 and therefore GPU support cannot be determined.
+
+### Plugin API
+
+#### General design
+
+The plugin API was largely inspired by [PEP 517](https://peps.python.org/pep-0517/). However, it was extended to support
+classes that are instantiated, in order to facilitate single initialization and clean caching of plugin state between
+multiple method calls. For the convenience of plugin authors, both class-level and module-level (with global variables
+and functions) API implementations are supported.
+
+For the primary use in building packages and installing wheel variants, the plugin API endpoint is either specified
+explicitly or inferred from requirements. Support for the latter was added as the need to explicitly guess the correct
+`build-backend` value was noted as a significant shortcoming of PEP 517. However, for the convenience of package
+developers, plugins are recommended to install entry points as well. Thanks to that, the developer can install
+the relevant provider plugins to their system, and variant-related tooling will be able to automatically discover it
+and obtain the correct API backend values.
+
+The API means to be absolutely minimal. The plugin declares its namespace globally and does not include it in return
+values to avoid potential problems if returned namespace mismatched. All methods are only passed properties
+in the plugin namespace to reduce the risk of mistakenly processing properties from another namespace.
+The `validate_property()` method operates on one property at a time to simplify the return value, since calling it
+multiple times is not considered a bottleneck.
+
+The types used in the API are defined using abstract protocols, in order not to force a specific implementation —
+especially that such an implementation could end up relying on models deprecated in a future version of Python.
+For example, the relevant data types can be implemented using data classes, named tuples, `argparse.Namespace`
+or an entirely custom class.
+
+#### Static and dynamic plugins
+
+The split into static and dynamic plugins was introduced to handle diverse use cases for wheel variants. In particular,
+it was pointed out that the static design cannot handle use cases where compatible values cannot be predicted up front
+and restricted to a fixed list. For these cases, the API permits the plugin to intelligently process the actual property
+values specified at build time, for example as version ranges.
+
+At the same time, the support for the static approach to plugins was preserved in order to facilitate better caching
+and the ability to pin variants easier for the use cases that do not need dynamic processing.
+
+Both versions of the API use the same prototypes to avoid maintaining two divergent API documentations, and to make it
+easier to convert plugin from one type to another. The only difference is in the value of `known_properties` argument
+to `get_supported_configs()`, that explicitly takes `None` for static plugins to avoid accidentally depending on this
+data in static plugins.
 
 
 ## Specification
@@ -232,21 +274,18 @@ the class to use. If object path is omitted, the whole module is used as the end
 
 If the API endpoint specifies a callable, it is called to instantiate the provider object. Otherwise, it is used as-is.
 
-For example, `importable.module:ProviderClass` where `ProviderClass` is a class corresponds to the following Python
-code:
+An API endpoint specification is equivalent to the following Python pseudocode:
 
 ```python
-import importable.module
+import {import path}
 
-provider = importable.module.ProviderClass()
-```
+if {object path}:
+    obj = {import path}.{object path}
+else:
+    obj = {import path}
 
-whereas `importable.module` corresponds to:
-
-```python
-import importable.module
-
-provider = importable.module
+if callable(obj):
+    obj = obj()
 ```
 
 Additionally, a plugin provider can install an entry point in the `variant_plugins` group that can be used
@@ -507,6 +546,23 @@ Several alternative approaches were considered and ultimately rejected:
 - The initial implementation lacked separation between serialized variant properties. As a result, different
   combinations of properties could have yielded the same hash value (`a :: b :: c` + `de :: f :: g` = `a :: b :: cd` +
   `e :: f :: g`).
+
+### Plugin API
+
+- It was proposed that plugins could be implemented as callable executables (or scripts) instead. This would provide
+  natural process isolation, and make it easier to implement plugins in programming languages other than Python.
+  However, this idea was ultimately rejected in favor of following the approach more consistent with PEP 517.
+
+- Originally, provider plugins relied entirely on entry points for discovery, assuming that all plugins installed
+  in the environment would be used. However, this was deemed not explicit enough, and the inconsistency with PEP 517
+  was pointed out.
+
+- The original static API used a `get_all_configs()` function that provided all valid property values for the purpose
+  of validation. To facilitate dynamic plugins and to avoid unnecessary divergence in API, it was replaced by a simpler
+  `validate_property()` function.
+
+- Use of more basic Python types (such as tuples) for passing variant configurations and properties was considered.
+  However, dataclass-like protocols provided much better readability at a minimal cost.
 
 ## Open Issues
 
