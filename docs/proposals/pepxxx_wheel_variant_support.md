@@ -583,33 +583,63 @@ specifying feature names within given namespace. The second-level value is a lis
 was built for.
 
 
-### Integration with `installers`
+### Integration with installers
 
-Upon package installation, `pip/uv/etc.` will:
+#### Install procedure
 
-1. Query `variantlib` for installed `Provider Plugins`.
+When requested to install a package, a package manager supporting wheel variants should:
 
-2. Generate a list of possible variant hashes based on detected attributes.
+1. If fetching from a remote index, fetch the corresponding `*-variants.json` file. If the file cannot be downloaded
+   or is invalid, wheel variants should be ignored. Any variants not listed in the file should be ignored as well.
 
-3. Search package repositories for matching wheels.
+2. Determine which provider plugins to use. Plugins that do not match `enable-if` rules, or are optional and were not
+   explicitly enabled should be discarded.
 
-4. Select the most relevant variant based on predefined priority rules.
+3. Create an isolated environment and install the plugin provider packages there. While installing provider plugins,
+   variant support must be disabled.
 
-5. Install the selected wheel, or fall back to a generic version if no variant is found.
+4. If dynamic plugins are used, construct a complete set of all properties used in considered variants.
 
-6. Users must have control over which plugins are active, with the ability to disable or prioritize them via `pip.conf`
-or `variant.conf`.
+5. Invoke the `get_supported_configs()` plugin API function.
 
-7. A `[uv] pip install --no-variant package` option should be available to force installation of generic wheels.
+6. Filter out variants that are not compatible according to the returned value. The null variant is always compatible.
 
-8. A `[uv] pip install --variant=abcd1234 package` option should be available to force installation of generic wheels.
+7. Install the best variant according to the ordering rules. If no variants are compatible, fall back to the regular
+   wheel, if available.
 
-9. Platform detection can be expensive, it must be cache-able. The following caching policy might be a good start
-(ultimately up to the tool):
-    - Run once and cache
-    - Void at restart
-    - Void at plugin update
-    - Void manually: `[uv] pip cache --void variant_cache`
+Additionally, package managers should support the following features:
+
+- disabling variant support entirely
+
+- specifying an explicit variant to install via appending `#{variant label}` to the requirement specifier
+
+- specifying optional providers to enable
+
+#### Variant ordering
+
+In order to determine the best variant to install, the package manager should order wheel variants using the following
+algorithm:
+
+1. All namespaces are ordered according to the priorities specified in `default-priorities.namespace` key.
+
+2. All features within namespaces are initially ordered according to the order in which they are returned
+   by `get_supported_configs()`, and afterwards reordered according to the overrides in `default-priorities.feature`
+   key.
+
+3. All property values for features are initially ordered according to the order in which they are returned
+   by `get_supported_configs()`, and afterwards reordered according to the overrides in `default-priorities.property`
+   key.
+
+4. Properties are sorted top-down according to namespace-feature-value ordering. Properties from a higher priority
+   namespace sort above these from a lower priority namespace. Within a single namespace, properties from a higher
+   priority feature sort above these from a lower priority feature. Within a single feature, properties from a higher
+   priority value sort above these from a lower priority value.
+
+5. Wheel variants are sorted according to their property priorities. A variant with a higher priority property sorts
+   above a variant without that property. Therefore, a variant with all possible properties would sort first, a variant
+   with all properties but the lowest priority one second, and so on. The null variant always sorts last, but it takes
+   precedence over a non-variant wheel.
+
 
 ## Backward Compatibility
 
