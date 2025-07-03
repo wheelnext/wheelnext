@@ -718,6 +718,33 @@ Several alternative approaches were considered and ultimately rejected:
 - Use of more basic Python types (such as tuples) for passing variant configurations and properties was considered.
   However, dataclass-like protocols provided much better readability at a minimal cost.
 
+### Variant information
+
+- Originally, variant information was added to the Core Metadata. However, it was pointed out that it might not be
+  the most correct location for information regarding wheel metadata — in particular, that the wheel tags are stored
+  in the `WHEEL` file instead. Additionally, the RFC 822 format was very cumbersome to use, and did not permit 1:1
+  structure match between all the formats used. After surveying different build backend implementations, the idea was
+  replaced by using a new JSON file.
+
+- The original design did not use `*-variants.json` files, but instead relied entirely on evaluating hashes for all
+  possible variant property combinations and matching them against wheel variant filenames. This approach was proven
+  to easily result in exponential growth of computational complexity, and therefore untenable without enforcing
+  arbitrarily low limits on the variants. Rejecting it enabled further extensions, such as dynamic plugins and arbitrary
+  labels.
+
+- Making variants optional by skipping them from `default-priorities.namespace` list. It was pointed out that this
+  is confusing: why a priority list controls whether something is optional or not? It also required the users to
+  explicitly control namespace ordering for optional providers. Other options included an additional explicit list
+  of optional (or required) namespaces, or splitting `optional-providers` dictionary out of `providers`. Eventually,
+  the `optional` key was chosen as a method involving minimal duplication.
+
+- Originally, priority overrides were global rather than per-feature / per-property. This allowed a more fine-grained
+  control, in particular specifying that some features or properties of a lower priority plugin would take precedence
+  over all features and properties of higher priority plugins. However, it made the converse very hard — in order to
+  override the ordering inside a lower priority plugin, one would have to explicitly repeat all features or properties
+  from all higher priority plugins. Since local overrides seemed more likely to occur in practice, the override
+  structure was changed to match.
+
 ## Open Issues
 
 1. **Dependency Management**
