@@ -64,6 +64,21 @@ something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull
 
 ### Wheel Variants
 
+### Opt-in vs. opt-out
+
+A critical early design point was whether the wheel variants were supposed to be opt-in or opt-out. An early proposal
+was to make them opt-in, possibly by requiring the user to manually install specific plugins. Then the installer would
+use all the plugins found in the environment to determine whether variants are supported. It was pointed out that this
+design would hamper the adoption of wheel variants and be a suboptimal solution to the original problem, given that
+the users would need to be explicitly aware whether any packages (either installed directly or as a dependency) provide
+wheel variants, and then find out which plugin packages they need to install in order to enable them. Furthermore,
+the necessity of manually keeping the plugins in acceptable version ranges could cause a significant maintenance burden.
+
+Instead, an opt-out approach was taken, with plugins being automatically installed into an isolated environment. This
+approach ensures that variants work out of the box, and users can benefit from them with minimal maintenance burden.
+To satisfy the localized need for an opt-in solutions, providers can be marked optional — in which case they must be
+enabled explicitly but still benefit from automatic provider installation.
+
 #### Wheel filename
 
 In order to distinguish different variants, a variant label was added to the filename. The label is added as the very
@@ -833,6 +848,11 @@ Several alternative approaches were considered and ultimately rejected:
   override the ordering inside a lower priority plugin, one would have to explicitly repeat all features or properties
   from all higher priority plugins. Since local overrides seemed more likely to occur in practice, the override
   structure was changed to match.
+
+- Specifying variant provider dependencies in `build-system.requires`, with the help of variant environment markers.
+  Since the packages are also needed during install time, they were moved to the dedicated `variant.providers` table.
+  Furthermore, integration in the original form was quite hard, as the build frontend needed to filter the dependencies
+  before calling the installer.
 
 ## Open Issues
 
