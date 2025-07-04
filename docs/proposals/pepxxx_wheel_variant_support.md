@@ -791,6 +791,13 @@ Several alternative approaches were considered and ultimately rejected:
 - Automatically generating human-readable labels by providers. This idea did not fit well with very limited variant
   label length.
 
+- Using a distinct character (such as `+`) as a variant label separator. This would make wheel variants even more
+  distinct from regular wheels, and make it easier to adjust the current filename processing algorithms, by avoiding
+  the ambiguity of a 6-component filename (that could either mean build tag or variant label being present).
+  The proposal relies on the variant label being interpreted as part of the platform tag by pre-variant implementations,
+  and therefore rejected based on unsupported platform. However, this approach does not work correctly if the wheel
+  uses multiple platform tags, e.g. `platform1.platform2+label` could be selected if `platform1` matched.
+
 #### Variant properties
 
 - Originally, only a single value was permitted for a property. This assumed that variants designate a specific
