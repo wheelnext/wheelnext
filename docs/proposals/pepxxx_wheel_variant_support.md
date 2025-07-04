@@ -583,6 +583,29 @@ specifying feature names within given namespace. The second-level value is a lis
 was built for.
 
 
+### Variant environment markers
+
+The specification adds additional environment markers to enable specifying dependencies conditional to enabled variant
+properties. The following new markers are added:
+
+- `variant_namespaces` corresponding to the set of namespaces of all the variant properties that the wheel variant was
+  built for
+
+- `variant_features` corresponding to the set of `namespace :: feature` pairs of all the variant properties that
+  the wheel variant was built for
+
+- `variant_properties` corresponding to the set of `namespace :: feature :: value` tuples of all the variant properties
+  that the wheel variant was built for
+
+The markers are defined as set of strings, and therefore must be matched via the `in` or `not in` operator, e.g.:
+
+```
+frobnicate; "foo :: bar :: baz" in variant_properties
+```
+
+Implementations should support matching the values while ignoring whitespace.
+
+
 ### Integration with installers
 
 #### Install procedure
