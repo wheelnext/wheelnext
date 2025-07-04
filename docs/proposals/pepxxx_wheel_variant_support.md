@@ -641,6 +641,38 @@ algorithm:
    precedence over a non-variant wheel.
 
 
+### Integration with build systems
+
+Build systems wishing to support wheel variants should provide the following options:
+
+- an option to specify the list of variant properties to build for
+
+- an option to request building the null variant (exclusive with specifying variant properties)
+
+- an option to override the variant label (exclusive with building a null variant)
+
+It is recommended that these options are exposed via PEP 517 `config_settings` dictionary.
+
+When building a wheel variant, the build system should:
+
+1. Obtain the set of all namespaces from the requested properties, and verify that they are present
+   in the `variant.providers` table in `pyproject.toml` (and in `variant.default-properties.namespace`).
+
+2. Install the respective provider plugins in the isolated build environment (when building via a PEP 517 backend,
+   this is done by including them in the return value of `get_requires_for_build_wheel()` hook).
+
+3. Invoke the plugins' `validate_property()` functions for every property requested, in order to verify their
+   correctness.
+
+4. Construct the `*.dist-info/variant.json` by combining the variant information from `pyproject.toml` with requested
+   variant properties.
+
+5. Build the wheel, including the variant label in the filename.
+
+The build system may support customizing the build process based on selected variant properties, in particular exposing
+the variant information to the scripts run at build time.
+
+
 ## Backward Compatibility
 
 The introduction of `Wheel Variants` does not break existing `installer` (`pip`, `uv`, etc.) versions, as older versions
