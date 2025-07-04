@@ -713,9 +713,21 @@ the variant information to the scripts run at build time.
 
 ## Backward Compatibility
 
-The introduction of `Wheel Variants` does not break existing `installer` (`pip`, `uv`, etc.) versions, as older versions
-will simply ignore variant wheels. This is ensured by modifying the standard wheel filename regex ensures that legacy
-`pip` versions do not mistakenly install incompatible variants.
+The proposal attempts to avoid causing backwards compatibility issues by aiming for pre-variant installer
+implementations to reject variant wheels as incompatible. This is achieved by adding an additional filename component,
+causing the validation or parsing logic to fail. These installers should therefore ignore wheel variants, and fall back
+to a regular wheel, should one be provided.
+
+Aside from this explicit incompatibility, the specification makes minimal and nonintrusive changes to the wheel format.
+This aims to ease implementing it, and particularly providing support in third party tools that are neither installers
+nor build backends, and therefore do not need specific variant awareness. Variant information is stored in a separate
+file, therefore it does not require Core Metadata version change, and it is unlikely to cause problems for tools reading
+`METADATA` or `WHEEL` files.
+
+The use of explicit `*-variants.json` files make it possible to publish variant wheels via indexes without explicit
+wheel variant support. The only requirement is that the index permits publishing wheels with variant-specific filenames,
+and that it permits publishing JSON files. In particular, they do not have to parse variant information in any way.
+
 
 ## Security Implications
 
