@@ -318,8 +318,8 @@ import hashlib
 import typing
 
 
-def variant_hash(properties: typing.Iterable[tuple[str, str, str]]) -> str:
-    if not properties:
+def variant_hash(properties: typing.Collection[tuple[str, str, str]]) -> str:
+    if len(properties) == 0:
         return "00000000"
     hash_obj = hashlib.new("sha256")
     for namespace, feature, value in sorted(properties):
