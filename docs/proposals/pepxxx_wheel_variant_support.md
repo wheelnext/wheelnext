@@ -688,7 +688,7 @@ convenience. Nevertheless, it should be possible to reduce the risks. In particu
 suggested:
 
 - Providing users with more explicit control over variant usage. The package manager should provide options to disable
-  variant use entirely, allow users to specify allow-lists and block-lists for variant providers, pin them.
+  variant use entirely, allow users to specify allow-lists and block-lists for variant providers, and pin them.
 
 - Providing the ability to use a static file in place of variant provider calls. Such a file could be generated
   by invoking the plugin in a secured environment or written manually. The installer would consult the file to get
