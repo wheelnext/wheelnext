@@ -139,6 +139,9 @@ In particular, this makes it possible to publish a smaller null variant for syst
 with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
 and therefore GPU support cannot be determined.
 
+Publishing a null variant is entirely optional. If one is missing, then the non-variant wheel is used instead.
+The non-variant wheel is also used if variant support is explicitly disabled.
+
 ### Plugin API
 
 #### General design
@@ -330,10 +333,11 @@ def variant_hash(properties: typing.Collection[tuple[str, str, str]]) -> str:
 
 #### Null variant
 
-A null variant is a special case of a wheel variant. It has no properties, and its variant label is always `00000000`.
-It is distinct from non-variants, as it still requires the package manager to explicitly support variants, and therefore
-it can be used to provide distinct fallbacks for package managers predating variant support and for systems where none
-of the other variants is supported.
+A null variant is a special case of a wheel variant. It has no properties, and therefore it is always considered
+supported, but less preferable than any other variant. Its variant label is always `00000000`. However,
+it is distinct from non-variants, as it still requires the package manager to explicitly support variants, and therefore
+it can be used to provide distinct wheels to use when no other variant is supported but variant support is available,
+and when the package manager does not support variants at all or the support is explicitly disabled.
 
 
 ### Provider Plugins
