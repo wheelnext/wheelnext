@@ -617,9 +617,9 @@ algorithm:
    precedence over a non-variant wheel.
 
 
-### Integration with build systems
+### Integration with build backends
 
-Build systems wishing to support wheel variants should provide the following options:
+Build backends wishing to support wheel variants should provide the following options:
 
 - an option to specify the list of variant properties to build for
 
@@ -629,7 +629,7 @@ Build systems wishing to support wheel variants should provide the following opt
 
 It is recommended that these options are exposed via PEP 517 `config_settings` dictionary.
 
-When building a wheel variant, the build system should:
+When building a wheel variant, the build backend should:
 
 1. Obtain the set of all namespaces from the requested properties, and verify that they are present
    in the `variant.providers` table in `pyproject.toml` (and in `variant.default-properties.namespace`).
@@ -645,7 +645,7 @@ When building a wheel variant, the build system should:
 
 5. Build the wheel, including the variant label in the filename.
 
-The build system may support customizing the build process based on selected variant properties, in particular exposing
+The build backend may support customizing the build process based on selected variant properties, in particular exposing
 the variant information to the scripts run at build time.
 
 
