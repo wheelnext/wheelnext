@@ -724,6 +724,10 @@ suggested:
 - Requiring that provider plugins vendor all their dependencies, and disabling dependency installation while installing
   them, therefore reducing the attack surface and making auditing easier.
 
+- Vendoring or reimplementing popular plugins, such as these related to GPU or CPU feature detection, in package
+  managers. This allows installations with variant support without running third-party code. Such functionality
+  is similar to the platform probing installers already have to perform to determine operating system version and libc.
+
 
 ## How to Teach This
 
@@ -763,6 +767,9 @@ Several alternative approaches were considered and ultimately rejected:
     - Significant user complexity. Force the user to carefully read the documentation.
     - Totally breaks the dependency tree: `transformers => pytorch`
 
+5. **Extending platform tags for GPU awareness**
+    - Less flexible than the proposed solution. Requires package managers to keep being updated for changing GPUs.
+
 ![pytorch selector](../assets/images/pytorch_variant_selector.webp)
 
 ### Wheel Variants
@@ -773,7 +780,7 @@ Several alternative approaches were considered and ultimately rejected:
   was ultimately rejected, as adding it as a last component made it easier to distinguish different variants,
   and achieved the same goals.
 
-- Using both hash an label in the filename. This approach was rejected because it caused an unnecessary increase
+- Using both hash and label in the filename. This approach was rejected because it caused an unnecessary increase
   of filename length. As the specification evolved and made it unnecessary to include the hash in the filename,
   it was suggested to replace it with a human-readable label instead.
 
