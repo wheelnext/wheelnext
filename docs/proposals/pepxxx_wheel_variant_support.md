@@ -486,8 +486,8 @@ the default priorities used to order wheels by preference.
 
 Upon building the wheel, these keys and their values are copied to the `*.dist-info/variant.json` file. This file
 additionally contains a `variants` key, containing a dictionary with a single key that is the wheel's variant label. The
-value defines the properties required by this wheel. It is a dictionary where the keys are
-namespaces and the values are dictionaries with feature name-values key-value pairs.
+value defines the properties required by this wheel. It is a dictionary where the keys are namespaces and the values are
+dictionaries with features as keys and a list of properties as values.
 
 `*-variants.json` merges the variant files of all wheels of a release in an index. It follows the same structure as
 `*.dist-info/variant.json` and contains the same `providers` and `default-priorities` entries. The `variants` however
@@ -565,7 +565,7 @@ Example `foo_bar-1.2.3.dist-info/variant.json` in `foo_var-1.2.3-cp313-cp313-win
   "variants": {
     "fa7c1393": {
       "x86_64": {
-        "level": "v3"
+        "level": ["v3"]
       }
     }
   }
@@ -606,19 +606,17 @@ Example `foo_bar-1.2.3-variants.json`:
   "variants": {
     "fa7c1393": {
       "x86_64": {
-        "level": "v3"
+        "level": ["v3"]
       }
     },
     "fp16": {
       "aarch64": {
-        "fp16": "on"
+        "extensions": ["fp16"]
       }
     },
     "i8mmbf16": {
       "aarch64": {
-        "fp16": "on",
-        "i8mm": "on",
-        "bf16": "on"
+        "extensions": ["fp16", "i8mm", "bf16"]
       }
     }
   }
