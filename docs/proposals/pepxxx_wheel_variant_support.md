@@ -480,9 +480,9 @@ Variant information is stored in three locations:
 2. As a JSON file called `{distribution}-{version}.dist-info/variant.json` in each variant wheel
 3. As a JSON file called `{distribution}-{version}-variants.json` on the wheel index
 
-`[variant]` in `pyproject.toml` defines the two keys `providers` and `default-priorities`. `providers` contains a
-dictionary of used variant providers, with the names of their namespaces as keys, while `default-priorities` specifies
-the default priorities used to order wheels by preference.
+`[variant]` in `pyproject.toml` defines the two keys `providers` and `default-priorities`. `providers` declares the 
+variant providers and when they are used, while `default-priorities` specifies the default priorities for ordering
+wheels by preference.
 
 Upon building the wheel, these keys and their values are copied to the `*.dist-info/variant.json` file. This file
 additionally contains a `variants` key, containing a dictionary with a single key that is the wheel's variant label. The
