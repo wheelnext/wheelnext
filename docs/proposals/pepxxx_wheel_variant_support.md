@@ -66,7 +66,8 @@ something they [indirectly do today](https://github.com/wheelnext/wheelnext/pull
 
 ### Opt-in vs. opt-out
 
-A critical early design point was whether the wheel variants were supposed to be opt-in or opt-out. An early proposal
+A critical early design point was whether installing wheel variants when they were published for a package, was supposed
+to be opt-in or opt-out. An early proposal
 was to make them opt-in, possibly by requiring the user to manually install specific plugins. Then the installer would
 use all the plugins found in the environment to determine whether variants are supported. It was pointed out that this
 design would hamper the adoption of wheel variants and be a suboptimal solution to the original problem, given that
@@ -82,14 +83,14 @@ enabled explicitly but still benefit from automatic provider installation.
 #### Wheel filename
 
 In order to distinguish different variants, a variant label was added to the filename. The label is added as the very
-last component in order to make it easy to distinguish different variants.
+last component to make it easy to distinguish different variants.
 
-The model defaults to using a hash in order to provide unique and reproducible filenames out of the box. However, it
-permits explicitly choosing a different label in order to make variants easy to recognize by humans. The label length
-is strictly limited in order to prevent the wheel filenames to become much longer than they are now, and causing issues
+The model defaults to using a hash to provide unique and reproducible filenames out of the box. However, it
+permits explicitly choosing a different label to make variants easy to recognize by humans. The label length
+is strictly limited to prevent the wheel filenames to become much longer than they are now, and causing issues
 on systems with smaller filename or path length limits.
 
-The same `-` character is used as the separator in order to reduce the risk of existing package manager implementations
+The same `-` character is used as the separator to reduce the risk of existing package manager implementations
 accidentally choosing a potentially unsupported wheel variant instead of a regular wheel. This was based on a survey
 of wheel filename verification methods used by different package managers and libraries (packaging, poetry, pip, uv).
 Both the current specification and some implementations are very permissive about different components, yet they all
@@ -100,9 +101,9 @@ choice is that it assumes that the python tag will never start with a digit.
 
 Variant properties follow a key-value design, where namespace and feature name constitute the key. Namespaces are used
 to group features defined by a single provider, and avoid conflicts should multiple providers define a feature with
-the same name. The character sets for all components are restricted in order to make it easier to preserve consistency
+the same name. The character sets for all components are restricted to make it easier to preserve consistency
 between different providers, in particular uppercase characters are rejected to avoid different spellings of the same
-name. The character set for values is more relaxed, in order to permit values resembling versions and version
+name. The character set for values is more relaxed, to permit values resembling versions and version
 specifications.
 
 Multiple values are permitted as a logical disjunction, while different features are treated conjunctively. This is
@@ -113,14 +114,14 @@ be dynamically interpreted, e.g. as version ranges.
 #### Variant hash
 
 Variant hash is used as a stable and unique identifier for every set of variant properties. It is truncated to
-8 characters in order to ensure that filenames remain short. SHA256 algorithm was chosen, because it is already widely
+8 characters to ensure that filenames remain short. SHA256 algorithm was chosen, because it is already widely
 used in wheels, in the `RECORD` file and therefore the package managers do not have to implement an additional
 algorithm.
 
 To ensure reproducible hash values, properties are sorted before hashing. They are then serialized into a canonical
 string form, and each one is terminated with a newline character to ensure their separation.
 
-As a special case, a variant hash of `00000000` is used for the null variant, in order to make it easily distinguishable
+As a special case, a variant hash of `00000000` is used for the null variant, to make it easily distinguishable
 from other variants.
 
 #### Null variant
@@ -147,7 +148,7 @@ The non-variant wheel is also used if variant support is explicitly disabled.
 #### General design
 
 The plugin API was largely inspired by [PEP 517](https://peps.python.org/pep-0517/). However, it was extended to support
-classes that are instantiated, in order to facilitate single initialization and clean caching of plugin state between
+classes that are instantiated, to facilitate single initialization and clean caching of plugin state between
 multiple method calls. For the convenience of plugin authors, both class-level and module-level (with global variables
 and functions) API implementations are supported.
 
@@ -158,14 +159,21 @@ developers, plugins are recommended to install entry points as well. Thanks to t
 the relevant provider plugins to their system, and variant-related tooling will be able to automatically discover it
 and obtain the correct API backend values.
 
-The API means to be absolutely minimal. The plugin declares its namespace globally and does not include it in return
-values to avoid potential problems if returned namespace mismatched. All methods are only passed properties
-in the plugin namespace to reduce the risk of mistakenly processing properties from another namespace.
-The `validate_property()` method operates on one property at a time to simplify the return value, since calling it
+The API means to be absolutely minimal and is specified using abstract protocols. Its centerpiece is a function that
+allows a frontend to query the configs supported on the current platform (`get_supported_configs()`). Additionally,
+a plugin declares the namespace it uses (`namespace`), whether it is a static or dynamic plugin (`dynamic`)
+and exposes a function to validate properties (`validate_property()`).
+
+The namespace is declared globally and is avoided in return values to avoid redundancy and the need to handle potential
+mismatches. All methods are only passed properties in the plugin namespace to make plugin implementation easier,
+and avoid the need for explicit filtering, that if accidentally omitted could result in mistakenly processing properties
+from another namespace.
+
+The `validate_property()` method is provided for build backends to ensure that wheel variants are not built with
+incorrect properties. It operates on one property at a time to simplify the return value, since calling it
 multiple times is not considered a bottleneck.
 
-The types used in the API are defined using abstract protocols, in order not to force a specific implementation —
-especially that such an implementation could end up relying on models deprecated in a future version of Python.
+The types used in the API are defined using abstract protocols, in order not to force a specific implementation.
 For example, the relevant data types can be implemented using data classes, named tuples, `argparse.Namespace`
 or an entirely custom class.
 
@@ -176,7 +184,7 @@ it was pointed out that the static design cannot handle use cases where compatib
 and restricted to a fixed list. For these cases, the API permits the plugin to intelligently process the actual property
 values specified at build time, for example as version ranges.
 
-At the same time, the support for the static approach to plugins was preserved in order to facilitate better caching
+At the same time, the support for the static approach to plugins was preserved to facilitate better caching
 and the ability to pin variants easier for the use cases that do not need dynamic processing.
 
 Both versions of the API use the same prototypes to avoid maintaining two divergent API documentations, and to make it
@@ -191,16 +199,17 @@ data in static plugins.
 The variant information format is meant to cover the complete pipeline from building wheels to installing them. It
 includes both information needed to build wheel variants and to install them. The information is initially included
 in project's `pyproject.toml` file, then copied verbatim into `variant.json` in the built wheel. From there, it is
-copied to `*-variants.json` file on the index, where it enables installers to filter and sort supported wheel variants
-without having to fetch all of them.
+copied to `*-variants.json` file on the index, where it enables installers to filter and sort the supported wheel
+variants without having to fetch all of them. This is similar in principle to [PEP 658](
+https://peps.python.org/pep-0658/) that enables serving the distribution metadata via an additional URL.
 
 For project-level configuration, the `pyproject.toml` format was selected as specified in [PEP 518](
 https://peps.python.org/pep-0518/), and frequently used for project metadata and tool configuration. For wheel-level
-information, a JSON file is used instead, as a format intended exclusive for machine processing and supported by all
+information, a JSON file is used instead, as a format intended exclusively for machine processing and supported by all
 Python versions. The same format is used e.g. in [PEP 770](https://peps.python.org/pep-0770/) that is also included
 in the `.dist-info` directory. For the same reasons, JSON is also used for `*-variants.json` on the index.
 
-A separate `variant.json` file is used in the `.dist-info` directory in order to minimize the risk of interoperability
+A separate `variant.json` file is used in the `.dist-info` directory to minimize the risk of interoperability
 issues and to make the implementation as simple as possible. In particular, given different implementations of code
 responsible for reading and writing `METADATA` and `WHEEL` files in different package managers (some expecting
 dictionaries, others serialized data), a solution that uses a separate file made providing the data via a single
@@ -212,12 +221,12 @@ relevant to building, to keep all the configuration in a single location. The co
 into the wheel, to facilitate the ability of constructing `*-variants.json` for index using prebuilt wheels alone.
 
 The `*-variants.json` files are generated separately for every package version. This makes it possible to upload them
-along with every new version without having to update the previous file. It may be particularly necessary if the index
-does not permit overwriting files.
+along with every new version without having to update the previous file. It also makes it possible for the index
+to generate the file after all files for a version have been uploaded, similarly to the `.metadata` files.
 
 #### Provider information
 
-All providers are keyed on their namespaces, in order to permit matching them easily to variant properties. The two
+All providers are keyed on their namespaces, to permit matching them easily to variant properties. The two
 most important data are the `requires` key that is necessary to automatically install the provider plugin and therefore
 enable automatic selection of variants, and the `plugin-api` key that provides flexibility in layouting the plugin
 to the author's wishes.
@@ -226,9 +235,11 @@ The `requires` key permits uses standard Python dependency specifier syntax, and
 to the dependency specifiers used elsewhere in package management context. For user convenience, `plugin-api` is
 optional and defaults to the value inferred from the first package in `requires` — this aims to reduce the need
 of having to explicitly look up the correct `plugin-api` value when using a provider plugin. Ideally, `plugin-api` would
-only be explicitly declared in special cases.
+only be explicitly declared in special cases. When constructing the default value, `-` are replaced by `_` since
+the former is not valid in `import` statements and can be relatively common in distribution names; other characters are
+not normalized since packages follow different conventions on matching distribution names to import names.
 
-The `enable-if` key was added in order to enable cleanly restricting the systems on which the provider is used,
+The `enable-if` key was added to enable cleanly restricting the systems on which the provider is used,
 and therefore avoiding installing unnecessary provider plugins on systems where they always report no compatible
 variant properties. For example, providers handling compatibility with specific CPU features need only to be installed
 on systems with specific CPU architectures.
@@ -241,8 +252,9 @@ is the ability to avoid installing plugins for rarely used variants by default.
 Provider plugins define the features and their values in a specific order. However, the ordering between different
 plugins is undefined. Therefore, it is necessary for every package to specify the requested ordering for namespaces.
 
-The format also permits overriding the preference order for features within every namespace, and for property value for
-every feature. The overrides are scoped in order to allow specifying features or property values that have higher
+The format also permits packages to override the preference order initially specified by the plugins, for features
+within every namespace, and for property value for
+every feature. The overrides are scoped to allow specifying features or property values that have higher
 significance without needing to explicitly cover all the features or properties used by the package.
 
 #### Variants
@@ -317,11 +329,11 @@ must be supported.
 Variant hash is computed using the following algorithm, where `properties` are given as a list of property tuples:
 
 ```python
+import collections.abc
 import hashlib
-import typing
 
 
-def variant_hash(properties: typing.Collection[tuple[str, str, str]]) -> str:
+def variant_hash(properties: collections.abc.Collection[tuple[str, str, str]]) -> str:
     if len(properties) == 0:
         return "00000000"
     hash_obj = hashlib.new("sha256")
@@ -377,8 +389,9 @@ if callable(obj):
 ```
 
 Additionally, a plugin provider can install an entry point in the `variant_plugins` group that can be used
-by development tools to discover available providers. However, wheels must be installable without the presence of entry
-points.
+by development tools to discover available providers, for example providing methods to query the plugin status
+or easily add wheel variant support to `pyproject.toml`. However, wheels must be installable without the presence of
+entry points.
 
 #### Plugin API
 
@@ -409,13 +422,18 @@ class PluginType:
        ...
 ```
 
-The plugin must implement the following attributes or properties:
+The plugin API can be implemented either at class or module level. When implemented as a class, the listen attributes
+can also be implemented as properties, and the listed methods can also be class or static methods. When implemented
+at module level, the attributes are implemented as global variables, the methods are implemented as global
+functions, and the `self` parameter must be omitted.
+
+The plugin must implement the following attributes:
 
 - `namespace` stating the namespace used by the provider
 
 - `dynamic` indicating whether the plugin is dynamic
 
-It must also implement two methods or functions:
+It must also implement two methods:
 
 - `get_supported_configs()` that returns a list of feature names and values that are compatible with the current
   environment, in their order of preference (i.e. a wheel with such a property can be installed)
@@ -498,7 +516,7 @@ the values are dictionaries.  They must include the following key:
 Additionally, they may include the following keys:
 
 - `enable-if: str` specifying an environment marker defining when the plugin should be used. If the environment marker
-  does not match the running environment, the provider will be disabled and the variants using its properties will
+  does not match the running environment, the provider will be disabled and the variants using its properties are
   deemed incompatible.
 
 - `optional: bool` specifying whether the provider is optional, as a boolean value. If it is true, the provider
@@ -507,7 +525,7 @@ Additionally, they may include the following keys:
 
 - `plugin-api: str` specifying the API endpoint for the plugin. If it is specified, it must be an object reference
   as explained in the "API endpoint" section. If it is missing, the package name from the first dependency specifier
-  in `requires` is used, after replacing all the `-` characters with `_`.
+  in `requires` is used, after replacing all `-` characters with `_` in the normalized package name.
 
 #### Default priorities
 
@@ -641,7 +659,7 @@ When building a wheel variant, the build backend should:
 2. Install the respective provider plugins in the isolated build environment (when building via a PEP 517 backend,
    this is done by including them in the return value of `get_requires_for_build_wheel()` hook).
 
-3. Invoke the plugins' `validate_property()` functions for every property requested, in order to verify their
+3. Invoke the plugins' `validate_property()` functions for every property requested, to verify their
    correctness.
 
 4. Construct the `*.dist-info/variant.json` by combining the variant information from `pyproject.toml` with requested
