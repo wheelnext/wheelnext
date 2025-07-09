@@ -517,8 +517,8 @@ property.x86_64.level = ["v3", "v2", "v1"]
 [variant.providers.aarch64]
 # Using different package based on the Python version
 requires = [
-    "provider-variant-aarch64 >=0.0.1,<1; python_version >= '3.9'",
-    "legacy-provider-variant-aarch64 >=0.0.1,<1; python_version < '3.9'",
+  "provider-variant-aarch64 >=0.0.1,<1; python_version >= '3.9'",
+  "legacy-provider-variant-aarch64 >=0.0.1,<1; python_version < '3.9'",
 ]
 # use only on aarch64/arm machines
 enable-if = "platform_machine == 'aarch64' or 'arm' in platform_machine"
@@ -611,12 +611,14 @@ Example `foo_bar-1.2.3-variants.json`:
     },
     "fp16": {
       "aarch64": {
-        "extensions": ["fp16"]
+        "fp16": ["on"]
       }
     },
     "i8mmbf16": {
       "aarch64": {
-        "extensions": ["fp16", "i8mm", "bf16"]
+        "fp16": ["on"],
+        "i8mm": ["on"],
+        "bf16": ["on"]
       }
     }
   }
