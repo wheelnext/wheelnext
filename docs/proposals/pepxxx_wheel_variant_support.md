@@ -487,7 +487,7 @@ the default priorities used to order wheels by preference.
 Upon building the wheel, these keys and their values are copied to the `*.dist-info/variant.json` file. This file
 additionally contains a `variants` key, containing a dictionary with a single key that is the wheel's variant label. The
 value defines the properties required by this wheel. It is a dictionary where the keys are
-namespaces and the values are dictionaries with property-feature key-value pairs.
+namespaces and the values are dictionaries with feature name-values key-value pairs.
 
 `*-variants.json` merges the variant files of all wheels of a release in an index. It follows the same structure as
 `*.dist-info/variant.json` and contains the same `providers` and `default-priorities` entries. The `variants` however
