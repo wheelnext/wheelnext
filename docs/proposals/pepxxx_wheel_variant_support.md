@@ -495,7 +495,7 @@ contain one key for each wheel variant label, where the value is the entry from 
 
 `{distribution}` and `{version}` are the project name and version normalized in the same way as in wheels, as specified
 in the [binary distribution format](https://packaging.python.org/en/latest/specifications/binary-distribution-format/),
-that is the normalized version with `-` replaced by `_` and the normalized version.
+that is the normalized package name with `-` replaced by `_` and the normalized version.
 
 Example `pyproject.toml`:
 
