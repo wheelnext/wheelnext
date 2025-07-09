@@ -403,7 +403,7 @@ class VariantFeatureConfigType:
     values: list[str]
 
 
-cladd VariantPropertyType:
+class VariantPropertyType:
     namespace: str
     feature: str
     value: str
@@ -422,7 +422,7 @@ class PluginType:
        ...
 ```
 
-The plugin API can be implemented either at class or module level. When implemented as a class, the listen attributes
+The plugin API can be implemented either at class or module level. When implemented as a class, the listed attributes
 can also be implemented as properties, and the listed methods can also be class or static methods. When implemented
 at module level, the attributes are implemented as global variables, the methods are implemented as global
 functions, and the `self` parameter must be omitted.
