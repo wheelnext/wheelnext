@@ -508,7 +508,7 @@ The following keys are defined:
 The provider information dictionary provides information on how to install and use variant providers. It must be
 specified in `pyproject.toml` for every variant namespace that is supported. It must be copied to `variant.json` as-is,
 including data for providers that are not used in the particular wheel. The dictionary keys are namespaces, while
-the values are dictionaries.  They must include the following key:
+the values are dictionaries. They must include the following key:
 
 - `requires: list[str]` specifying a list of one or more package dependency specifiers. When installing the provider,
   all the dependencies are installed (provided their environment markers match).
@@ -773,7 +773,7 @@ Several alternative approaches were considered and ultimately rejected:
   was ultimately rejected, as adding it as a last component made it easier to distinguish different variants,
   and achieved the same goals.
 
-- Using labels in addition to the variant hash. This approach was rejected because it caused unnecessary increase
+- Using both hash an label in the filename. This approach was rejected because it caused an unnecessary increase
   of filename length. As the specification evolved and made it unnecessary to include the hash in the filename,
   it was suggested to replace it with a human-readable label instead.
 
