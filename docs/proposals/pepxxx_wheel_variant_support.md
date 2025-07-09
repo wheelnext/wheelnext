@@ -609,7 +609,7 @@ Additionally, package managers should support the following features:
 
 - disabling variant support entirely
 
-- specifying an explicit variant to install via appending `#{variant label}` to the requirement specifier
+- specifying an explicit variant to install
 
 - specifying optional providers to enable
 
@@ -620,13 +620,13 @@ algorithm:
 
 1. All namespaces are ordered according to the priorities specified in `default-priorities.namespace` key.
 
-2. All features within namespaces are initially ordered according to the order in which they are returned
-   by `get_supported_configs()`, and afterwards reordered according to the overrides in `default-priorities.feature`
-   key.
+2. For features within namespaces, the order returned by `get_supported_configs()` is updated so that all features
+   that are in `default-priorities.feature` are in that order and ahead of the features that aren't
+   in `default-priorities.feature`.
 
-3. All property values for features are initially ordered according to the order in which they are returned
-   by `get_supported_configs()`, and afterwards reordered according to the overrides in `default-priorities.property`
-   key.
+3. For property values, the order returned by `get_supported_configs()` is updated os that all values that are
+   in `default-priorities.property` are in that order and ahead of the values that aren't
+   in `default-priorities.property`.
 
 4. Properties are sorted top-down according to namespace-feature-value ordering. Properties from a higher priority
    namespace sort above these from a lower priority namespace. Within a single namespace, properties from a higher
