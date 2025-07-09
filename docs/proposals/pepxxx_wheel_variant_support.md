@@ -474,34 +474,156 @@ for each of them. It will only be called with properties whose namespace matches
 
 ### Variant information
 
-Variant information is stored in three contexts:
+Variant information is stored in three locations:
 
-1. As a top-level table called `[variant]` in `pyproject.toml`, where it specifies the variant providers that are used
-   to build and install wheels, as well as provides the default priorities used when installing wheels.
+1. As a top-level table called `[variant]` in `pyproject.toml`
+2. As a JSON file called `{distribution}-{version}.dist-info/variant.json` in each variant wheel
+3. As a JSON file called `{distribution}-{version}-variants.json` on the wheel index
 
-2. As a JSON file called `variant.json` stored inside the wheel's `.dist-info` directory, where it includes a copy
-   of the aforementioned information that is used while determining whether to install the wheel, as well as the list
-   of variant properties used by the wheel.
+`[variant]` in `pyproject.toml` defines the two keys `providers` and `default-priorities`. `providers` contains a
+dictionary of used variant providers, with the names of their namespaces as keys, while `default-priorities` specifies
+the default priorities used to order wheels by preference.
 
-3. As a JSON file called `{package}-{version}-variants.json` on the wheel index, where it includes a copy
-   of the aforementioned information that is used while determining which of the available wheel variants to install,
-   as well as list of all available wheel variants along with their respective properties. The `{package}`
-   and `{version}` templates correspond to the normalized project name and version, per the rules specified
-   in [binary distribution format
-   specification](https://packaging.python.org/en/latest/specifications/binary-distribution-format/).
+Upon building the wheel, these keys and their values are copied to the `*.dist-info/variant.json` file. This file
+additionally contains a `variants` key, containing a dictionary with a single key that is the wheel's variant label. The
+value defines the namespaces, properties and features required by this wheel, it is a dictionary where the keys are
+namespaces and the values are dictionaries with property-feature key-value pairs.
 
-All these contexts use the same data structure that is defined in terms of Python dictionary below, and serialized
-using the standard TOML serialization, as sub-tables using the `[variant]` table as an anchor, or the standard JSON
-serialization as a top-level object.
+`*-variants.json` merges the variant files of all wheels of a release in an index. It follows the same structure as
+`*.dist-info/variant.json` and contains the same `providers` and `default-priorities` entries. The `variants` however
+contain one key for each wheel variant label, where the value is the entry from the corresponding wheel.
 
-The following keys are defined:
+`{distribution}` and `{version}` are the project name and version normalized in the same way as in wheels, as specified
+in the [binary distribution format](https://packaging.python.org/en/latest/specifications/binary-distribution-format/),
+that is the normalized version with `-` replaced by `_` and the normalized version.
 
-- `providers` containing a dictionary of used variant providers, with the names of their namespaces as keys
+Example `pyproject.toml`:
 
-- `default-priorities` specifying the default priorities used to order wheels by preference
+```toml
+[project]
+name = "foo-bar"
+version = "1.2.3"
 
-- `variants` containing a dictionary of wheel variants, with their labels as keys and properties as values
-  (not present in `pyproject.toml`)
+[variant.default-priorities]
+# prefer aarch64 over x86_64
+namespace = ["aarch64", "x86_64"]
+# prefer aarch64 version and x86_64 level features over other features
+# (specific CPU extensions like "sse4.1")
+feature.aarch64 = ["version"]
+feature.x86_64 = ["level"]
+# prefer x86-64-v3 and then older (even if CPU is newer)
+property.x86_64.level = ["v3", "v2", "v1"]
+
+[variant.providers.aarch64]
+# Using different package based on the Python version
+requires = [
+    "provider-variant-aarch64 >=0.0.1,<1; python_version >= '3.9'",
+    "legacy-provider-variant-aarch64 >=0.0.1,<1; python_version < '3.9'",
+]
+# use only on aarch64/arm machines
+enable-if = "platform_machine == 'aarch64' or 'arm' in platform_machine"
+plugin-api = "provider_variant_aarch64.plugin:AArch64Plugin"
+
+[variant.providers.x86_64]
+requires = ["provider-variant-x86-64 >=0.0.1,<1"]
+# use only on x86_64 machines
+enable-if = "platform_machine == 'x86_64' or platform_machine == 'AMD64'"
+plugin-api = "provider_variant_x86_64.plugin:X8664Plugin"
+```
+
+Example `foo_bar-1.2.3.dist-info/variant.json` in `foo_var-1.2.3-cp313-cp313-win_amd64-fa7c1393.whl`:
+
+```json
+{
+  "default-priorities": {
+    "feature": {
+      "aarch64": ["version"],
+      "x86_64": ["level"]
+    },
+    "namespace": ["aarch64", "x86_64"],
+    "property": {
+      "x86_64": {
+        "level": ["v3", "v2", "v1"]
+      }
+    }
+  },
+  "providers": {
+    "aarch64": {
+      "enable-if": "platform_machine == 'aarch64' or 'arm' in platform_machine",
+      "plugin-api": "provider_variant_aarch64.plugin:AArch64Plugin",
+      "requires": [
+        "provider-variant-aarch64 >=0.0.1,<1; python_version >= '3.9'",
+        "legacy-provider-variant-aarch64 >=0.0.1,<1; python_version < '3.9'"
+      ]
+    },
+    "x86_64": {
+      "enable-if": "platform_machine == 'x86_64' or platform_machine == 'AMD64'",
+      "plugin-api": "provider_variant_x86_64.plugin:X8664Plugin",
+      "requires": ["provider-variant-x86-64 >=0.0.1,<1"]
+    }
+  },
+  "variants": {
+    "fa7c1393": {
+      "x86_64": {
+        "level": "v3"
+      }
+    }
+  }
+}
+```
+
+Example `foo_bar-1.2.3-variants.json`:
+
+```json
+{
+  "default-priorities": {
+    "feature": {
+      "aarch64": ["version"],
+      "x86_64": ["level"]
+    },
+    "namespace": ["aarch64", "x86_64"],
+    "property": {
+      "x86_64": {
+        "level": ["v3", "v2", "v1"]
+      }
+    }
+  },
+  "providers": {
+    "aarch64": {
+      "enable-if": "platform_machine == 'aarch64' or 'arm' in platform_machine",
+      "plugin-api": "provider_variant_aarch64.plugin:AArch64Plugin",
+      "requires": [
+        "provider-variant-aarch64 >=0.0.1,<1; python_version >= '3.9'",
+        "legacy-provider-variant-aarch64 >=0.0.1,<1; python_version < '3.9'"
+      ]
+    },
+    "x86_64": {
+      "enable-if": "platform_machine == 'x86_64' or platform_machine == 'AMD64'",
+      "plugin-api": "provider_variant_x86_64.plugin:X8664Plugin",
+      "requires": ["provider-variant-x86-64 >=0.0.1,<1"]
+    }
+  },
+  "variants": {
+    "fa7c1393": {
+      "x86_64": {
+        "level": "v3"
+      }
+    },
+    "fp16": {
+      "aarch64": {
+        "fp16": "on"
+      }
+    },
+    "i8mmbf16": {
+      "aarch64": {
+        "fp16": "on",
+        "i8mm": "on",
+        "bf16": "on"
+      }
+    }
+  }
+}
+```
 
 #### Provider information
 
