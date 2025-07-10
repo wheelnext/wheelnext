@@ -776,9 +776,13 @@ Additionally, package managers should support the following features:
 
 - disabling variant support entirely
 
+- limiting variant support to specific plugins (e.g. plugins provided by the package manager, plugins vetted by user)
+
 - specifying an explicit variant to install
 
 - specifying optional providers to enable
+
+- controlling the use of isolated environment
 
 #### Variant ordering
 
