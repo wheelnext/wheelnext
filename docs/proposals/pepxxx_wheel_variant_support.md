@@ -205,14 +205,42 @@ and the plugin returns what the particular CPU provides. Most importantly, the p
 CPU versions that are compatible with it.
 
 An example of a dependency-style property is compatibility with a runtime version. While simpler dependency requirements
-(such as Semantic Versions of style `>= A.B, < (A+1)` could be reasonable well expressed using static plugins, in a more
-general case, a variant could wish to declare a requirement equivalent to `>= A.B.C, < X.Y.Z`. This faces two problems:
-expressing it would require up to 2 features per each component (min and max value), with the actual semantics being
-quite confusing, and it would require the plugin to be able to exhaustively list all possible versions (in some
-contexts, this would imply all future versions as well). As such, the static approach turns out to be unworkable.
+(such as Semantic Versions of style `>=1.2, <2`) could be reasonable well expressed using static plugins, a more
+general case such as `>=4, <=7` cannot. Let's assume that a wheel variant declares it using two properties:
 
-The dynamic plugin approach could be used to solve that problem, and achieve much better readability. For example,
-the variant wheel would declare the runtime versions it is compatible with as a property:
+```
+example_runtime :: min :: 4
+example_runtime :: max :: 7
+```
+
+If a plugin has dependency version 6 installed, it needs to reject wheels requiring `>=7` or higher (i.e. `min :: 7`),
+and accept values below that, that is:
+
+```
+example_runtime :: min :: [0, 1, 2, 3, 4, 5, 6]
+```
+
+Conversely, it needs to reject wheels requiring `<=5` (i.e. `max :: 5`), and allow any value higher than that:
+
+```
+example_runtime :: max :: [6, 7, 8, ...]
+```
+
+Solutions of this kind face three problems:
+
+1. The `max` list is unbounded (as new versions can be released indefinitely). The plugin can use some approximation,
+   such as going a limited number of versions forward from the newest known version at the time and updating the list
+   in new plugin releases, but this is hardly a robust solution.
+
+2. The `min` / `max` semantics can be confusing for plugin authors. Rather than matching installed runtime version
+   to the dependency specifiers, we are constructing all dependency specifiers that would match the installed runtime
+   version.
+
+3. Handling versions consisting of multiple components requires introducing even more properties, and the complexity
+   grows quickly.
+
+The dynamic plugin approach could be used to solve that problem in a way that's both most robust and easier
+to comprehend. For example, the variant wheel would declare the runtime versions it is compatible with as a property:
 
 ```
 example_runtime :: version :: >=1.2.3,<3
