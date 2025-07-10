@@ -1086,6 +1086,11 @@ Several alternative approaches were considered and ultimately rejected:
     - Same logic for CPU, every `AVX512` specialized packages need to highlight that feature in the exact same way.
     - Shall we have a package like `troveclassifiers` to act as a "source of truth"?
 
+5. **Other details**
+    - Should `*` be permitted in property values? It is part of version specifiers, so we may want to allow it for
+    consistency.
+    - Should `variant_hash` and/or `variant_label` environment markers be added?
+
 ## Conclusion
 
 This proposal outlines a scalable and backward-compatible solution for platform-specific Python Wheel distribution.
