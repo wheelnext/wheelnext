@@ -180,12 +180,57 @@ or an entirely custom class.
 #### Static and dynamic plugins
 
 The split into static and dynamic plugins was introduced to handle diverse use cases for wheel variants. In particular,
-it was pointed out that the static design cannot handle use cases where compatible values cannot be predicted up front
-and restricted to a fixed list. For these cases, the API permits the plugin to intelligently process the actual property
-values specified at build time, for example as version ranges.
+static plugins are better suited to handling feature-style properties, while dynamic plugins are better equipped
+to dependency-style properties.
 
-At the same time, the support for the static approach to plugins was preserved to facilitate better caching
-and the ability to pin variants easier for the use cases that do not need dynamic processing.
+An example of a feature-style property is CPU support. If a wheel variant is built for a version 3 of an example CPU
+(equivalent to `-march=example-v3`), it could use the following property to declare that it requires support for that:
+
+```
+example_cpu :: version :: 3
+```
+
+Conversely, when the plugin detects that version 4 of that particular CPU is available, it would return all versions
+compatible with it, in order of preference (the highest version being most preferred, as it would match the best
+optimization available):
+
+```
+example_cpu :: version :: [4, 3, 2, 1]
+```
+
+The key point here is that the set of all valid property values is fixed for a particular plugin version, and both
+the required values specified by the variant wheel, and the supported values returned by the plugin are subsets of that
+set, and can be determined independently of each other. In this scenario, the wheel declares what it requires,
+and the plugin returns what the particular CPU provides. Most importantly, the plugin can up front determine all other
+CPU versions that are compatible with it.
+
+An example of a dependency-style property is compatibility with a runtime version. While simpler dependency requirements
+(such as Semantic Versions of style `>= A.B, < (A+1)` could be reasonable well expressed using static plugins, in a more
+general case, a variant could wish to declare a requirement equivalent to `>= A.B.C, < X.Y.Z`. This faces two problems:
+expressing it would require up to 2 features per each component (min and max value), with the actual semantics being
+quite confusing, and it would require the plugin to be able to exhaustively list all possible versions (in some
+contexts, this would imply all future versions as well). As such, the static approach turns out to be unworkable.
+
+The dynamic plugin approach could be used to solve that problem, and achieve much better readability. For example,
+the variant wheel would declare the runtime versions it is compatible with as a property:
+
+```
+example_runtime :: version :: >=1.2.3,<3
+```
+
+When runtime version 1.6.7 is installed, rather than trying to enumerate all possible dependency specifiers matching
+that version, the plugin is given all properties actually found in wheels, determines which specifiers match
+the installed version and return them in order. In this particular case, it would return precisely the same value.
+In more generic cases, it might return multiple values if multiple compatible wheel variants are available, ordered
+by the best match.
+
+In this class of plugins, the key point is that the set of all valid property values cannot be determined up front,
+and is possibly infinite. The wheel variant declares the value that the system needs to be compatible with,
+and the plugin determines whether the system is actually compatible with it.
+
+Technically, dynamic plugins can also satisfy all the use cases for static plugins. However, the support for the static
+approach was preserved to facilitate better caching, reduced attack surface, and the ability to pin variants easier
+for the use cases that do not need dynamic processing.
 
 Both versions of the API use the same prototypes to avoid maintaining two divergent API documentations, and to make it
 easier to convert plugin from one type to another. The only difference is in the value of `known_properties` argument
