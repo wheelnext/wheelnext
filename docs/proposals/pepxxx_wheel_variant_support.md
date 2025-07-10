@@ -616,9 +616,9 @@ Example `foo_bar-1.2.3-variants.json`:
     },
     "i8mmbf16": {
       "aarch64": {
+        "bf16": ["on"],
         "fp16": ["on"],
-        "i8mm": ["on"],
-        "bf16": ["on"]
+        "i8mm": ["on"]
       }
     }
   }
