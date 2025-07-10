@@ -930,12 +930,36 @@ suggested:
 
 ## How to Teach This
 
-User documentation will be updated to:
+### Installer documentation
 
-- Explain the concept of `Wheel Variants` and how they improve package selection.
-- Provide guidance on writing and publishing `Provider Plugins`.
-- Detail configuration options, such as overriding variant selection or disabling the feature entirely.
-- Include debugging instructions for users encountering unexpected behavior.
+The documentation intended for installer users will need to cover:
+
+- The concept of wheel variants and their effect on wheel selection
+- The security implications of variant provider use and ways to mitigate them
+- Options and configuration specific to variant selection
+- Instructions for debugging unexpected behavior, notably incorrect variant selection
+
+### Build backend documentation
+
+The documentation intended for package builders will need to cover:
+
+- Instructions on finding variant providers and inspecting their properties
+- Options related to specifying variant properties and label
+- Tutorials on building variant wheels
+
+### Provider-related documentation
+
+The documentation related to variant providers will need to cover:
+
+- Technical details and good practices for developing and maintaining provider plugins
+- Tutorials on creating new provider plugins
+- Governance practices for provider plugins
+
+### Technical documentation
+
+After the PEP is accepted, the [Binary distribution format](
+https://packaging.python.org/en/latest/specifications/binary-distribution-format/) specification will need to be updated
+for wheel variants.
 
 ## Reference Implementation
 
