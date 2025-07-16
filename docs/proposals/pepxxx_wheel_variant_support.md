@@ -82,7 +82,7 @@ enabled explicitly but still benefit from automatic provider installation.
 
 #### Wheel filename
 
-In order to distinguish different variants, a variant label was added to the filename. The label is added as the very
+In order to uniquely identify variants, a variant label was added to the filename. The label is added as the very
 last component to make it easy to distinguish different variants.
 
 The model defaults to using a hash to provide unique and reproducible filenames out of the box. However, it
@@ -891,8 +891,8 @@ and that it permits publishing JSON files. In particular, they do not have to pa
 ## Security Implications
 
 The provider plugin mechanism introduces potential security risks. Its flexibility implies that any requested package
-may introduce variant wheels, therefore causing the package manager to install arbitrary packages for the provider
-plugin, and execute code from them. This effectively goes against [the rationale for the wheel
+may introduce variant wheels, therefore causing the package manager to install variant plugin packages, 
+and execute code from them. This effectively goes against [the rationale for the wheel
 format](https://peps.python.org/pep-0427/#rationale), that aimed to avoid running arbitrary code at install time.
 Furthermore, it has been pointed out that packages that will be used as a regular user are installed with elevated
 privileges, effectively making arbitrary code execution even more serious of a threat.
@@ -902,7 +902,7 @@ code payload:
 
 1. A new version of an existing provider plugin is published with malicious code.
 
-2. A new variant is added to an existing package, with a malicious provider.
+2. A new variant provider is added to an existing package, and that provider is malicious.
 
 Unfortunately, it is impossible to fully address these concerns without sacrificing the flexibility and user
 convenience. Nevertheless, it should be possible to reduce the risks. In particular, the following options have been
