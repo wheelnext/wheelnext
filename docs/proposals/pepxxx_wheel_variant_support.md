@@ -90,12 +90,14 @@ permits explicitly choosing a different label to make variants easy to recognize
 is strictly limited to prevent the wheel filenames to become much longer than they are now, and causing issues
 on systems with smaller filename or path length limits.
 
-The same `-` character is used as the separator to reduce the risk of existing package manager implementations
-accidentally choosing a potentially unsupported wheel variant instead of a regular wheel. This was based on a survey
-of wheel filename verification methods used by different package managers and libraries (packaging, poetry, pip, uv).
-Both the current specification and some implementations are very permissive about different components, yet they all
-reject wheels if there are more than six components, or the build tag does not start with a digit. A limitation of this
-choice is that it assumes that the python tag will never start with a digit.
+A core requirement of the design was to ensure that installers predating variant support will ignore wheel variant
+files. For this reason, the variant hash is separated using the same `-` character as other wheel filename components.
+Therefore, wheel filenames have two optional components now: the build number (at third position), and the variant
+label (at the last position). If both are present, the wheel filename is rejected because it has too many components
+(seven). If only the variant label is present, it is rejected because python tag is taken to be the build number,
+and the build number must start with a digit. However, this assumes that the python tag will never actually start
+with a digit. This behavior was confirmed by a survey of wheel filename verification methods used by different package
+managers and libraries (packaging, poetry, pip, uv).
 
 #### Variant properties
 
@@ -154,7 +156,7 @@ and functions) API implementations are supported.
 
 For the primary use in building packages and installing wheel variants, the plugin API endpoint is either specified
 explicitly or inferred from requirements. Support for the latter was added as the need to explicitly guess the correct
-`build-backend` value was noted as a significant shortcoming of PEP 517. However, for the convenience of package
+`build-backend` value was noted as a shortcoming of PEP 517. However, for the convenience of package
 developers, plugins are recommended to install entry points as well. Thanks to that, the developer can install
 the relevant provider plugins to their system, and variant-related tooling will be able to automatically discover it
 and obtain the correct API backend values.
@@ -323,7 +325,8 @@ is the ability to avoid installing plugins for rarely used variants by default.
 #### Default priorities
 
 Provider plugins define the features and their values in a specific order. However, the ordering between different
-plugins is undefined. Therefore, it is necessary for every package to specify the requested ordering for namespaces.
+plugins is undefined. Therefore, it is necessary for every package to specify the requested ordering for all namespaces,
+including optional namespaces.
 
 The format also permits packages to override the preference order initially specified by the plugins, for features
 within every namespace, and for property value for
@@ -465,6 +468,13 @@ Additionally, a plugin provider can install an entry point in the `variant_plugi
 by development tools to discover available providers, for example providing methods to query the plugin status
 or easily add wheel variant support to `pyproject.toml`. However, wheels must be installable without the presence of
 entry points.
+
+An example entry point could be installed using the following [PEP 621](https://peps.python.org/pep-0621/) syntax:
+
+```
+[project.entry-points.variant_plugins]
+x86_64 = "provider_variant_x86_64.plugin:X8664Plugin"
+```
 
 #### Plugin API
 
@@ -872,7 +882,7 @@ the variant information to the scripts run at build time.
 
 ## Backward Compatibility
 
-The proposal attempts to avoid causing backwards compatibility issues by aiming for pre-variant installer
+The proposal should not be causing backwards compatibility issues by aiming for pre-variant installer
 implementations to reject variant wheels as incompatible. This is achieved by adding an additional filename component,
 causing the validation or parsing logic to fail. These installers should therefore ignore wheel variants, and fall back
 to a regular wheel, should one be provided.
@@ -1031,9 +1041,6 @@ Several alternative approaches were considered and ultimately rejected:
   and implement it in the way best fitted to their particular needs.
 
 #### Variant hash
-
-- Originally, the SHAKE-128 algorithm was used, as it permitted choosing an arbitrary hash length. However, it was
-  pointed out that the same result can be achieved by using a more common hash algorithm, and truncating it.
 
 - The initial implementation lacked separation between serialized variant properties. As a result, different
   combinations of properties could have yielded the same hash value (`a :: b :: c` + `de :: f :: g` = `a :: b :: cd` +
