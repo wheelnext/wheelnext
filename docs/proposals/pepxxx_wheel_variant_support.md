@@ -785,6 +785,10 @@ frobnicate; "foo :: bar :: baz" in variant_properties
 
 Implementations should support matching the values while ignoring whitespace.
 
+Variant marker expressions are evaluated against a wheel, not against the output of the provider plugins. An
+implementation selects the best variant for the current platform using the properties from the provider plugins, or it
+builds a wheel from a source distribution. It then evaluates the marker expression using the properties of that wheel.
+If a non-variant wheel was selected or built, all variant markers evaluate to `False`.
 
 ### Integration with installers
 
