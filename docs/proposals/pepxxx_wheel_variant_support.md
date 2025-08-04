@@ -341,6 +341,24 @@ is reused both in `*.dist-info/variant.json` and `*-variants.json` files, with t
 it specifies only the single variant, while in the latter all wheel variants available. This makes it possible to easily
 construct the latter file by merging the JSON from individual wheels.
 
+### Variant sorting
+
+Variant sorting is meant to respect feature preferences as much as possible, while accounting for the possibility
+of specific plugins requiring largely different number of properties. For example, if the user considers CUDA support
+more significant than x86-64 optimizations, then a variant with a single CUDA property will be preferred over one with
+a large number of x86-64 properties, e.g. support for specific instruction sets.
+
+When two variants share the most preferable property, the second most preferable property will decide on precedence,
+and so on. For example, if two variants have same CUDA properties but one of them additionally has more preferable
+x86-64 properties, the latter will be preferred.
+
+However, it should be noted that precedence is determined at property value level. For example, if higher CUDA versions
+are preferable over lower versions, then a wheel using CUDA 12.9 will be preferable over a wheel using CUDA 12.8,
+even if the latter has more preferred properties.
+
+Variants take precedence over platform compatibility tags, as presumably they provide features more specifically
+matching user preferences. While generally discrepancy between different variants should be avoided, it could happen
+e.g. when CUDA variants are built against an older system image, and therefore support an older `manylinux` tag.
 
 ## Specification
 
@@ -850,6 +868,10 @@ algorithm:
    above a variant without that property. Therefore, a variant with all possible properties would sort first, a variant
    with all properties but the lowest priority one second, and so on. The null variant always sorts last, but it takes
    precedence over a non-variant wheel.
+
+When selecting the wheel to install, variant preference takes precedence over tag preference. For example, when
+both `*-manylinux2010_x86_64-cu129.whl` and `*-manylinux2014_x86_64-00000000.whl` wheels are supported, the former will
+be preferred even though `manylinux2014_x86_64` tag is preferred over `manylinux2010_x86_64` tag.
 
 
 ### Integration with build backends
