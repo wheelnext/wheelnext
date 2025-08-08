@@ -24,6 +24,7 @@ Below you will find the list of communities, projects and companies involved in 
 - scikit-build: <https://scikit-build.readthedocs.io/>
 - scikit-learn: <https://scikit-learn.org/>
 - uv: <https://docs.astral.sh/uv/>
+- vLLM: <https://github.com/vllm-project/vllm>
 - XGBoost: <https://xgboost.readthedocs.io/>
 
 ## Companies
