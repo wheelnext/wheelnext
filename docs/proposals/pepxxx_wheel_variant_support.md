@@ -790,6 +790,55 @@ implementation selects the best variant for the current platform using the prope
 builds a wheel from a source distribution. It then evaluates the marker expression using the properties of that wheel.
 If a non-variant wheel was selected or built, all variant markers evaluate to `False`.
 
+### Integration with `pylock.toml`
+
+The following section is added to the `pylock.toml` specification:
+
+```restructuredtext
+.. _pylock-packages-variants-json:
+
+``[packages.variants-json]``
+----------------------------
+
+- **Type**: table
+- **Required?**: no; requires that :ref:`pylock-packages-wheels` is used,
+  mutually-exclusive with :ref:`pylock-packages-vcs`,
+  :ref:`pylock-packages-directory`, and :ref:`pylock-packages-archive`.
+- **Inspiration**: uv_
+- The URL or path to the `variants.json` file.
+- Only used if the project uses :ref:`wheel variants <wheel-variants>`.
+
+.. _pylock-packages-variants-json-url:
+
+``packages.variants-json.url``
+''''''''''''''''''''''''''''''
+
+See :ref:`pylock-packages-archive-url`.
+
+.. _pylock-packages-variants-json-path:
+
+``packages.variants-json.path``
+'''''''''''''''''''''''''''''''
+
+See :ref:`pylock-packages-archive-path`.
+
+.. _pylock-packages-variants-json-hashes:
+
+``packages.variants-json.hashes``
+'''''''''''''''''''''''''''''''''
+
+See :ref:`pylock-packages-archive-hashes`.
+```
+
+Additionally, an optional `[static-variants]` section is added, with the
+contents of the static variants file defined in [TODO write and link to
+section].
+
+If there is a `[packages.variants-json]` section, the installer resolver
+variants to select the best wheel file. If there is a `[static-variants]`
+section, the installer resolver selects the best wheel file using only the
+static variants and the `variants.json` files, without probing the system.
+
 ### Integration with installers
 
 #### Install procedure
