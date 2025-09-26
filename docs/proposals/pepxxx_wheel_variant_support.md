@@ -1231,12 +1231,12 @@ class MyPlugin:
             VariantFeatureConfig(
                name="accelerated", 
                values=["yes"],
-               multi_values=False
+               multi_value=False
             ),
             VariantFeatureConfig(
                name="version", 
                values=["v1", "v2", "v3", "v4"],
-               multi_values=False
+               multi_value=False
             ),
         ]
 ```
