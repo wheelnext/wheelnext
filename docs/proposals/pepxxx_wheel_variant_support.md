@@ -532,7 +532,7 @@ A variant lable must adhere to the following rules:
   - Between 1-16 characters
   - Using only `0-9`, `a-z`, `.` or `_` characters
 
-Equivalent regex: `[0-9a-z._]{1,16}`
+Equivalent regex: `^[0-9a-z._]{1,16}$`
 
 #### Build Tag and Variant Label
 
