@@ -674,25 +674,23 @@ Otherwise, only a single value can be present.
 
 #### Variant Ordering
 
-In order to choose the best wheel to install, the installer must order different variant wheels according to their
-variant properties. This ordering must take precedence over ordering by wheel tags.
+The order of variant properties is defined first by the order of namespaces, then the order of features in the namespace
+and then the order of feature values in a feature.
 
-The ordering is done according to the following algorithm:
+The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is defined by
+their order in the variant provider output, but can be overridden by `default-priorities.feature`. Features in
+`default-priorities.feature` are sorted before features from the variant provider output. Similarly, the order of
+feature values in a feature is defined by their order in the order in the variant provider output,
+`default-priorities.property` which take precedence.
 
-1. Namespaces, features within namespaces and values within features are ordered according to their preference.  
-2. Variant properties are ordered. The sort key is a 3-tuple, consisting of indices of namespaces, features within
-namespaces and values within features in the sorted lists.  
-3. Variant wheels are ordered according to the indices of their properties on the sorted list. They must be ordered so
-that a variant featuring a more preferred property sorts before one that does not have the same property.
+A variant wheel has a higher priority than another variant wheel if its most important property is more important than
+the most important other variant wheel. If both wheels have the same most important property, compare the second most
+important property for each, and so on, until a tie-breaker is found.
 
-The sorting algorithm ensures that the variants with features considered more important are preferred over variants with
-less important properties (e.g. GPU support over CPU optimizations), and variants featuring more preferable properties
-sort before these featuring a subset of them (e.g. a wheel featuring both GPU support and CPU optimizations is preferred
-over one with just GPU support). The null variant naturally sorts last, since it doesn’t have any properties.
-
-The initial ordering of features within namespaces and values within features are provided by the provider plugins, in
-the form of their ordered lists of supported properties. The initial ordering of namespaces, as well as overrides to the
-remaining orderings are provided by the package metadata. Installers should also permit users to override the ordering.
+A different way to describe the same algorithm: Assign each namespace, feature name in a namespace and feature value in
+a feature a numerical priority. Translate each property into a three-tuple of namespace, feature name and feature value
+score. Sort the translated properties for each variant wheel into a list. Sort the wheels according to their sorted 
+translated properties lists.
 
 ### Metadata - Data Format Standard
 
