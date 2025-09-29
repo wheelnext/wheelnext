@@ -611,12 +611,9 @@ The non-variant wheel is also used if variant support is explicitly disabled by 
 
 ### Opt-in vs Opt-out
 
-Wheel variants should be supported using an opt-out approach. This ensures that wheel variants work seamlessly out of
-the box, providing users with optimal performance and compatibility with minimal maintenance burden. Plugins will be
-automatically installed into an isolated environment, enabling variant support without user intervention.
-
-For scenarios requiring explicit control, providers can be marked as optional. In these cases, users must explicitly
-enable the providers, but they will still benefit from automatic provider installation.
+For a consistent experience between tools, wheel variants should be supported by default. Tools may provide an opt-out
+to only use non-variant wheels. For scenarios requiring more control, providers can be marked as optional and must be
+explicitly enabled by the user.
 
 ### Variant Properties System
 
