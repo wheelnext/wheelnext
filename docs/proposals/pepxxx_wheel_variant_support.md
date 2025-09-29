@@ -383,19 +383,19 @@ taken by various communities.
 
 ### Conda - Conda-Forge
 
-The project that will come to most people’s mind is `[conda / conda-forge](https://conda.org/)`, <TO BE FOLLOWED BY MICHAEL>
+The project that will come to most people’s mind is [conda / conda-forge](https://conda.org/), TO BE FOLLOWED BY MICHAEL
 
 ### Spack / Archspec
 
-<TO BE ADDED>
+TO BE ADDED
 
 ### Docker / Kubernetes / Container
 
-<TO BE ADDED>
+TO BE ADDED
 
 ### Homebrew: Bottle DSL (Domain Specific Language)
 
-<TO BE ADDED>: [https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language](https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language)
+TO BE ADDED: [https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language](https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language)
 
 ### Nix / Nixpkgs
 
@@ -452,7 +452,7 @@ USE flags have boolean values. This also has the downside that multiple flags ne
 
 ## Linux Distro - Debian / Ubuntu Perspective
 
-<TO BE ADDED>: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org/CategoryMultiarch)
+TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org/CategoryMultiarch)
 
 ## Specification
 
@@ -577,7 +577,7 @@ There must be a direct one-to-one relationship guarantee between variant propert
 
 **A variant label must uniquely describe a specific set of variant properties for a given distribution and version.**
 
-**In other words, for a given distribution (i.e. package name) and version:**
+In other words, for a given distribution (i.e. package name) and version:
 
 - Two different labels must not refer to the same set of variant properties.  
 - The set of variant properties must always point to the same variant label.
@@ -595,7 +595,7 @@ suitable hardware.
 
 - A GPU+CPU regular wheel that is installed on systems without wheel variant support (i.e. the “mega-wheel” approach)
 
-The `null variant` must not have any properties and it must use the variant label `null`.  
+The null variant must not have any properties and it must use the variant label `null`.  
 Conversely, wheel variants that declare any variant properties must not use the variant label `null`.
 
 In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable
@@ -660,15 +660,15 @@ x86_64 :: avx512_bf16 :: on
 **Variant Namespace:** identifies the provider plugin and must be unique within the plugin set used by a single package
 version.
 
-- It **must** follow this exact regex: **`r"[a-z0-9_]+"`**
+- It **must** follow this exact regex: `r"[a-z0-9_]+"`
 
 **Variant Feature Name**: Names a specific “characteristic” within the namespace.
 
-- It **must** follow this exact regex: **`r"[a-z0-9_]+"`**
+- It **must** follow this exact regex: `r"[a-z0-9_]+"`
 
 **Variant Feature Value**: A single value corresponding to the combination `namespace :: feature`.
 
-- It **must** follow this exact regex: **`r"[a-z0-9_.,!>~<=]+"`**  
+- It **must** follow this exact regex: `r"[a-z0-9_.,!>~<=]+"`
 - In a “multi-value” feature, a single variant wheel can specify multiple values corresponding to a single feature key.
 Otherwise, only a single value can be present.
 
@@ -757,7 +757,6 @@ Under a `[variant]` key, it defines the providers and default priorities needed 
 
 ```toml
 [variant.default-priorities]
-
 # prefer `x86_64` plugin over `aarch64`
 namespace = ["x86_64", "aarch64", "blas_lapack"]
 
@@ -901,7 +900,7 @@ variantlib.commands.generate_index_json - INFO - Processing wheel: `foo-1.2.3-cp
 The `foo-1.2.3-variants.json` corresponding to the package with two wheel variants, one of them listed in the
 previous example, would look like:
 
-```json
+```jsonc
 {
    "default-priorities": {    // Identical to above
       ...
@@ -1176,13 +1175,13 @@ The method must return a fixed list of supported features.
 ```python
 class MyPlugin:
     namespace = "example"
+
     # defines features compatible with the system as:
     # example :: version :: v2 (more preferred)
     # example :: version :: v1 (less preferred)
     # (a wheel with no "example :: version" is the least preferred)
     #
     # the system does not support "example :: something_else" at all
-
     def get_supported_configs(self) -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
@@ -1218,14 +1217,13 @@ Note that the properties returned by `get_supported_configs()` must be a subset 
 ```python
 class MyPlugin:
     namespace = "example"
-    
+
     # all valid properties as:
     # example :: accelerated :: yes
     # example :: version :: v4
     # example :: version :: v3
     # example :: version :: v2
     # example :: version :: v1
-
     def get_all_configs(self) -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
