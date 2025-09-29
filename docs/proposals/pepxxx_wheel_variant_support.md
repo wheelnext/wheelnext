@@ -454,6 +454,21 @@ USE flags have boolean values. This also has the downside that multiple flags ne
 
 TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org/CategoryMultiarch)
 
+## Reference implementations
+
+The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation illustrating how
+to generate a `variants.json` file and can be used to generate this file given a local directory containing all the
+variant wheels using the following command:
+
+```bash
+$ variantlib generate-index-json -d dist/
+
+variantlib.commands.generate_index_json - INFO - Processing wheel: `foo-1.2.3-cp313-cp313-linux_x86_64-x86_v3.whl` with variant label: `x86_v3`
+variantlib.commands.generate_index_json - INFO - Processing wheel: `foo-1.2.3-cp313-cp313-linux_x86_64-x86_v4.whl` with variant label: `x86_v4`
+```
+
+A client for installing variant wheels is implemented in [uv](https://github.com/astral-sh/uv).
+
 ## Specification
 
 This PEP proposes a set of backward-compatible extensions to the wheel format (PEP [427](https://peps.python.org/pep-0427/)
@@ -879,17 +894,6 @@ and guarantee efficient variant resolution.
 
 This file uses the same structure as `variant.json` described above, except that the variants object is permitted to
 list multiple variants, and must list all variants available on the package index for the package version in question.
-
-The `[variantlib](https://github.com/wheelnext/variantlib)` project proposes a reference implementation illustrating how
-to generate this file and can be used to generate this file given a local directory containing all the variant wheels
-using the following command:
-
-```bash
-$ variantlib generate-index-json -d dist/
-
-variantlib.commands.generate_index_json - INFO - Processing wheel: `foo-1.2.3-cp313-cp313-linux_x86_64-x86_v3.whl` with variant label: `x86_v3`
-variantlib.commands.generate_index_json - INFO - Processing wheel: `foo-1.2.3-cp313-cp313-linux_x86_64-x86_v4.whl` with variant label: `x86_v4`
-```
 
 **The following behaviors must be respected and verified during the generation of the `{name}-{version}-variants.json` file:**
 
