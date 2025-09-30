@@ -505,7 +505,7 @@ The Wheel Variant PEP introduces four key components:
 2. **Variant Metadata Format**: Standardized metadata describing variant properties and provider requirements.
    1. Metadata specification at "project level" inside `pyproject.toml`
    2. Metadata specification of "built packages" inside two JSON files:
-      1. `**.dist-info/variant.json*`: Individual wheel variant metadata.
+      1. `*.dist-info/variant.json`: Individual wheel variant metadata.
       2. `*-variants.json`: Variant metadata file aggregated on the package index.
 
 3. **Provider Plugin System**: Plugin interface to allow detection of system capabilities and validate variant
