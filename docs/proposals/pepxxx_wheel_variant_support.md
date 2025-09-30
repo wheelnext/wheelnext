@@ -1271,7 +1271,6 @@ evaluate to `False`.
 
 ## Reference implementation
 
-The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of the protocol, querying plugins, variant filtering
-and ordering, validation, variant metadata reading and writing, and generating the `variants.json` index.
+The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of all the protocols and algorithms introduced in this PEP, as well as a command-line tool to convert wheels, generate the `*-variants.json` index and query plugins.
 
 A client for installing variant wheels is implemented in [uv](https://github.com/astral-sh/uv).
