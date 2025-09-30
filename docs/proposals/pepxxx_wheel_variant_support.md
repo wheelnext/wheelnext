@@ -454,7 +454,7 @@ USE flags have boolean values. This also has the downside that multiple flags ne
 
 TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org/CategoryMultiarch)
 
-## Reference implementations
+## Reference implementation
 
 The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation illustrating how
 to generate a `variants.json` file and can be used to generate this file given a local directory containing all the
