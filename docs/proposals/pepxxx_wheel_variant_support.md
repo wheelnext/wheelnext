@@ -680,7 +680,7 @@ variant properties.
 The order of variant properties is defined first by the order of namespaces, then the order of features in the namespace
 and then the order of property values in a feature.
 
-The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is defined by
+The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is initially defined by
 `default-priorities.feature`. Features not listed in `default-priorities.feature` are appended from their order in the
 variant provider output. Similarly, the order of property values in a feature is defined by their order in
 `default-priorities.property`, missing properties are appended from their order in the variant provider output.
