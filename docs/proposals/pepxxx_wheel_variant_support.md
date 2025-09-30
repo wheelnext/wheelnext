@@ -689,14 +689,19 @@ A variant wheel has a higher priority than another variant wheel if its most imp
 the most important property of the other variant wheel. If both wheels have the same most important property, compare the second most
 important property for each, and so on, until a tie-breaker is found.
 
-A different way to describe the same algorithm: Use the index in `default-priorities.namespace` to assign each namespace
-a priority score. For each namespace, build a priority list by concatenating its `default-priorities.feature` features
-with its features in the provider output not in `default-priorities.feature`, and for each feature, build a priority
-list by concatenating its `default-priorities.property` properties with its properties in the provider output not in
+A different way to describe the same algorithm:
+
+Use the index in `default-priorities.namespace` to assign each namespace a priority score. For each namespace, build a
+priority list by concatenating its `default-priorities.feature` features with its features in the provider output not
+in `default-priorities.feature`, and for each feature, build a priority list by concatenating its
+`default-priorities.property` properties with its properties in the provider output not in
 `default-priorities.property`. Use the index in those lists to assign a priority score to each feature and each
-property. Translate each property used in a variant wheel into a three-tuple of namespace, feature name and feature
-value score. Each variant wheel is now associated with a set of three-tuples, its properties. Sort the set into a list.
-Sort the wheels according to these lists (of translated property tuples).
+property. This defines a function to assign each property used in a variant wheel a score, which is the three-tuple of
+namespace, feature name and feature value score.
+
+For each wheel, translate their properties into a list of scores, and sort that list. This assigns each wheel a score
+that is a sorted list of three-tuples. Order the wheels by their scores. The wheel wheel with the highest score is the
+most preferred wheel.
 
 ### Metadata - Data Format Standard
 
