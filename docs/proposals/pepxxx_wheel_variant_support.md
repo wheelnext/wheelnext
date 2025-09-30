@@ -875,17 +875,6 @@ and guarantee efficient variant resolution.
 This file uses the same structure as `variant.json` described above, except that the variants object is permitted to
 list multiple variants, and must list all variants available on the package index for the package version in question.
 
-The `[variantlib](https://github.com/wheelnext/variantlib)` project proposes a reference implementation illustrating how
-to generate this file and can be used to generate this file given a local directory containing all the variant wheels
-using the following command:
-
-```bash
-$ variantlib generate-index-json -d dist/
-
-variantlib.commands.generate_index_json - INFO - Processing wheel: `foo-1.2.3-cp313-cp313-linux_x86_64-x86_v3.whl` with variant label: `x86_v3`
-variantlib.commands.generate_index_json - INFO - Processing wheel: `foo-1.2.3-cp313-cp313-linux_x86_64-x86_v4.whl` with variant label: `x86_v4`
-```
-
 **The following behaviors must be respected and verified during the generation of the `{name}-{version}-variants.json` file:**
 
 - Wheel Variants must declare strictly identical `default-priorities` and `providers` dictionary entries.  
@@ -1274,3 +1263,9 @@ Implementations MUST ignore differences in whitespace while matching the feature
 Variant marker expressions MUST be evaluated against the variant properties stored in the wheel being installed, not
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
+
+## Reference implementation
+
+The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of all the protocols and algorithms introduced in this PEP, as well as a command-line tool to convert wheels, generate the `*-variants.json` index and query plugins.
+
+A client for installing variant wheels is implemented in [uv](https://github.com/astral-sh/uv).
