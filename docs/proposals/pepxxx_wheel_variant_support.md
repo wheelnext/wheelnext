@@ -681,8 +681,8 @@ The order of variant properties is defined first by the order of namespaces, the
 and then the order of property values in a feature.
 
 The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is initially defined by
-`default-priorities.feature`. Features not listed in `default-priorities.feature` are appended from their order in the
-variant provider output. Similarly, the order of property values in a feature is defined by their order in
+`default-priorities.feature`. Features not listed in `default-priorities.feature` are appended in the order they are
+returned by the variant provider plugin. Similarly, the order of property values in a feature is defined by their order in
 `default-priorities.property`, missing properties are appended from their order in the variant provider output.
 
 A variant wheel has a higher priority than another variant wheel if its most important property is more important than
