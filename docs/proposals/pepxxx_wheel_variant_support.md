@@ -674,23 +674,29 @@ Otherwise, only a single value can be present.
 
 #### Variant Ordering
 
+To determine which variant wheel to install when multiple wheels are compatible, variant wheels are ordered by their
+variant properties.
+
 The order of variant properties is defined first by the order of namespaces, then the order of features in the namespace
-and then the order of feature values in a feature.
+and then the order of property values in a feature.
 
 The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is defined by
-their order in the variant provider output, but can be overridden by `default-priorities.feature`. Features in
-`default-priorities.feature` are sorted before features from the variant provider output. Similarly, the order of
-feature values in a feature is defined by their order in the order in the variant provider output,
-`default-priorities.property` which take precedence.
+`default-priorities.feature`. Features not listed in `default-priorities.feature` are appended from their order in the
+variant provider output. Similarly, the order of property values in a feature is defined by their order in
+`default-priorities.property`, missing properties are appended from their order in the variant provider output.
 
 A variant wheel has a higher priority than another variant wheel if its most important property is more important than
 the most important other variant wheel. If both wheels have the same most important property, compare the second most
 important property for each, and so on, until a tie-breaker is found.
 
-A different way to describe the same algorithm: Assign each namespace, feature name in a namespace and feature value in
-a feature a numerical priority. Translate each property into a three-tuple of namespace, feature name and feature value
-score. Sort the translated properties for each variant wheel into a list. Sort the wheels according to their sorted 
-translated properties lists.
+A different way to describe the same algorithm: Use the index in `default-priorities.namespace` to assign each namespace
+a priority score. For each namespace, build a priority list by concatenating its `default-priorities.feature` features
+with its features in the provider output not in `default-priorities.feature`, and for each feature, build a priority
+list by concatenating its `default-priorities.property` properties with its properties in the provider output not in
+`default-priorities.property`. Use the index in those lists to assign a priority score to each feature and each
+property. Translate each property used in a variant wheel into a three-tuple of namespace, feature name and feature
+value score. Each variant wheel is now associated with a set of three-tuples, its properties. Sort the set into a list.
+Sort the wheels according to these lists (of translated property tuples).
 
 ### Metadata - Data Format Standard
 
