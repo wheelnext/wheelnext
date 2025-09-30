@@ -956,13 +956,6 @@ variants to select the best wheel file.
 
 ### Plugin API - Standardized Variant Provider Plugin Interface
 
-#### Purpose
-
-This section describes the API used by variant provider plugins. The plugins are a central point of the variant
-specification, defining the valid metadata, and providing routines necessary to install and build variants.
-
-This document provides the API described both in text and using Python Protocols for convenience.
-
 #### High level design
 
 Every provider plugin must operate within a single namespace. This namespace is used as a unique key for all
