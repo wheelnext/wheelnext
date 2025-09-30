@@ -686,7 +686,7 @@ returned by the variant provider plugin. Similarly, the order of property values
 `default-priorities.property`, missing properties are appended from their order in the variant provider output.
 
 A variant wheel has a higher priority than another variant wheel if its most important property is more important than
-the most important other variant wheel. If both wheels have the same most important property, compare the second most
+the most important property of the other variant wheel. If both wheels have the same most important property, compare the second most
 important property for each, and so on, until a tie-breaker is found.
 
 A different way to describe the same algorithm: Use the index in `default-priorities.namespace` to assign each namespace
