@@ -326,7 +326,7 @@ The recent advances in modern AI workflows increasingly rely on GPU acceleration
 deployment complex and adds a significant burden on open source developers of the entire tool stack (from build backends
 to installers, not forgetting the package maintainers).
 
-## Motivation Summary
+### Motivation Summary
 
 As highlighted in the previous section, the current Python packaging system cannot adequately serve the needs of modern
 heterogeneous computing environments. These aforementioned limitations force package authors into complex workarounds
@@ -351,7 +351,7 @@ This PEP tries to present the minimal scope required and leaves aspects to tools
 - How to instruct build backends to emit variants through the PEP 517 mechanism. For backwards compatibility, build
 backends have to default to non-variant builds
 
-## Wheel Variant Glossary
+### Wheel Variant Glossary
 
 This section focuses specifically on the vocabulary used by the proposed "Wheel Variant" standard:
 
@@ -375,33 +375,33 @@ supported but has the lowest priority among wheel variants, while being preferab
 - **Variant Provider (Plugin)**: A provider of supported and valid variant properties for a specific namespace, usually
 in the form of a Python package that implements system detection.
 
-## Prior Art - Existing Solution - Within and  Beyond Python
+### Prior Art - Existing Solution - Within and  Beyond Python
 
 This problem is not unique to the Python ecosystem, different groups and ecosystems have come up with various answers to
 that very problem. This section will focus on highlighting the strengths and weaknesses of the different approaches
 taken by various communities.
 
-### Conda - Conda-Forge
+#### Conda - Conda-Forge
 
 The project that will come to most people’s mind is [conda / conda-forge](https://conda.org/), TO BE FOLLOWED BY MICHAEL
 
-### Spack / Archspec
+#### Spack / Archspec
 
 TO BE ADDED
 
-### Docker / Kubernetes / Container
+#### Docker / Kubernetes / Container
 
 TO BE ADDED
 
-### Homebrew: Bottle DSL (Domain Specific Language)
+#### Homebrew: Bottle DSL (Domain Specific Language)
 
 TO BE ADDED: [https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language](https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language)
 
-### Nix / Nixpkgs
+#### Nix / Nixpkgs
 
 <TO BE ADDED>
 
-### Linux Distro - The Gentoo Perspective
+#### Linux Distro - The Gentoo Perspective
 
 [Gentoo Linux](https://www.gentoo.org) is a source-first distribution with support for extensive package customization.
 The primary means of this customization are so-called [USE flags](https://wiki.gentoo.org/wiki/Handbook:AMD64/Working/USE):
@@ -450,7 +450,7 @@ dependency resolution.
 This syntax has been generally seen as sufficient for Gentoo. However, its simplicity largely stems from the fact that
 USE flags have boolean values. This also has the downside that multiple flags need to be used to express enumerations.
 
-## Linux Distro - Debian / Ubuntu Perspective
+#### Linux Distro - Debian / Ubuntu Perspective
 
 TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org/CategoryMultiarch)
 
@@ -785,7 +785,7 @@ requires = ["blas-lapack-variant-provider"]
 plugin-use = "build"
 ```
 
-### Note regarding `requires = [...]`
+##### Note regarding `requires = [...]`
 
 As shown above, the `requires = [...]` is specified as a list.
 
@@ -802,7 +802,7 @@ This design is necessary to allow future-proofing of the design when a plugin wo
 However this list **must** resolve to a single and unique project to be installed. Any situation where two dependency
 specifiers were to be simultaneously valid must be considered invalid and rejected.
 
-### `*.dist-info/variant.json`: the packaged variant metadata file
+#### `*.dist-info/variant.json`: the packaged variant metadata file
 
 The `variant.json` file is placed inside variant wheels, in the `*.dist-info/` directory containing the wheel metadata.
 It is serialized into JSON, with a variant metadata dictionary being the top object. In addition to the shared metadata
@@ -864,7 +864,7 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
 }
 ```
 
-### `{name}-{version}-variants.json`: the index level variant metadata file.
+#### `{name}-{version}-variants.json`: the index level variant metadata file.
 
 For every package version that includes at least one variant wheel, there must exist a corresponding
 `{name}-{version}-variants.json` file, hosted and served by the package index, where the package name and version are
@@ -913,7 +913,7 @@ previous example, would look like:
 }
 ```
 
-#### Integration with `pylock.toml`
+### Integration with `pylock.toml`
 
 The following section is added to the `pylock.toml` specification:
 
@@ -954,16 +954,16 @@ See :ref:`pylock-packages-archive-path`.
 If there is a `[packages.variants-json]` section, the installer should resolve
 variants to select the best wheel file.
 
-## Plugin API - Standardized Variant Provider Plugin Interface
+### Plugin API - Standardized Variant Provider Plugin Interface
 
-### Purpose
+#### Purpose
 
 This section describes the API used by variant provider plugins. The plugins are a central point of the variant
 specification, defining the valid metadata, and providing routines necessary to install and build variants.
 
 This document provides the API described both in text and using Python Protocols for convenience.
 
-### High level design
+#### High level design
 
 Every provider plugin must operate within a single namespace. This namespace is used as a unique key for all
 plugin-related operations. All the properties defined by the plugin are bound within the plugin's namespace, and the
@@ -1010,7 +1010,7 @@ The entry point method is provided to increase the convenience of using variant-
 used with plugins that are installed to the user's main system. It can be used e.g. to detect and print all supported
 variant properties, to help user configure variant preferences or provide defaults to `pyproject.toml`.
 
-### Behavior stability and versioning
+#### Behavior stability and versioning
 
 It is recommended that the plugin’s output remains stable within the plugin’s lifetime, and that packages do not pin to
 specific plugin versions. This ensures that the installer can vendor or reimplement the newest version of the plugin
@@ -1019,9 +1019,9 @@ while ensuring that variant wheels created earlier would still be installable.
 If a need arises to introduce a breaking change in the plugin's output, it is recommended to add a new API endpoint to
 the plugin. The old endpoints should continue being provided, preserving the previous output.
 
-### Helper classes
+#### Helper classes
 
-#### Variant feature config
+##### Variant feature config
 
 The variant feature config class is used to define a single variant feature, along with a list of possible values.
 Depending on the context, the order of values may be significant. It is defined using the following protocol:
@@ -1079,9 +1079,9 @@ class VariantFeatureConfig:
     multi_value: bool
 ```
 
-### Plugin class
+#### Plugin class
 
-#### Protocol
+##### Protocol
 
 The plugin class must implement the following protocol:
 
@@ -1117,7 +1117,7 @@ class PluginType(Protocol):
         raise NotImplementedError
 ```
 
-### Properties
+#### Properties
 
 The plugin class must define the following properties or attributes:
 
@@ -1176,7 +1176,7 @@ class MyPlugin:
         ]
 ```
 
-#### `def get_all_configs(...):`
+##### `def get_all_configs(...):`
 
 - Purpose: get all valid features and their values
 
