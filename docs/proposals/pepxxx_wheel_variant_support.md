@@ -631,7 +631,7 @@ a complete boolean logic.
 
 - Organized property management without naming conflicts
 - Independent development of provider plugins
-- Extensible support for new hardware and software capabilities without requiring changes to tools or a new PEP.
+- Extensible support for new hardware and software capabilities without requiring changes to tools or a new PEP
 - Clear ownership and validation responsibilities
 
 #### Variant Property format
