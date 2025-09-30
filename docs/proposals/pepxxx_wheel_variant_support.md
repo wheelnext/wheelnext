@@ -664,7 +664,7 @@ version.
 
 **Variant Feature Value**: A single value corresponding to the combination `namespace :: feature`.
 
-- It **must** match this regex: `^[a-z0-9_.,!>~<=]+$`
+- It **must** match this regex: `^[a-z0-9_.]+$`
 - In a “multi-value” feature, a single variant wheel can specify multiple values corresponding to a single feature key.
 Otherwise, only a single value can be present.
 
