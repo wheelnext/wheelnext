@@ -351,30 +351,6 @@ This PEP tries to present the minimal scope required and leaves aspects to tools
 - How to instruct build backends to emit variants through the PEP 517 mechanism. For backwards compatibility, build
 backends have to default to non-variant builds
 
-### Wheel Variant Glossary
-
-This section focuses specifically on the vocabulary used by the proposed "Wheel Variant" standard:
-
-- **Variant Wheels**: Wheels that share the same distribution name, version, build number, and platform compatibility
-tags, but are distinctly identified by an arbitrary set of variant properties.
-
-- **Variant Namespace**: An identifier used to group related features provided by a single plugin (e.g., `nvidia`,
-`x86_64`, `arm`, etc.).
-
-- **Variant Feature**: A specific characteristic (key) within a namespace (e.g., `version`, `avx512_bf16`, etc.) that
-can have one or more values.
-
-- **Variant Property**: A 3-tuple (`namespace :: feature-name :: feature-value`) describing a single specific feature
-and its value. If a feature has multiple values, each is represented by a separate property.
-
-- **Variant Label**: A string added to the wheel filename to uniquely identify variants. A string up to 16 characters.
-
-- **Null Variant**: A special variant with zero variant properties and the reserved label `null`. Always considered
-supported but has the lowest priority among wheel variants, while being preferably chosen over non-variant wheels.
-
-- **Variant Provider (Plugin)**: A provider of supported and valid variant properties for a specific namespace, usually
-in the form of a Python package that implements system detection.
-
 ### Prior Art - Existing Solution - Within and  Beyond Python
 
 This problem is not unique to the Python ecosystem, different groups and ecosystems have come up with various answers to
@@ -460,6 +436,30 @@ This PEP proposes a set of backward-compatible extensions to the wheel format (P
 & [491](https://peps.python.org/pep-0491/)) and the packaging ecosystem version while maintaining complete backward
 compatibility with existing package managers and tools. The design was made with the intent to protect
 non-variant-aware tools from failure when a new type of wheel appears that they don’t know how to manage.
+
+### Wheel Variant Glossary
+
+This section focuses specifically on the vocabulary used by the proposed "Wheel Variant" standard:
+
+- **Variant Wheels**: Wheels that share the same distribution name, version, build number, and platform compatibility
+tags, but are distinctly identified by an arbitrary set of variant properties.
+
+- **Variant Namespace**: An identifier used to group related features provided by a single plugin (e.g., `nvidia`,
+`x86_64`, `arm`, etc.).
+
+- **Variant Feature**: A specific characteristic (key) within a namespace (e.g., `version`, `avx512_bf16`, etc.) that
+can have one or more values.
+
+- **Variant Property**: A 3-tuple (`namespace :: feature-name :: feature-value`) describing a single specific feature
+and its value. If a feature has multiple values, each is represented by a separate property.
+
+- **Variant Label**: A string added to the wheel filename to uniquely identify variants. A string up to 16 characters.
+
+- **Null Variant**: A special variant with zero variant properties and the reserved label `null`. Always considered
+supported but has the lowest priority among wheel variants, while being preferably chosen over non-variant wheels.
+
+- **Variant Provider (Plugin)**: A provider of supported and valid variant properties for a specific namespace, usually
+in the form of a Python package that implements system detection.
 
 ### Overview
 
