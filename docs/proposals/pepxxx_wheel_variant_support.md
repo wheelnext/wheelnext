@@ -1230,7 +1230,7 @@ methods on the plugin instances. The implementations should ignore additional at
 For best compatibility, it is recommended that all private attributes are prefixed with an underscore (_) character to
 avoid incidental conflicts with future extensions.
 
-Variant environment markers
+### Variant environment markers
 
 Three new environment markers are introduced in dependency specifications:
 
