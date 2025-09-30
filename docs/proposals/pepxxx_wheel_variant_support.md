@@ -351,7 +351,7 @@ This PEP tries to present the minimal scope required and leaves aspects to tools
 - How to instruct build backends to emit variants through the PEP 517 mechanism. For backwards compatibility, build
 backends have to default to non-variant builds
 
-### Prior art - existing solution - within and beyond Python
+### Prior art
 
 This problem is not unique to the Python ecosystem, different groups and ecosystems have come up with various answers to
 that very problem. This section will focus on highlighting the strengths and weaknesses of the different approaches
@@ -690,7 +690,7 @@ The initial ordering of features within namespaces and values within features ar
 the form of their ordered lists of supported properties. The initial ordering of namespaces, as well as overrides to the
 remaining orderings are provided by the package metadata. Installers should also permit users to override the ordering.
 
-### Metadata - data format standard
+### Variant metadata
 
 This section describes the metadata format used for variant wheels. The format is used in three locations, with slight variations:
 
@@ -954,7 +954,7 @@ See :ref:`pylock-packages-archive-path`.
 If there is a `[packages.variants-json]` section, the installer should resolve
 variants to select the best wheel file.
 
-### Plugin API - standardized variant provider plugin interface
+### Provider plugin API
 
 #### High level design
 
