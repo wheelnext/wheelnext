@@ -973,35 +973,42 @@ needs to be forked into a new package.
 To make it easier to discover and install plugins, they should be published in the same indexes that the packages using
 them. In particular, packages published to PyPI must not rely on plugins that need to be installed from other indexes
 
-Plugins are implemented using a Python class. Their API can be accessed using two methods:
+Plugins are implemented as Python modules. The API specified in this PEP can either be implemented as top-level
+attributes and functions, or as members of a class. In the latter case, the class is instantiated prior to accessing
+them.
 
-1. An explicit object reference, as the "plugin API" metadata.
+#### API endpoint
 
-2. An installed entry point in the variant_plugins group. The name of the entry point is insignificant, and the value
-provides the object reference.
+The location of the plugin code is called an "API endpoint", and it is expressed using the object reference notation
+following the [entry point specification](https://packaging.python.org/en/latest/specifications/entry-points/).
+They are in the form of:
 
-Both formats use the object reference notation from the
-[entry point specification](https://packaging.python.org/en/latest/specifications/entry-points/). That is, they are in
-the form of:
-
-```python
-importable.module:ClassName
+```
+{import path}(:{object path})?
 ```
 
-The resulting plugin is instantiated by the equivalent of:
+An API endpoint specification is equivalent to the following Python pseudocode:
 
 ```python
-import importable.module
+import {import path}
 
-plugin_instance = importable.module.ClassName()
+if "{object path}":
+    plugin = {import path}.{object path}
+else:
+    plugin = {import path}
+
+if callable(plugin):
+    plugin = plugin()
 ```
 
-The explicit "plugin API" key is the primary method of using the plugin. It is part of the variant metadata, and it is
-therefore used while building and installing wheels.
+API endpoints are used in two contexts:
 
-The entry point method is provided to increase the convenience of using variant-related tools. It is therefore normally
-used with plugins that are installed to the user's main system. It can be used e.g. to detect and print all supported
-variant properties, to help user configure variant preferences or provide defaults to `pyproject.toml`.
+a. in the `plugin-api` key of variant metadata, either explicitly or inferred from the package name in the `requires`
+   key. This is the primary method of using the plugin when building and installing wheels.
+
+b. as the value of an installed entry point in the `variant_plugins`. The name of said entry point is insignificant.
+   This is optional but recommended, as it permits variant-related utilities to discover variant plugins installed
+   to the user's system.
 
 #### Behavior stability and versioning
 
