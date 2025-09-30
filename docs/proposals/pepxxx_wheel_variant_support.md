@@ -132,7 +132,7 @@ something they indirectly do today
 The current wheel format encodes compatibility through three platform tags:
 
 - **Python tag:** [The Python tag indicates the implementation and version required by a distribution](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#python-tag)
-(e.g., `cp313`)  
+(e.g., `cp313`)
 - **ABI tag:** [The ABI tag indicates which Python ABI is required by any included extension modules](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#abi-tag)
 (e.g., `cp313`)
 - **Platform tag**: [Operating system and architecture - In its simplest form: sysconfig.get_platform()](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#platform-tag)
@@ -190,10 +190,10 @@ pip install torch --index-url="https://download.pytorch.org/whl/cu129"
 
 **This approach requires:**
 
-- Manual selection of artifacts based on hardware and software factors  
-- Complex installation instructions  
-- Separate infrastructure maintenance  
-- Potential security issues when combining multiple indexes  
+- Manual selection of artifacts based on hardware and software factors
+- Complex installation instructions
+- Separate infrastructure maintenance
+- Potential security issues when combining multiple indexes
 - Separate index for every combination of compatible features (e.g. GPU variants with different levels of CPU
 optimizations)
 
@@ -259,7 +259,7 @@ don’t read in detail the documentation.
 It should be noted that most of these "extras" are technically mutually exclusive, though it is currently impossible to
 correctly express this incompatibility within the package metadata.
 
-```yaml
+```
 Provides-Extra: minimum-jaxlib
 Provides-Extra: cpu
 Provides-Extra: ci
@@ -334,20 +334,20 @@ that create friction for users, increase maintenance burden, and fragment the ec
 
 **Wheel Variants provide a standardized solution that:**
 
-- Enables automatic hardware-appropriate package selection  
+- Enables automatic hardware-appropriate package selection
 - Maintains full backward compatibility with existing tools (by guaranteeing to not break non-variant aware installers,
-tools, and indexes)  
-- Reduces package maintenance complexity by providing a unified and flexible answer to the problem  
-- Improves user experience through a consistent experience that requires little to no user inputs.  
-- Supports the full spectrum of modern computing hardware  
+tools, and indexes)
+- Reduces package maintenance complexity by providing a unified and flexible answer to the problem
+- Improves user experience through a consistent experience that requires little to no user inputs.
+- Supports the full spectrum of modern computing hardware
 - Provides a future-proof and flexible system that can evolve with the ecosystem and future use cases.
 
 ### Out-of-scope features
 
 This PEP tries to present the minimal scope required and leaves aspects to tools to evolve. A non-exhaustive list:
 
-- The format of the static variants file, and how to include them in a pylock.toml  
-- The list of variant provider that is vendored or re-implemented, as well as opt-in mechanisms  
+- The format of the static variants file, and how to include them in a pylock.toml
+- The list of variant providers that are vendored or re-implemented, as well as opt-in mechanisms
 - How to instruct build backends to emit variants through the PEP 517 mechanism. For backwards compatibility, build
 backends have to default to non-variant builds
 
@@ -421,30 +421,30 @@ The interesting technical details about USE flags are:
 
 1. Flags are defined for each package separately (with the exception of a few special flags). Their meanings can be
 either described globally or per package. The default values can be specified at package or profile (a system
-configuration such as "amd64 multilib desktop") level.  
+configuration such as "amd64 multilib desktop") level.
 2. Global flags can be grouped for improved UX. Examples of groups are `CPU_FLAGS_X86` that control SIMD code for x86
-processors, and `LLVM_SLOT` that select the LLVM version to build against.  
+processors, and `LLVM_SLOT` that select the LLVM version to build against.
 3. With the exception of a few special flags, there is no automation to select the right flags. For `CPU_FLAGS_X86`,
 Gentoo provides an external tool to query the CPU and provide a suggested value, but it needs to be run manually, and
 rerun when new flags are added to Gentoo. The package managers also generally suggest flag changes needed to satisfy the
-dependency resolution.  
-4. Dependencies, package sources and build rules can be conditional to use flags:  
-   - `flag? ( … )` is used only when the flag is enabled  
-   - `!flag? ( … )` is used only when the flag is disabled  
+dependency resolution.
+4. Dependencies, package sources and build rules can be conditional to use flags:
+   - `flag? ( … )` is used only when the flag is enabled
+   - `!flag? ( … )` is used only when the flag is disabled
 5. Particular states of USE flags can be expressed on dependencies, using a syntax similar to Python extras:
-`dep[flag1,flag2…]`.  
-   - `flag` indicates that the flag must be enabled on the dependency  
-   - `!flag` indicates that the flag must be disabled on the dependency  
-   - `flag?` indicates that it must be enabled if it is enabled on this package  
-   - `flag=` indicates that it must have the same state as on this package  
-   - `!flag=` indicates that it must have the opposite state than on this package  
-   - `!flag?` indicates that it must be disabled if it is disabled on this package  
-6. Constraints can be placed upon state of USE flags within a package:  
-   - `flag` specifies that the flag must be enabled  
-   - `!flag` specifies that the flag must be disabled  
-   - `flag? ( … )` and `!flag? ( … )` conditions can be used like in dependencies  
-   - `|| ( flag1 flag2 … )` indicates that at least one of the specified flags must be enabled  
-   - `^^ ( flag1 flag2 … )` indicates that exactly one of the specified flags must be enabled  
+`dep[flag1,flag2…]`.
+   - `flag` indicates that the flag must be enabled on the dependency
+   - `!flag` indicates that the flag must be disabled on the dependency
+   - `flag?` indicates that it must be enabled if it is enabled on this package
+   - `flag=` indicates that it must have the same state as on this package
+   - `!flag=` indicates that it must have the opposite state than on this package
+   - `!flag?` indicates that it must be disabled if it is disabled on this package
+6. Constraints can be placed upon state of USE flags within a package:
+   - `flag` specifies that the flag must be enabled
+   - `!flag` specifies that the flag must be disabled
+   - `flag? ( … )` and `!flag? ( … )` conditions can be used like in dependencies
+   - `|| ( flag1 flag2 … )` indicates that at least one of the specified flags must be enabled
+   - `^^ ( flag1 flag2 … )` indicates that exactly one of the specified flags must be enabled
    - `?? ( flag1 flag2 … )` indicates that at most one of the specified flags must be enabled
 
 This syntax has been generally seen as sufficient for Gentoo. However, its simplicity largely stems from the fact that
@@ -465,22 +465,22 @@ non-variant-aware tools from failure when a new type of wheel appears that they 
 
 Wheel variants introduce a more fine-grained specification of built wheel characteristics beyond what wheel tags
 provide. When evaluating wheels to install, the installer must determine whether variant properties are compatible with
-the system in addition to determining the tag compatibility. In order to choose the most suitable wheel to install, the
+the system in addition to determining the tag compatibility. To choose the most suitable wheel to install, the
 installer must order wheels according to the priorities of their variant properties first, and their tags second.
 
 Usually, providers are implemented as third-party Python packages providing the API specified in this document, called
 provider plugins. These plugins provide routines for validating variant properties while building variant wheels, and
 for determining wheel compatibility with the given system.
 
-When it is necessary to query the platform in order to determine wheel compatibility, provider plugins need to be called
+When it is necessary to query the platform to determine wheel compatibility, provider plugins need to be called
 while installing the wheel. Otherwise, their use can be limited to build time or disabled entirely, in which case the
 list of supported variant properties is encoded into the variant metadata.
 
-Package managers must not install or run untrusted variant providers without the user explicitly opting to that.
+Package managers must not install or run untrusted variant providers without the explicit user opt-in.
 Provider packages must not specify any dependencies, and the installer must ensure that no dependencies are installed if
 specified in the provider package metadata.
 
-It is recommended that the most commonly used plugins are either vendored, reimplemented, and/or locked to specific
+It is recommended that the most commonly used plugins are either vendored, reimplemented, or locked to specific
 wheels after verifying their trustworthiness, to enable the ability to securely install variant wheels out-of-the-box.
 To reduce the maintenance costs, repositories of such vetted plugins could be maintained collaboratively and shared
 between different package managers.
@@ -496,50 +496,51 @@ explicitly enabled by the user.
 
 ### Overview of Changes
 
-The Wheel Variant PEP introduce three key components:
+The Wheel Variant PEP introduces four key components:
 
-1. **Extended Wheel Filenames**: Variant wheels include a variant label in their filename to ensure:  
-   1. that every distinct variant has an unique filename  
-   2. that variant wheels are not  accidentally installed by non-variant-aware tools.  
+1. **Extended Wheel Filenames**: Variant wheels include a variant label in their filename to ensure:
+   1. that every distinct variant has a unique filename
+   2. that variant wheels are not accidentally installed by non-variant-aware tools.
 
-2. **Variant Metadata Format**: Standardized metadata describing variant properties and provider requirements.  
-   1. Metadata specification at "project level" inside `pyproject.toml`  
-   2. Metadata specification of "built packages" inside two JSON files:  
-      1. `**.dist-info/variant.json*`: Individual wheel variant metadata.  
-      2. `*-variants.json`: Variant metadata file aggregated on the package index.  
+2. **Variant Metadata Format**: Standardized metadata describing variant properties and provider requirements.
+   1. Metadata specification at "project level" inside `pyproject.toml`
+   2. Metadata specification of "built packages" inside two JSON files:
+      1. `**.dist-info/variant.json*`: Individual wheel variant metadata.
+      2. `*-variants.json`: Variant metadata file aggregated on the package index.
 
 3. **Provider Plugin System**: Plugin interface to allow detection of system capabilities and validate variant
 compatibility.
 
-4. **Environment Markers: New environment markers to declare dependencies that are applicable to a subset of variants only.**
+4. **Environment Markers**: New environment markers to declare dependencies that are applicable to a subset of variants only.
 
 ### Extended Wheel Filename Format
 
 One of the core requirements of the design is to ensure that installers predating this PEP will ignore wheel variant
 files. We propose to achieve this intent by appending a `-{variant label}` just before the `.whl` file extension.
 
-The variant label is separated using the same "-" character as other wheel filename components to be rejected by
+The variant label is separated using the same `-` character as other wheel filename components to be rejected by
 filename verification algorithms currently used by installers. Wheel filenames have two optional components now: the
 `build tag` (at the third position - see below), and the `variant label` (at the last position - see below).
 
 **The variant label serves two objectives:**
 
-- It guarantees a unique filename for different variants sharing identical tags.  
+- It guarantees a unique filename for different variants sharing identical tags.
 - It provides a human-readable identifier that helps to visually distinguish different variants.
 
-The label length is strictly limited (16 characters max) to prevent the wheel filenames from becoming much longer than
-they are now, and causing issues on systems with restrictions on total path length.
+The label length is strictly limited (16 characters max) to prevent issues on systems with restrictions on total path length.
 
 #### Variant label validation
 
-- Must adhere to the following rules:  
-    - Lower case only (to prevent case sensitivity issues)  
-    - Between 1-16 characters  
-    - Using only `0-9`, `a-z` or `.` or `_` characters
+A variant lable must adhere to the following rules:
+  - Lower case only (to prevent issues with case-sensitive vs. case-insensitive filesystems)
+  - Between 1-16 characters
+  - Using only `0-9`, `a-z`, `.` or `_` characters
 
-- Equivalent regex: `r"[0-9a-z._]{1,16}"`
+Equivalent regex: `^[0-9a-z._]{1,16}$`
 
 #### Build Tag and Variant Label
+
+Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants:
 
 - If both are present, the wheel will be rejected by installers and package indexes since the filename has too many
 components.
@@ -557,7 +558,7 @@ used by different package managers and packaging tooling ([auditwheel](https://g
 [uv](https://github.com/astral-sh/uv/blob/f6a9b55eb73be4f1fb9831362a192cdd8312ab96/crates/uv-distribution-filename/src/wheel.rs#L182-L299),
 [warehouse](https://github.com/pypi/warehouse/blob/main/warehouse/utils/wheel.py#L78-L81)).
 
-Currently the wheel filename follows the following format - as defined by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention)
+Currently, the wheel filename follows the following format, as defined by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention)
 
 ```re
 {distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}.whl
@@ -569,47 +570,47 @@ The Wheel Variant PEP extends this filename format following this template:
 {distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}(-{variant label})?.whl
 ```
 
-**A few examples:**
+**Examples:**
 
-- **Regular wheel (non variant):** `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64.whl`  
-- **Variant Label:**               `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`  
-- **Null variant (see below)**     `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-null.whl`
+- **Non-variant wheel:**                  `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64.whl`
+- **Wheel with variant label:**           `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
+- **Wheel with null variant (see below)** `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-null.whl`
 
 #### One-to-One relationship
 
-There must be a direct one-to-one relationship guarantee between variant properties and the variant label.
+There must be a direct one-to-one relationship between variant properties and the variant label.
 
 **A variant label must uniquely describe a specific set of variant properties for a given distribution and version.**
 
 In other words, for a given distribution (i.e. package name) and version:
 
-- Two different labels must not refer to the same set of variant properties.  
+- Two different labels must not refer to the same set of variant properties.
 - The set of variant properties must always point to the same variant label.
 
 ### Null Variant
 
-The concept of a null variant was added to make it possible to distinguish a fallback wheel variant from a regular wheel
+The concept of a null variant makes it possible to distinguish a fallback wheel variant from a regular wheel
 published for backwards compatibility. For example, a package that features optional GPU support could publish the
 following wheels:
 
-- One or more wheel variants built for specific hardware: will be installed on wheel-variant enabled systems with
+- One or more wheel variants built for specific hardware for wheel variant enabled systems with
 suitable hardware.
 
-- A CPU-only null variant that is installed on systems with wheel variant support but without suitable hardware.
+- A CPU-only null variant for systems with wheel variant support but without suitable hardware.
 
-- A GPU+CPU regular wheel that is installed on systems without wheel variant support (i.e. the “mega-wheel” approach)
+- A GPU+CPU regular wheel for systems without wheel variant support (i.e. the “mega-wheel” approach)
 
-The null variant must not have any properties and it must use the variant label `null`.  
+The null variant must not have any properties and it must use the variant label `null`.
 Conversely, wheel variants that declare any variant properties must not use the variant label `null`.
 
 In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable
 hardware, with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
 and therefore GPU support cannot be determined.
 
-Indeed, not being compatible with any of the available variants gives the installer more information about the system
+Not being compatible with any of the available variants gives the installer more information about the system
 (e.g. not having specialized hardware) than systems which do not support wheel variants. Consequently, it makes sense
 that package maintainers may wish to propose a different “fallback” to their users whether their system is Wheel Variant
-enabled or not. Publishing a null variant should be entirely optional. If one is published, a wheel variant enabled
+enabled or not. Publishing a null variant is optional. If one is published, a wheel variant enabled
 installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
 The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
 
@@ -628,9 +629,9 @@ a complete boolean logic.
 
 **This hierarchical structure enables:**
 
-- Organized property management without naming conflicts  
-- Independent development of provider plugins  
-- Extensible support for new hardware and software capabilities without requiring changes to tools or a new PEP.  
+- Organized property management without naming conflicts
+- Independent development of provider plugins
+- Extensible support for new hardware and software capabilities without requiring changes to tools or a new PEP.
 - Clear ownership and validation responsibilities
 
 #### Variant Property format
@@ -641,7 +642,7 @@ Variant properties use a structured 3-tuple format inspired by [PEP 301 for Trov
 namespace :: feature-name :: feature-value
 ```
 
-A few examples could be:
+Examples:
 
 ```shell
 nvidia :: cuda_version_lower_bound :: 12.8
@@ -655,15 +656,15 @@ x86_64 :: avx512_bf16 :: on
 **Variant Namespace:** identifies the provider plugin and must be unique within the plugin set used by a single package
 version.
 
-- It **must** follow this exact regex: `r"[a-z0-9_]+"`
+- It **must** match this regex: `^[a-z0-9_]+$`
 
 **Variant Feature Name**: Names a specific “characteristic” within the namespace.
 
-- It **must** follow this exact regex: `r"[a-z0-9_]+"`
+- It **must** match this regex: `^[a-z0-9_]+$`
 
 **Variant Feature Value**: A single value corresponding to the combination `namespace :: feature`.
 
-- It **must** follow this exact regex: `r"[a-z0-9_.,!>~<=]+"`
+- It **must** match this regex: `^[a-z0-9_.,!>~<=]+$`
 - In a “multi-value” feature, a single variant wheel can specify multiple values corresponding to a single feature key.
 Otherwise, only a single value can be present.
 
@@ -693,8 +694,8 @@ remaining orderings are provided by the package metadata. Installers should also
 
 This section describes the metadata format used for variant wheels. The format is used in three locations, with slight variations:
 
-- in the source repository, inside the `pyproject.toml` file  
-- in the built wheel, as a `*.dist-info/variant.json` file  
+- in the source repository, inside the `pyproject.toml` file
+- in the built wheel, as a `*.dist-info/variant.json` file
 - on the package index, as a `{package-name}-{version}-variants.json` file.
 
 All three variants metadata files share a common JSON-compatible structure, with some of its elements shared across all
@@ -703,7 +704,7 @@ of them, and some being specific to a single variant, as described further in th
 These variations fit into the common wheel building pipeline where a source tree is used to build one or more wheels,
 and the wheels are afterwards published on an index. The `pyproject.toml` file provides the metadata needed to build the
 wheels, as well as the shared metadata needed to install them. This metadata is then amended with information on the
-specific variant build, and copied into the wheel. When wheels are uploaded into the index, the metadata from all of
+specific variant build, and copied into the wheel. Before wheels are uploaded into the index, the metadata from all of
 them is read and aggregated into a single JSON file that can be used by the package installer to efficiently evaluate
 the available variants without having to fetch metadata from every wheel separately.
 
@@ -738,11 +739,11 @@ these blocks. The complete structure can be visualized using the following tree:
           +- <feature>  : list[str]
 ```
 
-For convenience, validation and reference - [a JSON Scheme file is included with the PEP](site:assets/wheel_variants/variant_schema.json)
+[A JSON Schema file is included with the PEP](../assets/wheel_variants/variant_schema.json)
 
 #### `pyproject.toml`: variant project-level data table
 
-The pyproject.toml file is the standard project configuration file as defined in
+The `pyproject.toml` file is the standard project configuration file as defined in
 [pyproject.toml specification](https://packaging.python.org/en/latest/specifications/pyproject-toml/#pyproject-toml-spec).
 The variant metadata is rooted at the top-level variant table. This format does not include the variant dictionary.
 
@@ -797,7 +798,7 @@ requires = [
 ]
 ```
 
-This design is necessary to allow future-proofing of the design when a plugin would become unmaintained or deprecated.  
+This design is necessary to allow future-proofing of the design when a plugin would become unmaintained or deprecated.
 However this list **must** resolve to a single and unique project to be installed. Any situation where two dependency
 specifiers were to be simultaneously valid must be considered invalid and rejected.
 
@@ -809,7 +810,7 @@ imported from `pyproject.toml`, it contains a `variants` object that must list e
 provided by the wheel.
 
 The default-priorities and providers for all wheels of the same package version on the same index must be the same and
-be equal to value in `{package-name}-{version}-variants.json` hosted on the index and described below.
+be equal to value in `{name}-{version}-variants.json` hosted on the index and described below.
 
 **The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:**
 
@@ -869,16 +870,15 @@ For every package version that includes at least one variant wheel, there must e
 `{name}-{version}-variants.json` file, hosted and served by the package index, where the package name and version are
 normalized according to the same rules as wheel files, as found in the
 [Binary Distribution Format specification](https://packaging.python.org/en/latest/specifications/binary-distribution-format/#escaping-and-unicode).
-The link to this file must be present on all index pages where the variant wheels are linked, to facilitate discovery
-and guarantee efficient variant resolution.
+The link to this file must be present on all index pages where the variant wheels are linked.
 
-This file uses the same structure as `variant.json` described above, except that the variants object is permitted to
-list multiple variants, and must list all variants available on the package index for the package version in question.
+This file uses the same structure as `variant.json` described above, except that the variants object must list all
+variants available on the package index for the package version in question.
 
 **The following behaviors must be respected and verified during the generation of the `{name}-{version}-variants.json` file:**
 
-- Wheel Variants must declare strictly identical `default-priorities` and `providers` dictionary entries.  
-- Wheel Variants with different labels must not use strictly identical sets of variant properties  
+- Wheel Variants must declare strictly identical `default-priorities` and `providers` dictionary entries.
+- Wheel Variants with different labels must not use strictly identical sets of variant properties
 - Wheel Variants with identical labels must use strictly identical sets of variant properties
 
 The `foo-1.2.3-variants.json` corresponding to the package with two wheel variants, one of them listed in the
@@ -890,7 +890,7 @@ previous example, would look like:
       ...
    },
    "providers": {    // Identical to above
-      ...  
+      ...
    },
    "variants": {
       "x8664v3_openblas": {
@@ -951,7 +951,7 @@ See :ref:`pylock-packages-archive-path`.
 '''''''''''''''''''''''''''''''''
 ```
 
-If there is a `[packages.variants-json]` section, the installer should resolve  
+If there is a `[packages.variants-json]` section, the installer should resolve
 variants to select the best wheel file.
 
 ## Plugin API - Standardized Variant Provider Plugin Interface
@@ -1201,7 +1201,7 @@ Note that the properties returned by `get_supported_configs()` must be a subset 
 ```python
 class MyPlugin:
     namespace = "example"
-
+  
     # all valid properties as:
     # example :: accelerated :: yes
     # example :: version :: v4
@@ -1242,11 +1242,11 @@ Variant environment markers
 Three new environment markers are introduced in dependency specifications:
 
 1. `variant_namespaces` corresponding to the set of namespaces of all the variant properties that the wheel variant was
-built for.  
+built for.
 2. `variant_features` corresponding to the set of `namespace :: feature` pairs of all the variant properties that the
-wheel variant was built for.  
+wheel variant was built for.
 3. `variant_properties` corresponding to the set of `namespace :: feature :: value` tuples of all the variant properties
-that the wheel variant was built for.  
+that the wheel variant was built for.
 4. `variant_label` corresponding to the exact variant label that the wheel was built with.
 
 The markers are defined as sets of strings, and therefore MUST be matched via the `in` or `not in` operator, e.g.:
