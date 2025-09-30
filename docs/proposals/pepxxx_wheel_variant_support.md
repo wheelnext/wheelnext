@@ -1110,7 +1110,7 @@ class PluginType(Protocol):
         raise NotImplementedError
 ```
 
-#### Properties
+##### Properties
 
 The plugin class must define the following properties or attributes:
 
@@ -1127,7 +1127,7 @@ class MyPlugin:
     namespace = "example"
 ```
 
-#### `def get_supported_configs(...):`
+##### `def get_supported_configs(...):`
 
 - Purpose: get features and their values supported on this system
 
