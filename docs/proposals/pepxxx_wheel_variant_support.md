@@ -490,6 +490,10 @@ interactive sessions, the package manager can explicitly ask the user for approv
 approval can be given using command-line interface options. It is important that the user is informed of the risk before
 giving such an approval.
 
+For a consistent experience between tools, variant wheels should be supported by default. Tools may provide an opt-out
+to only use non-variant wheels. For scenarios requiring more control, providers can be marked as optional and must be
+explicitly enabled by the user.
+
 ### Overview of Changes
 
 The Wheel Variant PEP introduce three key components:
@@ -608,15 +612,6 @@ that package maintainers may wish to propose a different “fallback” to their
 enabled or not. Publishing a null variant should be entirely optional. If one is published, a wheel variant enabled
 installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
 The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
-
-### Opt-in vs Opt-out
-
-Wheel variants should be supported using an opt-out approach. This ensures that wheel variants work seamlessly out of
-the box, providing users with optimal performance and compatibility with minimal maintenance burden. Plugins will be
-automatically installed into an isolated environment, enabling variant support without user intervention.
-
-For scenarios requiring explicit control, providers can be marked as optional. In these cases, users must explicitly
-enable the providers, but they will still benefit from automatic provider installation.
 
 ### Variant Properties System
 
