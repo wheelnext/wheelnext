@@ -1008,7 +1008,7 @@ a. in the `plugin-api` key of variant metadata, either explicitly or inferred fr
 
 b. as the value of an installed entry point in the `variant_plugins`. The name of said entry point is insignificant.
    This is optional but recommended, as it permits variant-related utilities to discover variant plugins installed
-   to the user's system.
+   to the user's environment.
 
 #### Behavior stability and versioning
 
