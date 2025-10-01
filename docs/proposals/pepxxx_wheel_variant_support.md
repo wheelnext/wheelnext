@@ -697,7 +697,7 @@ Use the index in `default-priorities.namespace` to assign each namespace a prior
 feature priority list by concatenating its `default-priorities.feature` features with its features in the provider
 output not in `default-priorities.feature`, and for each feature, build a property value priority list by concatenating
 its `default-priorities.property` properties with its properties in the provider output not in
-`default-priorities.property`. Use the index in those lists to assign a priority score to each feature and each
+`default-priorities.property`. Use the index in those lists to assign a priority score to every namespace, feature and
 property, earlier entries get a higher score than later entries. This defines a function to assign each property used in
 a variant wheel a score, which is the three-tuple of namespace, feature name and feature value score.
 
