@@ -783,8 +783,8 @@ It may have the following optional keys:
 #### Variants
 
 The `variants` dictionary is used in `variant.json` to indicate the variant that the wheel was built for,
-and in `*-variants.json` to indicate all the wheel variants available. It's a 3-level dictionary all properties for each
-listed variant: The first level keys are variant labels, the second level keys are namespaces, the third level are
+and in `*-variants.json` to indicate all the wheel variants available. It's a 3-level dictionary listing all properties
+per variant label: The first level keys are variant labels, the second level keys are namespaces, the third level are
 feature names, and the third level values are lists of feature values.
 
 #### `pyproject.toml`: variant project-level data table
