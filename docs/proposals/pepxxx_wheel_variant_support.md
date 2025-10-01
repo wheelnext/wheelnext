@@ -737,7 +737,10 @@ providers that are not used in the particular wheel.
 A provider information dictionary must include the following key:
 
 - `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
-  all the dependencies are installed (provided their environment markers match).
+  all the items are processed (provided their environment markers match), but they must always resolve
+  to a single distribution to be installed. Multiple dependencies can be used when different plugins providing
+  the same namespace need to be used conditionally to environment markers, e.g. for different Python versions
+  or platforms.
 
 Additionally, they may include the following keys:
 
@@ -833,23 +836,6 @@ requires = ["blas-lapack-variant-provider"]
 # into variant.json
 plugin-use = "build"
 ```
-
-##### Note regarding `requires = [...]`
-
-As shown above, the `requires = [...]` is specified as a list.
-
-```toml
-[variant.providers.aarch64]
-# example using different package based on Python version
-requires = [
-    "provider-variant-aarch64 >=0.0.1; python_version >= '3.12'",
-    "legacy-provider-variant-aarch64 >=0.0.1; python_version < '3.12'",
-]
-```
-
-This design is necessary to allow future-proofing of the design when a plugin would become unmaintained or deprecated.
-However this list **must** resolve to a single and unique project to be installed. Any situation where two dependency
-specifiers were to be simultaneously valid must be considered invalid and rejected.
 
 #### `*.dist-info/variant.json`: the packaged variant metadata file
 
