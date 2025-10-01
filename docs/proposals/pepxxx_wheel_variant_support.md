@@ -754,7 +754,7 @@ Additionally, they may include the following keys:
   in `requires` is used, after replacing all `-` characters with `_` in the normalized package name.
 
 - `plugin-use: str`: When the plugin is executed. It can be one of the following values:
-  - `all`: The plugin is run both at build time and at install time.
+  - `all` (the default): The plugin is run both at build time and at install time.
   - `build`: The plugin is run both at build time.
   - `none`: The plugin is not run, it only provides static information.
 
