@@ -1316,3 +1316,25 @@ evaluate to `False`.
 The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of all the protocols and algorithms introduced in this PEP, as well as a command-line tool to convert wheels, generate the `*-variants.json` index and query plugins.
 
 A client for installing variant wheels is implemented in [uv](https://github.com/astral-sh/uv).
+
+## Rejected ideas
+
+### Non-plugin approach
+
+The support for additional variant properties could technically be implemented without introducing provider plugins,
+but rather defining the available properties and their discovery methods as part of the specification, much like how
+wheel tags are implemented currently. However, the existing wheel tag logic already imposes a significant complexity
+on packaging tools that need to maintain the logic for generating supported tags, partially amortized by data available
+in the Python interpreter itself.
+
+Every new axis will be imposing even more effort on package manager maintainers, who will have to maintain an algorithm
+to determine property compatibility. This algorithm can be quite complex, possibly needing to account for different
+platforms, hardware versions and requiring more frequent updates than platform tags. Package manager maintainers will
+often also be unable to test the relevant code in production. This will also significantly increase the barrier towards
+adding new axes and therefore the risk of incompatibility between different installers, as every new axis will
+be imposing additional maintenance cost.
+
+For comparison, the plugin design essentially democratizes the variant properties. Provider plugins can be maintained
+independently by people having the necessary knowledge and hardware. They can be updated as frequently as necessary,
+independently of package managers. The decision to use a particular provider falls entirely on the maintainer
+of package needing it.
