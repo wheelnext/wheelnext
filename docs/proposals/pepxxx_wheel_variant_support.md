@@ -683,25 +683,27 @@ and then the order of property values in a feature.
 The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is initially defined by
 `default-priorities.feature`. Features not listed in `default-priorities.feature` are appended in the order they are
 returned by the variant provider plugin. Similarly, the order of property values in a feature is defined by their order in
-`default-priorities.property`, missing properties are appended from their order in the variant provider output.
+`default-priorities.property`, with missing properties appended in order from the variant provider output. In each list,
+earlier elements have higher priority than later elements.
 
 A variant wheel has a higher priority than another variant wheel if its most important property is more important than
-the most important property of the other variant wheel. If both wheels have the same most important property, compare the second most
-important property for each, and so on, until a tie-breaker is found.
+the most important property of the other variant wheel. If both wheels have the same most important property, compare
+the second most important property, and so on, until a tie-breaker is found. When two wheels otherwise have the same
+properties, the wheel with more properties has higher priority.
 
 A different way to describe the same algorithm:
 
 Use the index in `default-priorities.namespace` to assign each namespace a priority score. For each namespace, build a
-priority list by concatenating its `default-priorities.feature` features with its features in the provider output not
-in `default-priorities.feature`, and for each feature, build a priority list by concatenating its
-`default-priorities.property` properties with its properties in the provider output not in
+feature priority list by concatenating its `default-priorities.feature` features with its features in the provider
+output not in `default-priorities.feature`, and for each feature, build a property value priority list by concatenating
+its `default-priorities.property` properties with its properties in the provider output not in
 `default-priorities.property`. Use the index in those lists to assign a priority score to each feature and each
-property. This defines a function to assign each property used in a variant wheel a score, which is the three-tuple of
-namespace, feature name and feature value score.
+property, earlier entries get a higher score than later entries. This defines a function to assign each property used in
+a variant wheel a score, which is the three-tuple of namespace, feature name and feature value score.
 
-For each wheel, translate their properties into a list of scores, and sort that list. This assigns each wheel a score
-that is a sorted list of three-tuples. Order the wheels by their scores. The wheel wheel with the highest score is the
-most preferred wheel.
+For each wheel, translate their properties into a list of scores, and sort that list, higher scores first. This assigns
+each wheel a score that is a sorted list of three-tuples. Order the wheels by their scores. The variant wheel with the
+highest score is the most preferred wheel.
 
 ### Metadata - Data Format Standard
 
