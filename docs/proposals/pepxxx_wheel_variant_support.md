@@ -692,54 +692,100 @@ remaining orderings are provided by the package metadata. Installers should also
 
 ### Variant metadata
 
-This section describes the metadata format used for variant wheels. The format is used in three locations, with slight variations:
+This section describes the metadata format for the providers, variants and properties of a package and its wheels. The
+format is used in three locations, with slight variations:
 
-- in the source repository, inside the `pyproject.toml` file
+- in the source tree, inside the `pyproject.toml` file
 - in the built wheel, as a `*.dist-info/variant.json` file
-- on the package index, as a `{package-name}-{version}-variants.json` file.
+- on the package index, as a `{name}-{version}-variants.json` file.
 
-All three variants metadata files share a common JSON-compatible structure, with some of its elements shared across all
-of them, and some being specific to a single variant, as described further in this section.
-
-These variations fit into the common wheel building pipeline where a source tree is used to build one or more wheels,
-and the wheels are afterwards published on an index. The `pyproject.toml` file provides the metadata needed to build the
-wheels, as well as the shared metadata needed to install them. This metadata is then amended with information on the
-specific variant build, and copied into the wheel. Before wheels are uploaded into the index, the metadata from all of
-them is read and aggregated into a single JSON file that can be used by the package installer to efficiently evaluate
-the available variants without having to fetch metadata from every wheel separately.
-
-#### The metadata tree
-
-The metadata is a dictionary rooted at a specific point, specified for each file separately. The top-level keys of this
-dictionary are strings corresponding to specific metadata blocks, and their values are further dictionaries representing
-these blocks. The complete structure can be visualized using the following tree:
+All three variants metadata files share a common JSON-compatible structure:
 
 ```textproto
 (root)
 |
-+-- providers
-|   +- <namespace>
-|      +- requires      : list[str]
-|      +- enable-if     : str | None
-|      +- plugin-api    : str | None
-|      +- optional      : bool = False
-|      +- plugin-use    : Literal["install", "build", "none"] = "install"
++- providers
+|  +- <namespace>
+|     +- requires      : list[str]
+|     +- enable-if     : str | None
+|     +- plugin-api    : str | None
+|     +- optional      : bool = False
+|     +- plugin-use    : Literal["all", "build", "none"] = "all"
 |
-+-- default-priorities
-|   +- namespace        : list[str]
-|   +- feature
-|      +- <namespace>   : list[str]
-|   +- property
-|      +- <namespace>
-|         +- <feature>  : list[str]
++- default-priorities
+|  +- namespace        : list[str]
+|  +- feature
+|     +- <namespace>   : list[str]
+|  +- property
+|     +- <namespace>
+|        +- <feature>  : list[str]
 |
-+-- variants
-    +- <variant-label>
-       +- <namespace>
-          +- <feature>  : list[str]
++- variants
+   +- <variant-label>
+      +- <namespace>
+         +- <feature>  : list[str]
 ```
 
-[A JSON Schema file is included with the PEP](../assets/wheel_variants/variant_schema.json)
+[A JSON Schema is included in the Appendix of this PEP. TODO: Move to appendix](../assets/wheel_variants/variant_schema.json)
+
+#### Provider information
+
+`providers` is a dictionary, the keys are namespaces, the values are dictionaries with provider information. It specifies how to install and use variant providers. A provider information dictionary must be declared in
+`pyproject.toml` for every supported variant namespace. It must be copied to `variant.json` as-is, including data for
+providers that are not used in the particular wheel.
+
+A provider information dictionary must include the following key:
+
+- `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
+  all the dependencies are installed (provided their environment markers match).
+
+Additionally, they may include the following keys:
+
+- `enable-if: str`: An environment marker defining when the plugin should be used. If the environment marker
+  does not match the running environment, the provider will be disabled and the variants using its properties are
+  deemed incompatible.
+
+- `optional: bool`: Whether the provider is optional, as a boolean value. If it is true, the provider
+  is considered optional and should not be used unless the user opts in to it, effectively rendering the variants
+  using its properties incompatible. If it is false or missing, the provider is considered required.
+
+- `plugin-api: str`: The API endpoint for the plugin. If it is specified, it must be an object reference
+  as explained in the "API endpoint" section. If it is missing, the package name from the first dependency specifier
+  in `requires` is used, after replacing all `-` characters with `_` in the normalized package name.
+
+- `plugin-use: str`: When the plugin is executed. It can be one of the following values:
+  - `all` (the default): The plugin is run both at build time and at install time.
+  - `build`: The plugin is run both at build time.
+  - `none`: The plugin is not run, it only provides static information.
+
+#### Default priorities
+
+The `default-priorities` dictionary controls the ordering of variants.
+
+It has a single required key:
+
+- `namespace: list[str]`: All namespaces used by the wheel variants, from the most important to the least
+  important. This list must have the same members as the keys of the `providers` dictionary.
+
+It may have the following optional keys:
+
+- `feature: dict[str, list[str]]`: A dictionary with namespaces as keys, and ordered list of corresponding feature names
+  as values. The values in each list override the default ordering from the provider output. They are listed
+  from the most important to the least important. Features not present on the list are considered of lower
+  importance than those present, and their relative importance is defined by the plugin.
+
+- `property: dict[str, dict[str, list[str]]]`: A nested dictionary with namespaces as first-level keys, feature names as
+  second-level keys and ordered lists of corresponding property values as second-level values. The values present in the
+  list override the default ordering from the provider output. They are listed from the most important to the least
+  important. Properties not present on the list are considered of lower importance than these present, and their
+  relative importance is defined by the plugin output.
+
+#### Variants
+
+The `variants` dictionary is used in `variant.json` to indicate the variant that the wheel was built for,
+and in `*-variants.json` to indicate all the wheel variants available. It's a 3-level dictionary listing all properties
+per variant label: The first level keys are variant labels, the second level keys are namespaces, the third level are
+feature names, and the third level values are lists of feature values.
 
 #### `pyproject.toml`: variant project-level data table
 
