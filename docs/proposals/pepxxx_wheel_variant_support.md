@@ -688,8 +688,8 @@ earlier elements have higher priority than later elements.
 
 A variant wheel has a higher priority than another variant wheel if its most important property is more important than
 the most important property of the other variant wheel. If both wheels have the same most important property, compare
-the second most important property, and so on, until a tie-breaker is found. When two wheels otherwise have the same
-properties, the wheel with more properties has higher priority.
+the second most important property, and so on, until a tie-breaker is found. If the same set of the most important
+properties is shared by both wheels, the wheel having additional properties has higher priority.
 
 A different way to describe the same algorithm:
 
