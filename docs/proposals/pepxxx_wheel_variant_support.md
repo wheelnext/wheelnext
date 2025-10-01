@@ -760,7 +760,7 @@ Additionally, they may include the following keys:
 
 #### Default priorities
 
-The default priorities dictionary `default-priorities` controls the ordering of variants.
+The `default-priorities` dictionary controls the ordering of variants.
 
 It has a single required key:
 
