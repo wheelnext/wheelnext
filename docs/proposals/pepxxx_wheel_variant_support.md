@@ -1315,6 +1315,28 @@ Variant marker expressions MUST be evaluated against the variant properties stor
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
 
+## Backwards compatibility
+
+Existing installers must not accidentally install variant wheels, as they require additional logic to determine whether
+a wheel is compatible with the user's system. This is achieved by adding a `-{variant label}` component to the end
+of the filename, effectively causing variant wheels to be rejected by common installer implementations. For backwards
+compatibility, a regular wheel can be published in addition to the variant wheels, which will be the only wheel
+supported by incompatible installers, and the least preferred wheel for variant-compatible installers.
+
+Aside from this explicit incompatibility, the specification makes minimal and non-intrusive changes to the binary
+package format. The variant metadata is placed in a separate file in the `.dist-info` directory, which should be
+preserved by tools that are not concerned with variants, limiting the necessary changes to updating the filename
+validation algorithm (if there is one).
+
+The use of new environment markers in wheel dependencies introduces incompatibility with existing tools. This is
+a general problem with the design of environment markers, and not specific to wheel variants. It is possible to work
+around this problem by partially evaluating environment markers at build time, and removing the markers or dependencies
+specific to variant wheels from the regular wheel.
+
+By using a separate `*-variants.json` file for shared metadata, it is possible to use variant wheels on an index that
+does not specifically support variant metadata. However, the index must permit distributing wheels that use the extended
+filename syntax and the JSON file.
+
 ## Reference implementation
 
 The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of all the protocols and algorithms introduced in this PEP, as well as a command-line tool to convert wheels, generate the `*-variants.json` index and query plugins.
