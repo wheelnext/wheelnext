@@ -990,6 +990,7 @@ They are in the form of:
 An API endpoint specification is equivalent to the following Python pseudocode:
 
 ```python
+import inspect
 import {import path}
 
 if "{object path}":
@@ -997,7 +998,7 @@ if "{object path}":
 else:
     plugin = {import path}
 
-if callable(plugin):
+if inspect.isclass(plugin):
     plugin = plugin()
 ```
 
