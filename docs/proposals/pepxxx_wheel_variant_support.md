@@ -935,11 +935,11 @@ previous example, would look like:
 
 ```jsonc
 {
-   "default-priorities": {    // Identical to above
-      ...
+   "default-priorities": {
+      // Identical to above
    },
-   "providers": {    // Identical to above
-      ...
+   "providers": {
+      // Identical to above
    },
    "variants": {
       "x8664v3_openblas": {
