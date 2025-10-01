@@ -701,7 +701,7 @@ format is used in three locations, with slight variations:
 
 All three variants metadata files share a common JSON-compatible structure:
 
-```textproto
+```
 (root)
 |
 +- providers
@@ -737,7 +737,10 @@ providers that are not used in the particular wheel.
 A provider information dictionary must include the following key:
 
 - `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
-  all the dependencies are installed (provided their environment markers match).
+  all the items are processed (provided their environment markers match), but they must always resolve
+  to a single distribution to be installed. Multiple dependencies can be used when different plugins providing
+  the same namespace need to be used conditionally to environment markers, e.g. for different Python versions
+  or platforms.
 
 Additionally, they may include the following keys:
 
@@ -799,7 +802,7 @@ Under a `[variant]` key, it defines the providers and default priorities needed 
 
 ```toml
 [variant.default-priorities]
-# prefer `x86_64` plugin over `aarch64`
+# prefer CPU features over BLAS/LAPACK variants
 namespace = ["x86_64", "aarch64", "blas_lapack"]
 
 # prefer aarch64 version and x86_64 level features over other features
@@ -827,26 +830,12 @@ enable-if = "platform_machine == 'x86_64' or platform_machine == 'AMD64'"
 plugin-api = "provider_variant_x86_64.plugin:X8664Plugin"
 
 [variant.providers.blas_lapack]
+# plugin-use inferred from requires
 requires = ["blas-lapack-variant-provider"]
+# plugin used only when building package, properties will be inlined
+# into variant.json
 plugin-use = "build"
 ```
-
-##### Note regarding `requires = [...]`
-
-As shown above, the `requires = [...]` is specified as a list.
-
-```toml
-[variant.providers.aarch64]
-# example using different package based on Python version
-requires = [
-    "provider-variant-aarch64 >=0.0.1; python_version >= '3.12'",
-    "legacy-provider-variant-aarch64 >=0.0.1; python_version < '3.12'",
-]
-```
-
-This design is necessary to allow future-proofing of the design when a plugin would become unmaintained or deprecated.
-However this list **must** resolve to a single and unique project to be installed. Any situation where two dependency
-specifiers were to be simultaneously valid must be considered invalid and rejected.
 
 #### `*.dist-info/variant.json`: the packaged variant metadata file
 
@@ -860,16 +849,18 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
 
 **The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:**
 
-```json
+```jsonc
 {
    "default-priorities": {
       "feature": {
          "aarch64": ["version"],
+         // blas_lapack entry is added via plugin-use = "build"
          "blas_lapack": ["provider"],
          "x86_64": ["level"]
       },
       "namespace": ["x86_64", "aarch64", "blas_lapack"],
       "property": {
+         // blas_lapack entry is added via plugin-use = "build"
          "blas_lapack": {
             "provider": ["accelerate", "openblas", "mkl"]
          },
@@ -883,8 +874,8 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
          "enable-if": "platform_machine == 'aarch64' or 'arm' in platform_machine",
          "plugin-api": "provider_variant_aarch64.plugin:AArch64Plugin",
          "requires": [
-            "provider-variant-aarch64 >=0.0.1,<1; python_version >= '3.9'",
-            "legacy-provider-variant-aarch64 >=0.0.1,<1; python_version < '3.9'"
+            "provider-variant-aarch64 >=0.0.1; python_version >= '3.9'",
+            "legacy-provider-variant-aarch64 >=0.0.1; python_version < '3.9'"
          ]
       },
       "blas_lapack": {
@@ -894,10 +885,11 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
       "x86_64": {
          "enable-if": "platform_machine == 'x86_64' or platform_machine == 'AMD64'",
          "plugin-api": "provider_variant_x86_64.plugin:X8664Plugin",
-         "requires": ["provider-variant-x86-64 >=0.0.1,<1"]
+         "requires": ["provider-variant-x86-64 >=0.0.1"]
       }
    },
    "variants": {
+      // always a single entry, expressing the variant properties of the wheel
       "x8664v3_openblas": {
          "blas_lapack": {
             "provider": ["openblas"]
@@ -932,13 +924,14 @@ previous example, would look like:
 
 ```jsonc
 {
-   "default-priorities": {    // Identical to above
-      ...
+   "default-priorities": {
+      // identical to above
    },
-   "providers": {    // Identical to above
-      ...
+   "providers": {
+      // identical to above
    },
    "variants": {
+      // all available wheel variants
       "x8664v3_openblas": {
          "blas_lapack": {
             "provider": ["openblas"]
@@ -1298,7 +1291,7 @@ that the wheel variant was built for.
 
 The markers are defined as sets of strings, and therefore MUST be matched via the `in` or `not in` operator, e.g.:
 
-```textproto
+```
 dep1; "foo" in variant_namespaces
 dep2; "foo :: bar" in variant_features
 dep3; "foo :: bar :: baz" in variant_properties
