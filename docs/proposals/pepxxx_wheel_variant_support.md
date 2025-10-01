@@ -701,7 +701,7 @@ format is used in three locations, with slight variations:
 
 All three variants metadata files share a common JSON-compatible structure:
 
-```python
+```
 (root)
 |
 +- providers
@@ -1291,7 +1291,7 @@ that the wheel variant was built for.
 
 The markers are defined as sets of strings, and therefore MUST be matched via the `in` or `not in` operator, e.g.:
 
-```python
+```
 dep1; "foo" in variant_namespaces
 dep2; "foo :: bar" in variant_features
 dep3; "foo :: bar :: baz" in variant_properties
