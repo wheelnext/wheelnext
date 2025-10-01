@@ -769,7 +769,7 @@ It has a single required key:
 
 It may have the following optional keys:
 
-- `feature: dict[str, list[str]]`: A dictionary with namespaces as keys, and ordered list of corresponding feature name
+- `feature: dict[str, list[str]]`: A dictionary with namespaces as keys, and ordered list of corresponding feature names
   as values. The values in each list override the default ordering from the provider output. They are listed
   from the most important to the least important. Features not present on the list are considered of lower
   importance than those present, and their relative importance is defined by the plugin.
