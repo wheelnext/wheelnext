@@ -872,8 +872,8 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
          "enable-if": "platform_machine == 'aarch64' or 'arm' in platform_machine",
          "plugin-api": "provider_variant_aarch64.plugin:AArch64Plugin",
          "requires": [
-            "provider-variant-aarch64 >=0.0.1,<1; python_version >= '3.9'",
-            "legacy-provider-variant-aarch64 >=0.0.1,<1; python_version < '3.9'"
+            "provider-variant-aarch64 >=0.0.1; python_version >= '3.9'",
+            "legacy-provider-variant-aarch64 >=0.0.1; python_version < '3.9'"
          ]
       },
       "blas_lapack": {
@@ -883,7 +883,7 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
       "x86_64": {
          "enable-if": "platform_machine == 'x86_64' or platform_machine == 'AMD64'",
          "plugin-api": "provider_variant_x86_64.plugin:X8664Plugin",
-         "requires": ["provider-variant-x86-64 >=0.0.1,<1"]
+         "requires": ["provider-variant-x86-64 >=0.0.1"]
       }
    },
    "variants": {
