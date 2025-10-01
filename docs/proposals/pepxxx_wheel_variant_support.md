@@ -799,7 +799,7 @@ Under a `[variant]` key, it defines the providers and default priorities needed 
 
 ```toml
 [variant.default-priorities]
-# prefer `x86_64` plugin over `aarch64`
+# prefer CPU features over BLAS/LAPACK variants
 namespace = ["x86_64", "aarch64", "blas_lapack"]
 
 # prefer aarch64 version and x86_64 level features over other features
@@ -827,7 +827,10 @@ enable-if = "platform_machine == 'x86_64' or platform_machine == 'AMD64'"
 plugin-api = "provider_variant_x86_64.plugin:X8664Plugin"
 
 [variant.providers.blas_lapack]
+# plugin-use inferred from requires
 requires = ["blas-lapack-variant-provider"]
+# plugin used only when building package, properties will be inlined
+# into variant.json
 plugin-use = "build"
 ```
 
