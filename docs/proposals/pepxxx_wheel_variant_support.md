@@ -710,7 +710,7 @@ All three variants metadata files share a common JSON-compatible structure:
 |     +- enable-if     : str | None
 |     +- plugin-api    : str | None
 |     +- optional      : bool = False
-|     +- plugin-use    : Literal["install", "build", "none"] = "install"
+|     +- plugin-use    : Literal["all", "build", "none"] = "all"
 |
 +- default-priorities
 |  +- namespace        : list[str]
