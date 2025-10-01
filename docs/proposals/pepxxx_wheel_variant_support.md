@@ -849,16 +849,18 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
 
 **The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:**
 
-```json
+```jsonc
 {
    "default-priorities": {
       "feature": {
          "aarch64": ["version"],
+         // blas_lapack entry is added via plugin-use = "build"
          "blas_lapack": ["provider"],
          "x86_64": ["level"]
       },
       "namespace": ["x86_64", "aarch64", "blas_lapack"],
       "property": {
+         // blas_lapack entry is added via plugin-use = "build"
          "blas_lapack": {
             "provider": ["accelerate", "openblas", "mkl"]
          },
@@ -887,6 +889,7 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
       }
    },
    "variants": {
+      // always a single entry, expressing the variant properties of the wheel
       "x8664v3_openblas": {
          "blas_lapack": {
             "provider": ["openblas"]
@@ -922,12 +925,13 @@ previous example, would look like:
 ```jsonc
 {
    "default-priorities": {
-      // Identical to above
+      // identical to above
    },
    "providers": {
-      // Identical to above
+      // identical to above
    },
    "variants": {
+      // all available wheel variants
       "x8664v3_openblas": {
          "blas_lapack": {
             "provider": ["openblas"]
