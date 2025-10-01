@@ -349,7 +349,7 @@ This PEP tries to present the minimal scope required and leaves aspects to tools
 - The format of the static variants file, and how to include them in a pylock.toml
 - The list of variant providers that are vendored or re-implemented, as well as opt-in mechanisms
 - How to instruct build backends to emit variants through the PEP 517 mechanism. For backwards compatibility, build
-backends have to default to non-variant builds
+  backends have to default to non-variant builds
 
 ### Prior art
 
@@ -1288,6 +1288,12 @@ methods on the plugin instances. The implementations should ignore additional at
 For best compatibility, it is recommended that all private attributes are prefixed with an underscore (_) character to
 avoid incidental conflicts with future extensions.
 
+### Build backends
+
+As a build backend can't determine whether the frontend supports variant wheels or not, PEP 517 and PEP 660 hooks must
+build non-variant wheels by default. Build backends may provide ways to request variant builds. This specification does
+not define any specific configuration.
+
 ### Variant environment markers
 
 Three new environment markers are introduced in dependency specifications:
@@ -1332,6 +1338,8 @@ The use of new environment markers in wheel dependencies introduces incompatibil
 a general problem with the design of environment markers, and not specific to wheel variants. It is possible to work
 around this problem by partially evaluating environment markers at build time, and removing the markers or dependencies
 specific to variant wheels from the regular wheel.
+
+PEP 517 and PEP 660 builds must be non-variant wheels by default as they can't determine whether the frontend supports variants.
 
 By using a separate `*-variants.json` file for shared metadata, it is possible to use variant wheels on an index that
 does not specifically support variant metadata. However, the index must permit distributing wheels that use the extended
