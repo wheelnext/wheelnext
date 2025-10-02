@@ -477,8 +477,6 @@ while installing the wheel. Otherwise, their use can be limited to build time or
 list of supported variant properties is encoded into the variant metadata.
 
 Package managers must not install or run untrusted variant providers without the explicit user opt-in.
-Provider packages must not specify any dependencies, and the installer must ensure that no dependencies are installed if
-specified in the provider package metadata.
 
 It is recommended that the most commonly used plugins are either vendored, reimplemented, or locked to specific
 wheels after verifying their trustworthiness, to enable the ability to securely install variant wheels out-of-the-box.
@@ -1344,6 +1342,13 @@ PEP 517 and PEP 660 builds must be non-variant wheels by default as they can't d
 By using a separate `*-variants.json` file for shared metadata, it is possible to use variant wheels on an index that
 does not specifically support variant metadata. However, the index must permit distributing wheels that use the extended
 filename syntax and the JSON file.
+
+## Security Implications
+
+Externally installed provider plugins are at risk for supply-chain attacks. Provider plugins may choose to vendor their
+dependencies to avoid the risk of their dependencies being compromised in a new version, but should in any case aim to
+use the minimal number of dependencies. Other mitigations include locking provider plugins similar to runtime
+dependencies. These concerns do not apply to provider plugins that are vendored or reimplemented by the package manager.
 
 ## Reference implementation
 
