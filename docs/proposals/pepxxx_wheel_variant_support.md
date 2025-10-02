@@ -1329,10 +1329,9 @@ in the Python interpreter itself.
 
 Every new axis will be imposing even more effort on package manager maintainers, who will have to maintain an algorithm
 to determine property compatibility. This algorithm can be quite complex, possibly needing to account for different
-platforms, hardware versions and requiring more frequent updates than platform tags. Package manager maintainers will
-often also be unable to test the relevant code in production. This will also significantly increase the barrier towards
-adding new axes and therefore the risk of incompatibility between different installers, as every new axis will
-be imposing additional maintenance cost.
+platforms, hardware versions and requiring more frequent updates than platform tags.  This will also significantly
+increase the barrier towards adding new axes and therefore the risk of incompatibility between different installers,
+as every new axis will be imposing additional maintenance cost.
 
 For comparison, the plugin design essentially democratizes the variant properties. Provider plugins can be maintained
 independently by people having the necessary knowledge and hardware. They can be updated as frequently as necessary,
