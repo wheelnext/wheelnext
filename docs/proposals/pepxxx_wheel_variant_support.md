@@ -1024,8 +1024,7 @@ To make it easier to discover and install plugins, they should be published in t
 them. In particular, packages published to PyPI must not rely on plugins that need to be installed from other indexes
 
 Plugins are implemented as Python modules. The API specified in this PEP can either be implemented as top-level
-attributes and functions, or as members of a class. In the latter case, the class is instantiated prior to accessing
-them.
+attributes and functions, or as members of a class. In the latter case, they must be either static or class methods.
 
 #### API endpoint
 
@@ -1047,9 +1046,6 @@ if "{object path}":
     plugin = {import path}.{object path}
 else:
     plugin = {import path}
-
-if inspect.isclass(plugin):
-    plugin = plugin()
 ```
 
 API endpoints are used in two contexts:
@@ -1094,6 +1090,7 @@ class VariantFeatureConfigType(Protocol):
         raise NotImplementedError
 
     @property
+    @abstractmethod
     def multi_value(self) -> bool:
         """Does this property allow multiple values per variant?"""
         raise NotImplementedError
@@ -1146,6 +1143,9 @@ from typing import runtime_checkable
 class PluginType(Protocol):
     """A protocol for plugin classes"""
 
+    # Note: properties are used here for docstring purposes, these must
+    # be actually implemented as attributes.
+
     @property
     @abstractmethod
     def namespace(self) -> str:
@@ -1157,11 +1157,13 @@ class PluginType(Protocol):
         """Is this plugin valid for `plugin-use = "build"`?"""
         return False
 
+    @classmethod
     @abstractmethod
     def get_all_configs(self) -> list[VariantFeatureConfigType]:
         """Get all valid configs for the plugin"""
         raise NotImplementedError
 
+    @classmethod
     @abstractmethod
     def get_supported_configs(self) -> list[VariantFeatureConfigType]:
         """Get supported configs for the current system"""
