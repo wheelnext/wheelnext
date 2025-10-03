@@ -1090,6 +1090,7 @@ class VariantFeatureConfigType(Protocol):
         raise NotImplementedError
 
     @property
+    @abstractmethod
     def multi_value(self) -> bool:
         """Does this property allow multiple values per variant?"""
         raise NotImplementedError
