@@ -1021,10 +1021,12 @@ which implies that they become mutually exclusive. For example, this could happe
 needs to be forked into a new package.
 
 To make it easier to discover and install plugins, they should be published in the same indexes that the packages using
-them. In particular, packages published to PyPI must not rely on plugins that need to be installed from other indexes
+them. In particular, packages published to PyPI must not rely on plugins that need to be installed from other indexes.
 
-Plugins are implemented as Python modules. The API specified in this PEP can either be implemented as top-level
-attributes and functions, or as members of a class. In the latter case, they must be either static or class methods.
+Plugins are implemented as Python packages. They need to expose two kinds of Python objects at a specified API endpoint:
+attributes that return a specific value after being accessed via `{API endpoint}.{attribute name}`, and callables that
+are called via `{API endpoint}.{callable name}({arguments}...)`. These can be implemented either as modules, or classes
+with class methods or static methods.
 
 #### API endpoint
 
@@ -1102,7 +1104,7 @@ class VariantFeatureConfigType(Protocol):
         raise NotImplementedError
 ```
 
-A "variant feature config" must provide two properties or attributes:
+A "variant feature config" must provide three properties or attributes:
 
 - `name` specifying the feature name, as a string.
 
