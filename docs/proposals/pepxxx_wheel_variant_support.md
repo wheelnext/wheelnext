@@ -1334,10 +1334,10 @@ publish non-variant wheels for a transition period.
 Users with specific deployment targets need to learn how to configure provider plugins for their target, for example,
 with a static file generated on the target.
 
-For authors of pure Python `py3-none-any` packages nothing changes. Authors of extension modules need to be taught how
-providers integrate with their build backend, how variant markers work, how to generate `variants.json`, how to
-publish variant wheels and the `variants.json` file, and how backwards compatibility with non-variant package managers
-works. They need to know which providers are commonly vendored or reimplemented and what features they support.
+Authors of extension modules need to be taught how providers integrate with their build backend, how variant markers
+work, how to generate `variants.json`, how to publish variant wheels and the `variants.json` file, and how backwards
+compatibility with non-variant package managers works. They need to know which providers are commonly vendored or
+reimplemented and what features they support.
 
 ## Backwards compatibility
 
