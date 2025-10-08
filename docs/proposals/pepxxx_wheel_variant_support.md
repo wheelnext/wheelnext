@@ -1325,7 +1325,7 @@ Variant marker expressions MUST be evaluated against the variant properties stor
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
 
-## How to Teach This
+## How to teach this
 
 For the transition period, during which some package managers do and some do not support variant wheels, users need to
 be aware that certain features may only be available with certain tools. Similarly, package maintainers should still
