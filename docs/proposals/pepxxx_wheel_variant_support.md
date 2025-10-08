@@ -1086,19 +1086,16 @@ class VariantFeatureConfigType(Protocol):
     """A protocol for VariantFeature configs"""
 
     @property
-    @abstractmethod
     def name(self) -> str:
         """Feature name"""
         raise NotImplementedError
 
     @property
-    @abstractmethod
     def multi_value(self) -> bool:
         """Does this property allow multiple values per variant?"""
         raise NotImplementedError
 
     @property
-    @abstractmethod
     def values(self) -> list[str]:
         """Ordered list of values, most preferred first"""
         raise NotImplementedError
