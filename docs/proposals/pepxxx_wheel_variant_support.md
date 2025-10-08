@@ -1325,6 +1325,20 @@ Variant marker expressions MUST be evaluated against the variant properties stor
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
 
+## How to teach this
+
+For the transition period, during which some package managers do and some do not support variant wheels, users need to
+be aware that certain features may only be available with certain tools. Similarly, package maintainers should still
+publish non-variant wheels for a transition period.
+
+Users with specific deployment targets need to learn how to configure provider plugins for their target, for example,
+with a static file generated on the target.
+
+Authors of extension modules need to be taught how providers integrate with their build backend, how variant markers
+work, how to generate `variants.json`, how to publish variant wheels and the `variants.json` file, and how backwards
+compatibility with non-variant package managers works. They need to know which providers are commonly vendored or
+reimplemented and what features they support.
+
 ## Backwards compatibility
 
 Existing installers must not accidentally install variant wheels, as they require additional logic to determine whether
