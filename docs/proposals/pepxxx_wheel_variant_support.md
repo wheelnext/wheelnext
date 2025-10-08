@@ -1358,8 +1358,8 @@ installing a wheel, and the users have been relying on the `--no-binary` option 
 the proposal explicitly requires that untrusted providers are never installed or used without explicit user opt-in.
 A few options are suggested for improving the user experience without introducing the RCE risk, notably vendoring
 or locking plugins at the installer level, therefore ensuring that they are audited on the same level as the installer
-itself. More details are provided in the [Overview](#overview) section. The specification also provides for using lock
-files to disable the plugin system altogether.
+itself. More details are provided in the [Overview](#overview) section. Static file input can be used to skip running
+plugins on installation altogether.
 
 ## Reference implementation
 
