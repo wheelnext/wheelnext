@@ -1363,6 +1363,18 @@ By using a separate `*-variants.json` file for shared metadata, it is possible t
 does not specifically support variant metadata. However, the index must permit distributing wheels that use the extended
 filename syntax and the JSON file.
 
+## Security implications
+
+The proposal introduces a variant properties system that could introduce a risk of remote code execution through
+installing and executing third-party Python packages. Such a risk existed already when installing from source
+distributions, but the binary package specification does not provide for any third-party code being executed when
+installing a wheel, and the users have been relying on the `--no-binary` option to guarantee that. For this reason,
+the proposal explicitly requires that untrusted providers are never installed or used without explicit user opt-in.
+A few options are suggested for improving the user experience without introducing the RCE risk, notably vendoring
+or locking plugins at the installer level, therefore ensuring that they are audited on the same level as the installer
+itself. More details are provided in the [Overview](#overview) section. Static file input can be used to skip running
+plugins on installation altogether.
+
 ## Reference implementation
 
 The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of all the protocols and algorithms introduced in this PEP, as well as a command-line tool to convert wheels, generate the `*-variants.json` index and query plugins.
