@@ -1327,17 +1327,48 @@ evaluate to `False`.
 
 ## How to teach this
 
+### Python package users
+
+The primary source of information for Python package users should be installer documentation, supplemented by
+helpful informational messages from command-line interface and tutorials. Users without special needs should
+not require any special variant awareness. Advanced users would specifically need documentation on (provided
+the installer in question implements these features):
+
+- enabling untrusted provider plugins and the security implications of that
+
+- controlling provider usage, in particular enabling optional providers, disabling undesirable plugins or disabling
+  variant usage in general
+
+- explicitly selecting variants, as well as controlling variant selection process
+
+- configuring variant selection for remote deployment targets, for example using a static file generated on the target
+
+The installer documentation may also be supplemented by documentation specific to Python projects, in particular
+their installation instructions.
+
 For the transition period, during which some package managers do and some do not support variant wheels, users need to
-be aware that certain features may only be available with certain tools. Similarly, package maintainers should still
-publish non-variant wheels for a transition period.
+be aware that certain features may only be available with certain tools.
 
-Users with specific deployment targets need to learn how to configure provider plugins for their target, for example,
-with a static file generated on the target.
+### Python package maintainers
 
-Authors of extension modules need to be taught how providers integrate with their build backend, how variant markers
-work, how to generate `variants.json`, how to publish variant wheels and the `variants.json` file, and how backwards
-compatibility with non-variant package managers works. They need to know which providers are commonly vendored or
-reimplemented and what features they support.
+The primary source of information for maintainers of Python packages should be build backend documentation,
+supplemented by tutorials. The documentation needs to indicate:
+
+- how to declare variant support in `pyproject.toml`
+
+- how to use variant environment markers to specify dependencies
+
+- how to build variant wheels
+
+- how to publish them and generate the `*-variants.json` file on local indexes
+
+The maintainers will also need to peruse provider plugin documentation. They should also be aware which provider plugins
+are considered trusted by commonly used installers, and know the implications of used untrusted plugins. These materials
+may also be supplemented by generic documents explaining publishing variant wheels, along with specific example use
+cases.
+
+For the transition period, package maintainers need to be aware that they should still publish non-variant wheels
+for backwards compatibility.
 
 ## Backwards compatibility
 
