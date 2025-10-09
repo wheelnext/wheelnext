@@ -481,10 +481,10 @@ the package is installed, normally the default variant is used, but the user can
 #### Debug package variants
 
 A package may wish to provide a special debug-enabled builds for debugging or CI purposes, in addition to the regular
-release build. For this purpose, an optional non-plugin provider can be used (`plugin-use = "none"` with `optional =
-true`), defining a custom property for the debug builds. Since the provider is disabled by default, users normally
-install the non-variant wheel providing the release build. However, they can easily obtain the debug build by enabling
-the optional provider or selecting the variant explicitly.
+release build. For this purpose, an optional non-plugin provider can be used (`plugin-use = "none"` with
+`optional = true`), defining a custom property for the debug builds. Since the provider is disabled by default, users
+normally install the non-variant wheel providing the release build. However, they can easily obtain the debug build
+by enabling the optional provider or selecting the variant explicitly.
 
 #### Package ABI matching
 
