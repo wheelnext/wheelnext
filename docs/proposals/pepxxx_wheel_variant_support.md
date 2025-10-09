@@ -108,7 +108,7 @@ This PEP proposes a systematic and scalable approach to selecting optimized whee
 which will help Python’s usage expand across diverse computing environments, from cloud computing to embedded systems
 and AI accelerators.
 
-### Rationale and user stories
+### User stories
 
 - A user wants to install a version of NumPy that is specialized for their CPU architecture.
 
@@ -429,6 +429,72 @@ USE flags have boolean values. This also has the downside that multiple flags ne
 #### Debian / Ubuntu
 
 TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org/CategoryMultiarch)
+
+## Rationale
+
+### Example use cases
+
+#### PyTorch CPU/GPU variants
+
+As of October 2025, [PyTorch](https://pytorch.org/get-started/locally/) publishes builds a total of five variants
+for every release: a CPU-only variant, three CUDA variants with different minimal CUDA runtime versions and supported
+GPUs and a single ROCm variant.
+
+This setup could be improved using two GPU plugins that query the installed runtime version and installed GPUs to filter
+out the wheels for which the runtime is unavailable, it is too old or the user's GPU is not supported, and order
+the remaining variants by the runtime version. The CPU-only version is published as a null variant that is always
+supported.
+
+If a GPU runtime is available and supported, the installer automatically chooses the wheel for the newest runtime
+supported. Otherwise, it falls back to the CPU-only variant. In the corner case when both CUDA and ROCm are available
+and supported, PyTorch package maintainers indicate which one takes preference by default.
+
+#### Optimized CPU variants
+
+Wheel variants can be used to provide variants requiring specific CPU extensions, beyond what platform tags currently
+provide. They can be particularly helpful when runtime dispatching is impractical, when the package relies on prebuilt
+components that use instructions above the baseline or when availability of instruction sets implies library ABI
+changes.
+
+For example, an x86-64 CPU plugin can detect the capabilities for the installed CPU, mapping them onto the appropriate
+x86-64 architecture level and a set of extended instruction sets. Variant wheels indicate which level and/or instruction
+sets are required, filter out variants that do not meet the requirements and select the best optimized variant.
+A non-variant wheel can be used to represent the architecture baseline, if supported.
+
+Implementation using wheel variants makes it possible to provide fine-grained indication of instruction sets required,
+with plugins that can be updated as frequently as necessary. In particular, it is neither necessary to cover all
+available instruction sets from the start, nor to update the installers whenever the instruction set coverage needs
+to be improved.
+
+#### BLAS / LAPACK variants
+
+Packages such as [NumPy](https://numpy.org/) and [SciPy](https://scipy.org/) can be built using different BLAS / LAPACK
+libraries. Users may wish to choose a specific library for improved performance on a particular hardware or license
+considerations. Furthermore, different libraries may use different OpenMP implementations, whereas using a consistent
+implementation across the stack can avoid performance degradation by spawning too many threads.
+
+BLAS / LAPACK variants do not require a plugin at install time, since all variants built for a particular platform
+are compatible with it. Therefore, either a non-plugin provider (`plugin-use = "none"`) can be used for these variants,
+or a build-time plugin (`plugin-use = "build"`) that provides a predefined set of BLAS / LAPACK library names. When
+the package is installed, normally the default variant is used, but the user can explicitly select another one.
+
+#### Debug package variants
+
+A package may wish to provide a special debug-enabled builds for debugging or CI purposes, in addition to the regular
+release build. For this purpose, an optional non-plugin provider can be used (`plugin-use = "none"` with
+`optional = true`), defining a custom property for the debug builds. Since the provider is disabled by default, users
+normally install the non-variant wheel providing the release build. However, they can easily obtain the debug build
+by enabling the optional provider or selecting the variant explicitly.
+
+#### Package ABI matching
+
+Packages such as [vLLM](https://docs.vllm.ai/en/latest/index.html) need to be pinned to the PyTorch version they were
+built against to preserve ABI compatibility. This often results in unnecessarily strict pins in package versions, making
+it impossible to find a satisfactory resolution for an environment involving multiple packages requiring different
+versions of PyTorch. Variant wheels can be used to publish variants of vLLM built against different PyTorch version,
+therefore enabling upstream to easily provide support for multiple versions simultaneously.
+
+TODO: fill in when https://github.com/wheelnext/pep_xxx_wheel_variants/issues/87 concludes
 
 ## Specification
 
