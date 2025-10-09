@@ -1381,6 +1381,10 @@ The [variantlib](https://github.com/wheelnext/variantlib) project contains a ref
 
 A client for installing variant wheels is implemented in [uv](https://github.com/astral-sh/uv).
 
+The [Wheel Variants monorepo](https://github.com/wheelnext/pep_xxx_wheel_variants) includes example implementations
+of provider plugins, as well as modified versions of build backends featuring variant wheel building support
+and modified versions of some Python packages demonstrating variant wheel uses.
+
 ## Rejected ideas
 
 ### Non-plugin approach
