@@ -1374,15 +1374,23 @@ built for.
 wheel variant was built for.
 3. `variant_properties` corresponding to the set of `namespace :: feature :: value` tuples of all the variant properties
 that the wheel variant was built for.
-4. `variant_label` corresponding to the exact variant label that the wheel was built with.
+4. `variant_label` corresponding to the exact variant label that the wheel was built with. For the non-variant wheel,
+it is an empty string.
 
-The markers are defined as sets of strings, and therefore MUST be matched via the `in` or `not in` operator, e.g.:
+The markers evaluating to sets of strings MUST be matched via the `in` or `not in` operator, e.g.:
 
 ```
 dep1; "foo" in variant_namespaces
 dep2; "foo :: bar" in variant_features
 dep3; "foo :: bar :: baz" in variant_properties
+```
+
+The `variant_label` marker is a plain string:
+
+```
 dep4; variant_label == "foobar"
+dep5; variant_label != "null"
+dep6; variant_label == ""
 ```
 
 Implementations MUST ignore differences in whitespace while matching the features and properties.
