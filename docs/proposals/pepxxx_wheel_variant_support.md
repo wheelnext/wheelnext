@@ -786,11 +786,11 @@ All three variants metadata files share a common JSON-compatible structure:
 |
 +- providers
 |  +- <namespace>
-|     +- requires      : list[str]
 |     +- enable-if     : str | None
-|     +- plugin-api    : str | None
 |     +- optional      : bool = False
+|     +- plugin-api    : str | None
 |     +- plugin-use    : Literal["all", "build", "none"] = "all"
+|     +- requires      : list[str]
 |
 +- default-priorities
 |  +- namespace        : list[str]
@@ -814,23 +814,15 @@ All three variants metadata files share a common JSON-compatible structure:
 `pyproject.toml` for every supported variant namespace. It must be copied to `variant.json` as-is, including data for
 providers that are not used in the particular wheel.
 
-A provider information dictionary must include the following key:
-
-- `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
-  all the items are processed (provided their environment markers match), but they must always resolve
-  to a single distribution to be installed. Multiple dependencies can be used when different plugins providing
-  the same namespace need to be used conditionally to environment markers, e.g. for different Python versions
-  or platforms.
-
-Additionally, they may include the following keys:
+A provider information dictionary can contain the following keys:
 
 - `enable-if: str`: An environment marker defining when the plugin should be used. If the environment marker
-  does not match the running environment, the provider will be disabled and the variants using its properties are
-  deemed incompatible.
+  does not match the running environment, the provider will be disabled and the variants using its properties
+  will be deemed incompatible. If not provided, the plugin will be used in all environments.
 
 - `optional: bool`: Whether the provider is optional, as a boolean value. If it is true, the provider
   is considered optional and should not be used unless the user opts in to it, effectively rendering the variants
-  using its properties incompatible. If it is false or missing, the provider is considered required.
+  using its properties incompatible. If it is false or missing, the provider is considered obligatory.
 
 - `plugin-api: str`: The API endpoint for the plugin. If it is specified, it must be an object reference
   as explained in the "API endpoint" section. If it is missing, the package name from the first dependency specifier
@@ -838,8 +830,18 @@ Additionally, they may include the following keys:
 
 - `plugin-use: str`: When the plugin is executed. It can be one of the following values:
   - `all` (the default): The plugin is run both at build time and at install time.
-  - `build`: The plugin is run both at build time.
-  - `none`: The plugin is not run, it only provides static information.
+  - `build`: The plugin is run both at build time, and static information is used at install time.
+  - `none`: No plugin is being run, the provider only provides static information.
+
+- `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
+  all the items are processed (provided their environment markers match), but they must always resolve
+  to a single distribution to be installed. Multiple dependencies can be used when different plugins providing
+  the same namespace need to be used conditionally to environment markers, e.g. for different Python versions
+  or platforms.
+
+For plugin-based providers (i.e. when `plugin-use != "none"`), the `requires` key is obligatory. For non-plugin
+providers (i.e. when `plugin-use == "none"`), `requires`, `plugin-api` and `enable-if` keys are ignored, though they
+can be specified for user convenience (e.g. for when the non-plugin provider can be used interchangeably with a plugin).
 
 #### Default priorities
 
