@@ -845,7 +845,8 @@ can be specified for user convenience (e.g. for when the non-plugin provider can
 
 #### Default priorities
 
-The `default-priorities` dictionary controls the ordering of variants.
+The `default-priorities` dictionary controls the ordering of variants. Additionally, it may provide the static
+supported provider information for variant providers using `plugin-use != "all"`.
 
 It has a single required key:
 
@@ -864,6 +865,19 @@ It may have the following optional keys:
   list override the default ordering from the provider output. They are listed from the most important to the least
   important. Properties not present on the list are considered of lower importance than these present, and their
   relative importance is defined by the plugin output.
+
+The exact behavior of these dictionaries depends on the value of `plugin-use` in the provider information corresponding
+to the namespace in question:
+
+- for `plugin-use == "all"`, they only affect the variant ordering.
+
+- for `plugin-use == "build"`, the values returned by plugin at build time are appended to the values
+  in `pyproject.toml`, and at install time are used as a static list of supported properties.
+
+- for `plugin-use == "none"`, the value are used as a static list of supported properties.
+
+For the static list usage, every property must be declared both as a value in the `feature` direct and as a key
+for supported values in the `property` dict.
 
 #### Variants
 
