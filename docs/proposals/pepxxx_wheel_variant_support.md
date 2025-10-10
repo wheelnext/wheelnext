@@ -527,6 +527,9 @@ supported but has the lowest priority among wheel variants, while being preferab
 - **Variant Provider (Plugin)**: A provider of supported and valid variant properties for a specific namespace, usually
 in the form of a Python package that implements system detection.
 
+- **Non-Plugin Provider**: A variant provider in the form of fixed list of supported properties encoded in the package
+metadata, therefore not requiring an external plugin.
+
 ### Overview
 
 Wheel variants introduce a more fine-grained specification of built wheel characteristics beyond what wheel tags
@@ -542,7 +545,7 @@ When it is necessary to query the platform to determine wheel compatibility, pro
 while installing the wheel. Otherwise, their use can be limited to build time or disabled entirely, in which case the
 list of supported variant properties is encoded into the variant metadata.
 
-Package managers must not install or run untrusted variant providers without the explicit user opt-in.
+Package managers must not install or run untrusted variant provider plugins without the explicit user opt-in.
 Provider packages must not specify any dependencies, and the installer must ensure that no dependencies are installed if
 specified in the provider package metadata.
 
@@ -719,7 +722,7 @@ x86_64 :: avx512_bf16 :: on
 
 #### Variant property validation
 
-**Variant Namespace:** identifies the provider plugin and must be unique within the plugin set used by a single package
+**Variant Namespace:** identifies the provider and must be unique within the provider set used by a single package
 version.
 
 - It **must** match this regex: `^[a-z0-9_]+$`
@@ -1344,7 +1347,7 @@ class MyPlugin:
         ]
 ```
 
-#### Python version compatible
+#### Python version compatibility
 
 It is recommended for plugins to avoid using any Python syntax or API not supported by any Python which has not yet
 reached [end-of-life support](https://devguide.python.org/versions/). It is best to maximize compatibility by avoiding
@@ -1492,7 +1495,7 @@ and modified versions of some Python packages demonstrating variant wheel uses.
 
 ## Rejected ideas
 
-### Non-plugin approach
+### An approach without provider plugins
 
 The support for additional variant properties could technically be implemented without introducing provider plugins,
 but rather defining the available properties and their discovery methods as part of the specification, much like how
