@@ -885,7 +885,7 @@ with namespaces as first level keys, feature name as second level keys and order
 level values.
 
 In `pyproject.toml` file, the namespaces present in this dictionary in `pyproject.toml` file must correspond to all AoT
-providers without a plugin (i.e. with `install-time` of false and no `requires`). When building a wheel, the build
+providers without a plugin (i.e. with `install-time` of `false` and no `requires`). When building a wheel, the build
 backend must query the AoT provider plugins (i.e. these with `install-time` being false and non-empty `requires`)
 to obtain supported properties and embed them into the dictionary. Therefore, the dictionary in `variant.json`
 and `*-variants.json` must contain namespaces for all AoT providers (i.e. all providers with `install-time` being
