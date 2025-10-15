@@ -524,8 +524,16 @@ and its value. If a feature has multiple values, each is represented by a separa
 - **Null Variant**: A special variant with zero variant properties and the reserved label `null`. Always considered
 supported but has the lowest priority among wheel variants, while being preferably chosen over non-variant wheels.
 
-- **Variant Provider (Plugin)**: A provider of supported and valid variant properties for a specific namespace, usually
+- **Variant Provider**: A provider of supported and valid variant properties for a specific namespace, usually
 in the form of a Python package that implements system detection.
+
+- **Install-time Provider (Plugin)**: A provider in the form of a plugin that is queried while installing the wheel.
+
+- **Ahead-of-Time Provider**: A provider that features a static list of supported properties which is then embedded
+in the wheel metadata.
+
+- **Ahead-of-Time Provider Plugin**: A plugin that can be queried while building a wheel to provide the metadata for
+an AoT provider.
 
 - **Non-Plugin Provider**: A variant provider in the form of fixed list of supported properties encoded in the package
 metadata, therefore not requiring an external plugin.
@@ -533,20 +541,21 @@ metadata, therefore not requiring an external plugin.
 ### Overview
 
 Wheel variants introduce a more fine-grained specification of built wheel characteristics beyond what wheel tags
-provide. When evaluating wheels to install, the installer must determine whether variant properties are compatible with
+provide. Individual wheels are characterized by sets of variant properties that are organized into a hierarchical
+structure of namespaces, features and feature values.
+When evaluating wheels to install, the installer must determine whether variant properties are compatible with
 the system in addition to determining the tag compatibility. To choose the most suitable wheel to install, the
 installer must order wheels according to the priorities of their variant properties first, and their tags second.
 
-Usually, providers are implemented as third-party Python packages providing the API specified in this document, called
-provider plugins. These plugins provide routines for validating variant properties while building variant wheels, and
-for determining wheel compatibility with the given system.
+Every variant namespace is governed by a variant provider. There are two kinds of variant providers: install-time
+providers and ahead-of-time (AoT) providers. Install-time providers require plugins that are queried while installing
+wheels to determine the set of supported properties and their preference order. For AoT providers, this data is static
+and embedded in the wheel; it can be either provided directly by the developer or queried at wheel build time from
+an AoT plugin. Both kinds of plugins are usually implemented as third-party Python packages providing the API specified
+in this document.
 
-When it is necessary to query the platform to determine wheel compatibility, provider plugins need to be called
-while installing the wheel. Otherwise, their use can be limited to build time or disabled entirely, in which case the
-list of supported variant properties is encoded into the variant metadata.
-
-Package managers must not install or run untrusted variant provider plugins without the explicit user opt-in.
-Provider packages must not specify any dependencies, and the installer must ensure that no dependencies are installed if
+Package managers must not install or run untrusted plugins without the explicit user opt-in. Packages providing them
+must not specify any dependencies, and the installer must ensure that no dependencies are installed if
 specified in the provider package metadata.
 
 It is recommended that the most commonly used plugins are either vendored, reimplemented, or locked to specific
