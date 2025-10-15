@@ -1262,8 +1262,8 @@ class PluginType(Protocol):
         raise NotImplementedError
 
     @property
-    def is_build_plugin(self) -> bool:
-        """Is this plugin valid for `plugin-use = "build"`?"""
+    def is_aot_plugin(self) -> bool:
+        """Is this plugin valid for `install-time = false`?"""
         return False
 
     @classmethod
@@ -1285,7 +1285,7 @@ The plugin class must define the following properties or attributes:
 
 - `namespace: str` specifying the plugin's namespace.
 
-- `is_build_plugin: bool` indicating whether the plugin is valid for `plugin-use = "build"`. If that is the case,
+- `is_aot_plugin: bool` indicating whether the plugin is a valid AoT plugin. If that is the case,
 `get_supported_configs()` must always return the same value as `get_all_configs()` (modulo ordering), which must be a
 fixed list independent of the platform on which the plugin is running. Defaults to `False` if unspecified.
 
