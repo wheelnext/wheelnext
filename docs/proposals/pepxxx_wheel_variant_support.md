@@ -891,7 +891,8 @@ to obtain supported properties and embed them into the dictionary. Therefore, th
 and `*-variants.json` must contain namespaces for all AoT providers (i.e. all providers with `install-time` being
 false).
 
-The features in `static-properties` dictionary are unsorted. If more than one feature is specified for a namespace,
+Since TOML and JSON dictionaries are unsorted, so are the features in the `static-properties` dictionary.
+If more than one feature is specified for a namespace,
 then the order for all features must be specified in `default-priorities.feature.{namespace}`. If an AoT plugin is used
 to fill `static-properties`, then the features not already in the list in `pyproject.toml` must be appended to it.
 
