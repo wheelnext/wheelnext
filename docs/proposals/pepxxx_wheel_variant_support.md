@@ -796,9 +796,9 @@ All three variants metadata files share a common JSON-compatible structure:
 +- providers
 |  +- <namespace>
 |     +- enable-if     : str | None
+|     +- install-time  : bool = True
 |     +- optional      : bool = False
 |     +- plugin-api    : str | None
-|     +- plugin-use    : Literal["all", "build", "none"] = "all"
 |     +- requires      : list[str]
 |
 +- default-priorities
@@ -808,6 +808,10 @@ All three variants metadata files share a common JSON-compatible structure:
 |  +- property
 |     +- <namespace>
 |        +- <feature>  : list[str]
+|
++- static-properties
+|  +- <namespace>
+|     +- <feature>     : list[str]
 |
 +- variants
    +- <variant-label>
@@ -829,6 +833,9 @@ A provider information dictionary can contain the following keys:
   does not match the running environment, the provider will be disabled and the variants using its properties
   will be deemed incompatible. If not provided, the plugin will be used in all environments.
 
+- `install-time: bool`: Whether this is an install-time provider. Defaults to `true`. `false` means that it is
+  an AoT provider instead.
+
 - `optional: bool`: Whether the provider is optional, as a boolean value. If it is true, the provider
   is considered optional and should not be used unless the user opts in to it, effectively rendering the variants
   using its properties incompatible. If it is false or missing, the provider is considered obligatory.
@@ -837,20 +844,16 @@ A provider information dictionary can contain the following keys:
   as explained in the "API endpoint" section. If it is missing, the package name from the first dependency specifier
   in `requires` is used, after replacing all `-` characters with `_` in the normalized package name.
 
-- `plugin-use: str`: When the plugin is executed. It can be one of the following values:
-  - `all` (the default): The plugin is run both at build time and at install time.
-  - `build`: The plugin is run both at build time, and static information is used at install time.
-  - `none`: No plugin is being run, the provider only provides static information.
-
 - `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
   all the items are processed (provided their environment markers match), but they must always resolve
   to a single distribution to be installed. Multiple dependencies can be used when different plugins providing
   the same namespace need to be used conditionally to environment markers, e.g. for different Python versions
   or platforms.
 
-For plugin-based providers (i.e. when `plugin-use != "none"`), the `requires` key is obligatory. For non-plugin
-providers (i.e. when `plugin-use == "none"`), `requires`, `plugin-api` and `enable-if` keys are ignored, though they
-can be specified for user convenience (e.g. for when the non-plugin provider can be used interchangeably with a plugin).
+For install-time providers (i.e. when `install-time` is true), the `requires` key is obligatory. For AoT providers
+(i.e. otherwise), the `requires` key is optional. If it specified, it needs to specify an AoT provider plugin that
+is queried at build time to fill `static-properties`. If it is not specified, `static-properties` need to be specified
+in `pyproject.toml`.
 
 #### Default priorities
 
@@ -875,18 +878,18 @@ It may have the following optional keys:
   important. Properties not present on the list are considered of lower importance than these present, and their
   relative importance is defined by the plugin output.
 
-The exact behavior of these dictionaries depends on the value of `plugin-use` in the provider information corresponding
-to the namespace in question:
+#### Static properties
 
-- for `plugin-use == "all"`, they only affect the variant ordering.
+The `static-properties` dictionary specifies the supported properties for AoT providers. It is a nested dictionary
+with namespaces as first level keys, feature name as second level keys and ordered lists of feature values as second
+level values.
 
-- for `plugin-use == "build"`, the values returned by plugin at build time are appended to the values
-  in `pyproject.toml`, and at install time are used as a static list of supported properties.
-
-- for `plugin-use == "none"`, the value are used as a static list of supported properties.
-
-For the static list usage, every property must be declared both as a value in the `feature` direct and as a key
-for supported values in the `property` dict.
+In `pyproject.toml` file, the namespaces present in this dictionary in `pyproject.toml` file must correspond to all AoT
+providers without a plugin (i.e. with `install-time` of false and no `requires`). When building a wheel, the build
+backend must query the AoT provider plugins (i.e. these with `install-time` being false and non-empty `requires`)
+to obtain supported properties and embed them into the dictionary. Therefore, the dictionary in `variant.json`
+and `*-variants.json` must contain namespaces for all AoT providers (i.e. all providers with `install-time` being
+false).
 
 #### Variants
 
