@@ -942,7 +942,7 @@ plugin-api = "provider_variant_x86_64.plugin:X8664Plugin"
 requires = ["blas-lapack-variant-provider"]
 # plugin used only when building package, properties will be inlined
 # into variant.json
-plugin-use = "build"
+install-time = false
 ```
 
 #### `*.dist-info/variant.json`: the packaged variant metadata file
@@ -962,16 +962,10 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
    "default-priorities": {
       "feature": {
          "aarch64": ["version"],
-         // blas_lapack entry is added via plugin-use = "build"
-         "blas_lapack": ["provider"],
          "x86_64": ["level"]
       },
       "namespace": ["x86_64", "aarch64", "blas_lapack"],
       "property": {
-         // blas_lapack entry is added via plugin-use = "build"
-         "blas_lapack": {
-            "provider": ["accelerate", "openblas", "mkl"]
-         },
          "x86_64": {
             "level": ["v3", "v2", "v1"]
          }
@@ -995,6 +989,11 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
          "plugin-api": "provider_variant_x86_64.plugin:X8664Plugin",
          "requires": ["provider-variant-x86-64 >=0.0.1"]
       }
+   },
+   "static-properties": {
+      "blas_lapack": {
+         "provider": ["accelerate", "openblas", "mkl"]
+      },
    },
    "variants": {
       // always a single entry, expressing the variant properties of the wheel
@@ -1036,6 +1035,9 @@ previous example, would look like:
       // identical to above
    },
    "providers": {
+      // identical to above
+   },
+   "static-properties": {
       // identical to above
    },
    "variants": {
