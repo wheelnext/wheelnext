@@ -891,6 +891,14 @@ to obtain supported properties and embed them into the dictionary. Therefore, th
 and `*-variants.json` must contain namespaces for all AoT providers (i.e. all providers with `install-time` being
 false).
 
+The features in `static-properties` dictionary are unsorted. If more than one feature is specified for a namespace,
+then the order for all features must be specified in `default-priorities.feature.{namespace}`. If an AoT plugin is used
+to fill `static-properties`, then the features not already in the list in `pyproject.toml` must be appended to it.
+
+The list of values is ordered from the most preferred to the least preferred, same as the lists returned
+by `get_supported_configs()` plugin API call. The `default-priorities.property` dict can be used to override
+the property ordering.
+
 #### Variants
 
 The `variants` dictionary is used in `variant.json` to indicate the variant that the wheel was built for,
