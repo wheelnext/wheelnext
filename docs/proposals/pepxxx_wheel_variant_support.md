@@ -554,9 +554,8 @@ and embedded in the wheel; it can be either provided directly by the developer o
 an AoT plugin. Both kinds of plugins are usually implemented as third-party Python packages providing the API specified
 in this document.
 
-Package managers must not install or run untrusted plugins without the explicit user opt-in. Packages providing them
-must not specify any dependencies, and the installer must ensure that no dependencies are installed if
-specified in the provider package metadata.
+Package managers must not install or run any untrusted package for variant resolution without the explicit user opt-in.
+Provider packages should take measures to guard against supply chain attacks, such as vendoring all dependencies.
 
 It is recommended that the most commonly used plugins are either vendored, reimplemented, or locked to specific
 wheels after verifying their trustworthiness, to enable the ability to securely install variant wheels out-of-the-box.
