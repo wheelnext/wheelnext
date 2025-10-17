@@ -524,8 +524,16 @@ and its value. If a feature has multiple values, each is represented by a separa
 - **Null Variant**: A special variant with zero variant properties and the reserved label `null`. Always considered
 supported but has the lowest priority among wheel variants, while being preferably chosen over non-variant wheels.
 
-- **Variant Provider (Plugin)**: A provider of supported and valid variant properties for a specific namespace, usually
+- **Variant Provider**: A provider of supported and valid variant properties for a specific namespace, usually
 in the form of a Python package that implements system detection.
+
+- **Install-time Provider (Plugin)**: A provider in the form of a plugin that is queried while installing the wheel.
+
+- **Ahead-of-Time Provider**: A provider that features a static list of supported properties which is then embedded
+in the wheel metadata.
+
+- **Ahead-of-Time Provider Plugin**: A plugin that can be queried while building a wheel to provide the metadata for
+an AoT provider.
 
 - **Non-Plugin Provider**: A variant provider in the form of fixed list of supported properties encoded in the package
 metadata, therefore not requiring an external plugin.
@@ -533,20 +541,21 @@ metadata, therefore not requiring an external plugin.
 ### Overview
 
 Wheel variants introduce a more fine-grained specification of built wheel characteristics beyond what wheel tags
-provide. When evaluating wheels to install, the installer must determine whether variant properties are compatible with
+provide. Individual wheels are characterized by sets of variant properties that are organized into a hierarchical
+structure of namespaces, features and feature values.
+When evaluating wheels to install, the installer must determine whether variant properties are compatible with
 the system in addition to determining the tag compatibility. To choose the most suitable wheel to install, the
 installer must order wheels according to the priorities of their variant properties first, and their tags second.
 
-Usually, providers are implemented as third-party Python packages providing the API specified in this document, called
-provider plugins. These plugins provide routines for validating variant properties while building variant wheels, and
-for determining wheel compatibility with the given system.
+Every variant namespace is governed by a variant provider. There are two kinds of variant providers: install-time
+providers and ahead-of-time (AoT) providers. Install-time providers require plugins that are queried while installing
+wheels to determine the set of supported properties and their preference order. For AoT providers, this data is static
+and embedded in the wheel; it can be either provided directly by the developer or queried at wheel build time from
+an AoT plugin. Both kinds of plugins are usually implemented as third-party Python packages providing the API specified
+in this document.
 
-When it is necessary to query the platform to determine wheel compatibility, provider plugins need to be called
-while installing the wheel. Otherwise, their use can be limited to build time or disabled entirely, in which case the
-list of supported variant properties is encoded into the variant metadata.
-
-Package managers must not install or run untrusted variant provider plugins without the explicit user opt-in.
-Provider packages must not specify any dependencies, and the installer must ensure that no dependencies are installed if
+Package managers must not install or run untrusted plugins without the explicit user opt-in. Packages providing them
+must not specify any dependencies, and the installer must ensure that no dependencies are installed if
 specified in the provider package metadata.
 
 It is recommended that the most commonly used plugins are either vendored, reimplemented, or locked to specific
@@ -787,9 +796,9 @@ All three variants metadata files share a common JSON-compatible structure:
 +- providers
 |  +- <namespace>
 |     +- enable-if     : str | None
+|     +- install-time  : bool = True
 |     +- optional      : bool = False
 |     +- plugin-api    : str | None
-|     +- plugin-use    : Literal["all", "build", "none"] = "all"
 |     +- requires      : list[str]
 |
 +- default-priorities
@@ -799,6 +808,10 @@ All three variants metadata files share a common JSON-compatible structure:
 |  +- property
 |     +- <namespace>
 |        +- <feature>  : list[str]
+|
++- static-properties
+|  +- <namespace>
+|     +- <feature>     : list[str]
 |
 +- variants
    +- <variant-label>
@@ -820,6 +833,9 @@ A provider information dictionary can contain the following keys:
   does not match the running environment, the provider will be disabled and the variants using its properties
   will be deemed incompatible. If not provided, the plugin will be used in all environments.
 
+- `install-time: bool`: Whether this is an install-time provider. Defaults to `true`. `false` means that it is
+  an AoT provider instead.
+
 - `optional: bool`: Whether the provider is optional, as a boolean value. If it is true, the provider
   is considered optional and should not be used unless the user opts in to it, effectively rendering the variants
   using its properties incompatible. If it is false or missing, the provider is considered obligatory.
@@ -828,20 +844,16 @@ A provider information dictionary can contain the following keys:
   as explained in the "API endpoint" section. If it is missing, the package name from the first dependency specifier
   in `requires` is used, after replacing all `-` characters with `_` in the normalized package name.
 
-- `plugin-use: str`: When the plugin is executed. It can be one of the following values:
-  - `all` (the default): The plugin is run both at build time and at install time.
-  - `build`: The plugin is run both at build time, and static information is used at install time.
-  - `none`: No plugin is being run, the provider only provides static information.
-
 - `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
   all the items are processed (provided their environment markers match), but they must always resolve
   to a single distribution to be installed. Multiple dependencies can be used when different plugins providing
   the same namespace need to be used conditionally to environment markers, e.g. for different Python versions
   or platforms.
 
-For plugin-based providers (i.e. when `plugin-use != "none"`), the `requires` key is obligatory. For non-plugin
-providers (i.e. when `plugin-use == "none"`), `requires`, `plugin-api` and `enable-if` keys are ignored, though they
-can be specified for user convenience (e.g. for when the non-plugin provider can be used interchangeably with a plugin).
+For install-time providers (i.e. when `install-time` is true), the `requires` key is obligatory. For AoT providers
+(i.e. otherwise), the `requires` key is optional. If it specified, it needs to specify an AoT provider plugin that
+is queried at build time to fill `static-properties`. If it is not specified, `static-properties` need to be specified
+in `pyproject.toml`.
 
 #### Default priorities
 
@@ -866,18 +878,27 @@ It may have the following optional keys:
   important. Properties not present on the list are considered of lower importance than these present, and their
   relative importance is defined by the plugin output.
 
-The exact behavior of these dictionaries depends on the value of `plugin-use` in the provider information corresponding
-to the namespace in question:
+#### Static properties
 
-- for `plugin-use == "all"`, they only affect the variant ordering.
+The `static-properties` dictionary specifies the supported properties for AoT providers. It is a nested dictionary
+with namespaces as first level keys, feature name as second level keys and ordered lists of feature values as second
+level values.
 
-- for `plugin-use == "build"`, the values returned by plugin at build time are appended to the values
-  in `pyproject.toml`, and at install time are used as a static list of supported properties.
+In `pyproject.toml` file, the namespaces present in this dictionary in `pyproject.toml` file must correspond to all AoT
+providers without a plugin (i.e. with `install-time` of `false` and no `requires`). When building a wheel, the build
+backend must query the AoT provider plugins (i.e. these with `install-time` being false and non-empty `requires`)
+to obtain supported properties and embed them into the dictionary. Therefore, the dictionary in `variant.json`
+and `*-variants.json` must contain namespaces for all AoT providers (i.e. all providers with `install-time` being
+false).
 
-- for `plugin-use == "none"`, the value are used as a static list of supported properties.
+Since TOML and JSON dictionaries are unsorted, so are the features in the `static-properties` dictionary.
+If more than one feature is specified for a namespace,
+then the order for all features must be specified in `default-priorities.feature.{namespace}`. If an AoT plugin is used
+to fill `static-properties`, then the features not already in the list in `pyproject.toml` must be appended to it.
 
-For the static list usage, every property must be declared both as a value in the `feature` direct and as a key
-for supported values in the `property` dict.
+The list of values is ordered from the most preferred to the least preferred, same as the lists returned
+by `get_supported_configs()` plugin API call. The `default-priorities.property` dict can be used to override
+the property ordering.
 
 #### Variants
 
@@ -930,7 +951,7 @@ plugin-api = "provider_variant_x86_64.plugin:X8664Plugin"
 requires = ["blas-lapack-variant-provider"]
 # plugin used only when building package, properties will be inlined
 # into variant.json
-plugin-use = "build"
+install-time = false
 ```
 
 #### `*.dist-info/variant.json`: the packaged variant metadata file
@@ -950,16 +971,10 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
    "default-priorities": {
       "feature": {
          "aarch64": ["version"],
-         // blas_lapack entry is added via plugin-use = "build"
-         "blas_lapack": ["provider"],
          "x86_64": ["level"]
       },
       "namespace": ["x86_64", "aarch64", "blas_lapack"],
       "property": {
-         // blas_lapack entry is added via plugin-use = "build"
-         "blas_lapack": {
-            "provider": ["accelerate", "openblas", "mkl"]
-         },
          "x86_64": {
             "level": ["v3", "v2", "v1"]
          }
@@ -983,6 +998,11 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
          "plugin-api": "provider_variant_x86_64.plugin:X8664Plugin",
          "requires": ["provider-variant-x86-64 >=0.0.1"]
       }
+   },
+   "static-properties": {
+      "blas_lapack": {
+         "provider": ["accelerate", "openblas", "mkl"]
+      },
    },
    "variants": {
       // always a single entry, expressing the variant properties of the wheel
@@ -1024,6 +1044,9 @@ previous example, would look like:
       // identical to above
    },
    "providers": {
+      // identical to above
+   },
+   "static-properties": {
       // identical to above
    },
    "variants": {
@@ -1240,8 +1263,8 @@ class PluginType(Protocol):
         raise NotImplementedError
 
     @property
-    def is_build_plugin(self) -> bool:
-        """Is this plugin valid for `plugin-use = "build"`?"""
+    def is_aot_plugin(self) -> bool:
+        """Is this plugin valid for `install-time = false`?"""
         return False
 
     @classmethod
@@ -1263,7 +1286,7 @@ The plugin class must define the following properties or attributes:
 
 - `namespace: str` specifying the plugin's namespace.
 
-- `is_build_plugin: bool` indicating whether the plugin is valid for `plugin-use = "build"`. If that is the case,
+- `is_aot_plugin: bool` indicating whether the plugin is a valid AoT plugin. If that is the case,
 `get_supported_configs()` must always return the same value as `get_all_configs()` (modulo ordering), which must be a
 fixed list independent of the platform on which the plugin is running. Defaults to `False` if unspecified.
 
