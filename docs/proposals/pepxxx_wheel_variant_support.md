@@ -556,7 +556,9 @@ in this document.
 
 Package managers must not install or run any untrusted package for variant resolution without the explicit user opt-in.
 Provider packages should take measures to guard against supply chain attacks, for example by vendoring all dependencies.
-Pinning dependencies is discouraged, as it could prevent different packages from being installed simultaneously.
+Pinning dependencies is discouraged to comply with PEP 517 build process, as provider plugins may be needed at build
+time and dependencies pinned to different versions could prevent different plugins from being installed simultaneously
+in the same environment.
 
 It is recommended that the most commonly used plugins are either vendored, reimplemented, or locked to specific
 wheels after verifying their trustworthiness, to enable the ability to securely install variant wheels out-of-the-box.
