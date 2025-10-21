@@ -134,14 +134,14 @@ The current wheel format encodes compatibility through three platform tags:
 - **Python tag:** [The Python tag indicates the implementation and version required by a distribution](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#python-tag)
 (e.g., `cp313`)
 - **ABI tag:** [The ABI tag indicates which Python ABI is required by any included extension modules](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#abi-tag)
-(e.g., `cp313`)
+(e.g., `cp313`, `none`)
 - **Platform tag**: [Operating system and architecture - In its simplest form: sysconfig.get_platform()](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#platform-tag)
 (e.g., `linux_x86_64`)
 
 While these tags effectively handle traditional compatibility dimensions, they cannot express modern requirements:
 
-**GPU Accelerated Frameworks:** A wheel filename like `torch-2.8.0-cp313-cp313-manylinux_2_28_x86_64.whl`
-provides no indication whether it contains NVIDIA CUDA support, AMD ROCm support, or is CPU-only. Users cannot determine
+**GPU Accelerated Frameworks:** A wheel filename like `torch-2.9.0-cp313-cp313-manylinux_2_28_x86_64.whl`
+provides no indication whether it contains NVIDIA CUDA support, AMD ROCm support, Intel XPU support, or is CPU-only. Users cannot determine
 compatibility with their GPU hardware or drivers.
 
 **CPU Instruction Sets:** A wheel filename like
@@ -158,7 +158,7 @@ This lack of flexibility has led many projects to find sub-optimal - yet necessa
 selector provided by the PyTorch team. This complexity represents a fundamental scalability issue with the current tag
 system.
 
-![PyTorch Wheel Selector](site:assets/wheel_variants/pytorch_selector.png)
+![PyTorch Wheel Selector](https://raw.githubusercontent.com/wheelnext/wheelnext/main/docs/assets/images/pytorch_variant_selector.webp)
 
 **Source:** [https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/) (screen capture date: 2025/08/22)
 
@@ -194,6 +194,7 @@ pip install torch --index-url="https://download.pytorch.org/whl/cu129"
 - Complex installation instructions
 - Separate infrastructure maintenance
 - Potential security issues when combining multiple indexes
+- Managing and potentially hosting all project dependencies when using a single index which can significantly increase storage and CDN cost
 - Separate index for every combination of compatible features (e.g. GPU variants with different levels of CPU
 optimizations)
 
@@ -238,11 +239,11 @@ continuously have to create new PyPI packages, ask for limit increases, and keep
 documentation in sync with those new package names.
 
 ```bash
-cupy-cuda100 cupy-cuda101 cupy-cuda102 cupy-cuda110 cupy-cuda111 cupy-cuda112 cupy-cuda113 cupy-cuda114 cupy-cuda115 
-cupy-cuda116 cupy-cuda117 cupy-cuda118 cupy-cuda119 cupy-cuda11x cupy-cuda120 cupy-cuda121 cupy-cuda122 cupy-cuda123 
-cupy-cuda124 cupy-cuda125 cupy-cuda126 cupy-cuda127 cupy-cuda128 cupy-cuda129 cupy-cuda12x cupy-cuda13x cupy-cuda70 
-cupy-cuda75 cupy-cuda80 cupy-cuda90 cupy-cuda91 cupy-cuda92 cupy-rocm-4-0 cupy-rocm-4-1 cupy-rocm-4-2 cupy-rocm-4-3 
-cupy-rocm-4-4 cupy-rocm-4-5 cupy-rocm-5-0 cupy-rocm-5-1 cupy-rocm-5-2 cupy-rocm-5-3 cupy-rocm-5-4 cupy-rocm-5-5 
+cupy-cuda100 cupy-cuda101 cupy-cuda102 cupy-cuda110 cupy-cuda111 cupy-cuda112 cupy-cuda113 cupy-cuda114 cupy-cuda115
+cupy-cuda116 cupy-cuda117 cupy-cuda118 cupy-cuda119 cupy-cuda11x cupy-cuda120 cupy-cuda121 cupy-cuda122 cupy-cuda123
+cupy-cuda124 cupy-cuda125 cupy-cuda126 cupy-cuda127 cupy-cuda128 cupy-cuda129 cupy-cuda12x cupy-cuda13x cupy-cuda70
+cupy-cuda75 cupy-cuda80 cupy-cuda90 cupy-cuda91 cupy-cuda92 cupy-rocm-4-0 cupy-rocm-4-1 cupy-rocm-4-2 cupy-rocm-4-3
+cupy-rocm-4-4 cupy-rocm-4-5 cupy-rocm-5-0 cupy-rocm-5-1 cupy-rocm-5-2 cupy-rocm-5-3 cupy-rocm-5-4 cupy-rocm-5-5
 cupy-rocm-5-6 cupy-rocm-5-7 cupy-rocm-5-8 cupy-rocm-5-9 cupy-rocm-6-0 cupy-rocm-6-1 cupy-rocm-6-2 cupy-rocm-6-3
 ```
 
@@ -337,8 +338,8 @@ that create friction for users, increase maintenance burden, and fragment the ec
 - Enables automatic hardware-appropriate package selection
 - Maintains full backward compatibility with existing tools (by guaranteeing to not break non-variant aware installers,
 tools, and indexes)
-- Reduces package maintenance complexity by providing a unified and flexible answer to the problem
-- Improves user experience through a consistent experience that requires little to no user inputs.
+- Simplifies package maintenance by offering a unified and flexible solution to the challenge of managing multiple platform-specific package builds and distributions.
+- Provides a seamless and predictable experience for users, that requires little to no user inputs.
 - Supports the full spectrum of modern computing hardware
 - Provides a future-proof and flexible system that can evolve with the ecosystem and future use cases.
 
@@ -436,9 +437,9 @@ TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org
 
 #### PyTorch CPU/GPU variants
 
-As of October 2025, [PyTorch](https://pytorch.org/get-started/locally/) publishes builds a total of five variants
+As of October 2025, [PyTorch](https://pytorch.org/get-started/locally/) publishes builds a total of seven variants
 for every release: a CPU-only variant, three CUDA variants with different minimal CUDA runtime versions and supported
-GPUs and a single ROCm variant.
+GPUs, a two ROCm variants and a Linux XPU variant.
 
 This setup could be improved using two GPU plugins that query the installed runtime version and installed GPUs to filter
 out the wheels for which the runtime is unavailable, it is too old or the user's GPU is not supported, and order
@@ -527,12 +528,12 @@ supported but has the lowest priority among wheel variants, while being preferab
 - **Variant Provider**: A provider of supported and valid variant properties for a specific namespace, usually
 in the form of a Python package that implements system detection.
 
-- **Install-time Provider (Plugin)**: A provider in the form of a plugin that is queried while installing the wheel.
+- **Install-time Provider (Plugin)**: A provider implemented as a plugin that can be queried during wheel installation.
 
 - **Ahead-of-Time Provider**: A provider that features a static list of supported properties which is then embedded
 in the wheel metadata.
 
-- **Ahead-of-Time Provider Plugin**: A plugin that can be queried while building a wheel to provide the metadata for
+- **Ahead-of-Time Provider (Plugin)**: A provider implemented as a plugin that can be queried while building a wheel to provide the metadata for
 an AoT provider.
 
 - **Non-Plugin Provider**: A variant provider in the form of fixed list of supported properties encoded in the package
@@ -618,16 +619,15 @@ A variant lable must adhere to the following rules:
 
 Equivalent regex: `^[0-9a-z._]{1,16}$`
 
-#### Build tag and variant label
+#### Backward compatibility for build tag and variant labels
 
 Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants:
 
-- If both are present, the wheel will be rejected by installers and package indexes since the filename has too many
-components.
+| Scenario | Outcome | Reason |
+| --- | --- | --- |
+| Both build tag & variant label are present | Wheel rejected by installers and package indexes | Filename has too many components |
+| Only variant label present | Wheel rejected by installers and package indexes | Python tag is misinterpreted as the build number, and the build number must start with a digit. This assumes that no Python tags starting with a digit will be introduced in the foreseeable future.
 
-- If only the variant label is present, it will be rejected by installers and package indexes since the python tag is
-misinterpreted as the build number, and the build number must start with a digit. This assumes that no Python tags
-starting with a digit will be introduced in the foreseeable future.
 
 This critical behavior to ensure backward compatibility was confirmed by a survey of wheel filename verification methods
 used by different package managers and packaging tooling ([auditwheel](https://github.com/pypa/auditwheel/blob/6839107e9b918e035ab2df4927a25a5f81f1b8b6/src/auditwheel/repair.py#L61-L64),
@@ -838,7 +838,7 @@ A provider information dictionary can contain the following keys:
 - `install-time: bool`: Whether this is an install-time provider. Defaults to `true`. `false` means that it is
   an AoT provider instead.
 
-- `optional: bool`: Whether the provider is optional, as a boolean value. If it is true, the provider
+- `optional: bool`: Whether the provider is optional, as a boolean value. Defaults to `false`. If it is true, the provider
   is considered optional and should not be used unless the user opts in to it, effectively rendering the variants
   using its properties incompatible. If it is false or missing, the provider is considered obligatory.
 
@@ -1334,8 +1334,8 @@ class MyPlugin:
     def get_supported_configs(self) -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
-               name="version", 
-               values=["v2", "v1"], 
+               name="version",
+               values=["v2", "v1"],
                multi_value=False
             ),
         ]
@@ -1366,7 +1366,7 @@ Note that the properties returned by `get_supported_configs()` must be a subset 
 ```python
 class MyPlugin:
     namespace = "example"
-  
+
     # all valid properties as:
     # example :: accelerated :: yes
     # example :: version :: v4
@@ -1376,12 +1376,12 @@ class MyPlugin:
     def get_all_configs(self) -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
-               name="accelerated", 
+               name="accelerated",
                values=["yes"],
                multi_value=False
             ),
             VariantFeatureConfig(
-               name="version", 
+               name="version",
                values=["v1", "v2", "v3", "v4"],
                multi_value=False
             ),
