@@ -621,12 +621,12 @@ Equivalent regex: `^[0-9a-z._]{1,16}$`
 
 #### Backward compatibility for build tag and variant labels
 
-Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants:
+Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants. The wheel will be rejected by installers and package indexes in the following cases:
 
-| Scenario | Outcome | Reason |
-| --- | --- | --- |
-| Both build tag & variant label are present | Wheel rejected by installers and package indexes | Filename has too many components |
-| Only variant label present | Wheel rejected by installers and package indexes | Python tag is misinterpreted as the build number, and the build number must start with a digit. This assumes that no Python tags starting with a digit will be introduced in the foreseeable future.
+* If both the build tag and variant label are present:
+   * The filename will contain too many components, making it invalid.
+* If only the variant label is present:
+   * The variant label will be misinterpreted as the build number. Since the build number must start with a digit—and Python tags do not start with digits (assuming no Python tags starting with a digit will be introduced in the foreseeable future)—this results in an invalid filename.
 
 
 This critical behavior to ensure backward compatibility was confirmed by a survey of wheel filename verification methods
