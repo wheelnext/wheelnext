@@ -474,14 +474,14 @@ considerations. Furthermore, different libraries may use different OpenMP implem
 implementation across the stack can avoid performance degradation by spawning too many threads.
 
 BLAS / LAPACK variants do not require a plugin at install time, since all variants built for a particular platform
-are compatible with it. Therefore, either a non-plugin provider (`plugin-use = "none"`) can be used for these variants,
-or a build-time plugin (`plugin-use = "build"`) that provides a predefined set of BLAS / LAPACK library names. When
-the package is installed, normally the default variant is used, but the user can explicitly select another one.
+are compatible with it. Therefore, an ahead-of-time provider (with `install-time = false`) that provides a predefined
+set of BLAS / LAPACK library names can be used. When the package is installed, normally the default variant is used,
+but the user can explicitly select another one.
 
 #### Debug package variants
 
 A package may wish to provide a special debug-enabled builds for debugging or CI purposes, in addition to the regular
-release build. For this purpose, an optional non-plugin provider can be used (`plugin-use = "none"` with
+release build. For this purpose, an optional ahead-of-time provider can be used (`install-time = false` with
 `optional = true`), defining a custom property for the debug builds. Since the provider is disabled by default, users
 normally install the non-variant wheel providing the release build. However, they can easily obtain the debug build
 by enabling the optional provider or selecting the variant explicitly.
@@ -859,8 +859,7 @@ in `pyproject.toml`.
 
 #### Default priorities
 
-The `default-priorities` dictionary controls the ordering of variants. Additionally, it may provide the static
-supported provider information for variant providers using `plugin-use != "all"`.
+The `default-priorities` dictionary controls the ordering of variants.
 
 It has a single required key:
 
@@ -949,7 +948,7 @@ enable-if = "platform_machine == 'x86_64' or platform_machine == 'AMD64'"
 plugin-api = "provider_variant_x86_64.plugin:X8664Plugin"
 
 [variant.providers.blas_lapack]
-# plugin-use inferred from requires
+# plugin-api inferred from requires
 requires = ["blas-lapack-variant-provider"]
 # plugin used only when building package, properties will be inlined
 # into variant.json
@@ -992,7 +991,7 @@ be equal to value in `{name}-{version}-variants.json` hosted on the index and de
          ]
       },
       "blas_lapack": {
-         "plugin-use": "build",
+         "install-time": false,
          "requires": ["blas-lapack-variant-provider"]
       },
       "x86_64": {
