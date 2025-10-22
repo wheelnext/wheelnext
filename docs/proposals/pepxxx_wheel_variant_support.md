@@ -439,7 +439,7 @@ TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org
 
 As of October 2025, [PyTorch](https://pytorch.org/get-started/locally/) publishes builds a total of seven variants
 for every release: a CPU-only variant, three CUDA variants with different minimal CUDA runtime versions and supported
-GPUs, a two ROCm variants and a Linux XPU variant.
+GPUs, two ROCm variants and a Linux XPU variant.
 
 This setup could be improved using two GPU plugins that query the installed runtime version and installed GPUs to filter
 out the wheels for which the runtime is unavailable, it is too old or the user's GPU is not supported, and order
