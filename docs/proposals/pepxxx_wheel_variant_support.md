@@ -536,7 +536,7 @@ in the wheel metadata.
 - **Ahead-of-Time Provider (Plugin)**: A provider implemented as a plugin that can be queried while building a wheel to provide the metadata for
 an AoT provider.
 
-- **Non-Plugin Provider**: A variant provider in the form of fixed list of supported properties encoded in the package
+- **Ahead-of-Time Provider Non-Plugin**: A variant provider in the form of fixed list of supported properties encoded in the package
 metadata, therefore not requiring an external plugin.
 
 ### Overview
