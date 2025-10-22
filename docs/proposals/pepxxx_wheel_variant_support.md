@@ -1125,10 +1125,7 @@ plugin defines all the valid feature names and values within that namespace.
 It is recommended that providers choose namespaces that can be clearly associated with the project they represent, and
 avoid namespaces that refer to other projects or generic terms that could lead to naming conflicts in the future.
 
-Within a single package, only one plugin can be used for a given namespace. Attempting to load a second plugin sharing
-the same namespace must cause a fatal error. However, it is possible for multiple plugins using the namespace to exist,
-which implies that they become mutually exclusive. For example, this could happen if a plugin becomes unmaintained and
-needs to be forked into a new package.
+Within a single package and for a specific release version, only one plugin can exist for a given namespace. Attempting to load more than one plugin for the same namespace in the same release version must result in a fatal error. While multiple plugins for the same namespace may exist across different packages or release versions (such as when a plugin is forked due to being unmaintained), they are mutually exclusive within any single release version.
 
 To make it easier to discover and install plugins, they should be published in the same indexes that the packages using
 them. In particular, packages published to PyPI must not rely on plugins that need to be installed from other indexes.
