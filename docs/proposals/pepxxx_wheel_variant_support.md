@@ -864,7 +864,7 @@ supported provider information for variant providers using `plugin-use != "all"`
 
 It has a single required key:
 
-- `namespace: list[str]`: All namespaces used by the wheel variants, from higher priority to lower priority.
+- `namespace: list[str]`: All namespaces used by the wheel variants, ordered in decreasing priority.
    This list must have the same members as the keys of the `providers` dictionary.
 
 It may have the following optional keys:
