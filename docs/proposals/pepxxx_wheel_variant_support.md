@@ -876,7 +876,7 @@ It may have the following optional keys:
 
 - `property: dict[str, dict[str, list[str]]]`: A nested dictionary with namespaces as first-level keys, feature names as
   second-level keys and ordered lists of corresponding property values as second-level values. The values present in the
-  list override the default ordering from the provider output. They are listed from the higher priority to lower priority.
+  list override the default ordering from the provider output. They are listed from the the highest priority to the lowest priority.
   Properties not present on the list are considered of lower priority than these present, and their
   relative priority is defined by the plugin output.
 
