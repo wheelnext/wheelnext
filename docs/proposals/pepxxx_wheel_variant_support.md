@@ -762,9 +762,9 @@ returned by the variant provider plugin. Similarly, the order of property values
 `default-priorities.property`, with missing properties appended in order from the variant provider output. In each list,
 earlier elements have higher priority than later elements.
 
-A variant wheel has a higher priority than another variant wheel if its most important property is more important than
-the most important property of the other variant wheel. If both wheels have the same most important property, compare
-the second most important property, and so on, until a tie-breaker is found. If the same set of the most important
+A variant wheel has a higher priority than another variant wheel if its highest priority property is of higher priority
+than the highest priority property of the other variant wheel. If both wheels have the same highest priority property,
+compare the second highest priority property, and so on, until a tie-breaker is found. If the same set of highest priority
 properties is shared by both wheels, the wheel having additional properties has higher priority.
 
 A different way to describe the same algorithm:
@@ -864,21 +864,21 @@ supported provider information for variant providers using `plugin-use != "all"`
 
 It has a single required key:
 
-- `namespace: list[str]`: All namespaces used by the wheel variants, from the most important to the least
-  important. This list must have the same members as the keys of the `providers` dictionary.
+- `namespace: list[str]`: All namespaces used by the wheel variants, from higher priority to lower priority.
+   This list must have the same members as the keys of the `providers` dictionary.
 
 It may have the following optional keys:
 
 - `feature: dict[str, list[str]]`: A dictionary with namespaces as keys, and ordered list of corresponding feature names
   as values. The values in each list override the default ordering from the provider output. They are listed
-  from the most important to the least important. Features not present on the list are considered of lower
-  importance than those present, and their relative importance is defined by the plugin.
+  from the higher priority to lower priority.. Features not present on the list are considered of lower priority
+  than those present, and their relative priority is defined by the plugin.
 
 - `property: dict[str, dict[str, list[str]]]`: A nested dictionary with namespaces as first-level keys, feature names as
   second-level keys and ordered lists of corresponding property values as second-level values. The values present in the
-  list override the default ordering from the provider output. They are listed from the most important to the least
-  important. Properties not present on the list are considered of lower importance than these present, and their
-  relative importance is defined by the plugin output.
+  list override the default ordering from the provider output. They are listed from the higher priority to lower priority.
+  Properties not present on the list are considered of lower priority than these present, and their
+  relative priority is defined by the plugin output.
 
 #### Static properties
 
