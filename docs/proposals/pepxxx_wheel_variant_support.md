@@ -158,7 +158,7 @@ This lack of flexibility has led many projects to find sub-optimal - yet necessa
 selector provided by the PyTorch team. This complexity represents a fundamental scalability issue with the current tag
 system.
 
-![PyTorch Wheel Selector](assets/images/pytorch_variant_selector.webp)
+![PyTorch Wheel Selector](../assets/images/pytorch_variant_selector.webp)
 
 **Source:** [https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/) (screen capture date: 2025/08/22)
 
