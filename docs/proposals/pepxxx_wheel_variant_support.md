@@ -619,7 +619,7 @@ A variant lable must adhere to the following rules:
 
 Equivalent regex: `^[0-9a-z._]{1,16}$`
 
-#### Backward compatibility for build tag and variant labels
+#### Incompatibility with tools that do not support variants
 
 Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants. The wheel will be rejected by installers and package indexes in the following cases:
 
