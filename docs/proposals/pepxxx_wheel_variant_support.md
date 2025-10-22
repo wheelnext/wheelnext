@@ -871,7 +871,7 @@ It may have the following optional keys:
 
 - `feature: dict[str, list[str]]`: A dictionary with namespaces as keys, and ordered list of corresponding feature names
   as values. The values in each list override the default ordering from the provider output. They are listed
-  from the higher priority to lower priority.. Features not present on the list are considered of lower priority
+  from the highest priority to the lowest priority. Features not present on the list are considered of lower priority
   than those present, and their relative priority is defined by the plugin.
 
 - `property: dict[str, dict[str, list[str]]]`: A nested dictionary with namespaces as first-level keys, feature names as
