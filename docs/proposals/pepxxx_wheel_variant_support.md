@@ -593,10 +593,8 @@ compatibility.
 
 One of the core requirements of the design is to ensure that installers predating this PEP will ignore wheel variant
 files. We propose to achieve this intent by appending a `-{variant label}` just before the `.whl` file extension.
-
-The variant label is separated using the same `-` character as other wheel filename components to be rejected by
-filename verification algorithms currently used by installers. Wheel filenames have two optional components now: the
-`build tag` (at the third position - see below), and the `variant label` (at the last position - see below).
+This makes it possible to publish both variant wheels and non-variant wheels on a single index, with installers
+that do not support variants securely ignoring the former, and falling back to the latter.
 
 **The variant label serves two objectives:**
 
@@ -616,15 +614,22 @@ Equivalent regex: `^[0-9a-z._]{1,16}$`
 
 #### Incompatibility with tools that do not support variants
 
-Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants. The wheel will be rejected by installers and package indexes in the following cases:
+The variant label is separated using the same `-` character as other wheel filename components to be rejected by
+filename verification algorithms currently used by installers. Wheel filenames have two optional components now: the
+build tag (at the third position), and the variant label (at the last position).
 
-* If both the build tag and variant label are present:
-   * The filename will contain too many components, making it invalid.
+The wheel will be rejected by installers and package indexes in the following cases:
+
+* If both the build tag and the variant label are present:
+    * The filename will contain too many components, making it invalid.
+
 * If only the variant label is present:
-   * The variant label will be misinterpreted as the build number. Since the build number must start with a digit—and Python tags do not start with digits (assuming no Python tags starting with a digit will be introduced in the foreseeable future)—this results in an invalid filename.
+    * The higher number of filename components will result in the third component (the Python tag) being misinterpreted
+      as the build number. Since the build number must start with a digit and no Python tags at the time start with
+      digits, the filename is considered invalid. This assumes that no Python tags introduced in the future will start
+      with a digit.
 
-
-This critical behavior to ensure backward compatibility was confirmed by a survey of wheel filename verification methods
+This behavior was confirmed by a survey of wheel filename verification methods
 used by different package managers and packaging tooling ([auditwheel](https://github.com/pypa/auditwheel/blob/6839107e9b918e035ab2df4927a25a5f81f1b8b6/src/auditwheel/repair.py#L61-L64),
 [packaging](https://github.com/pypa/packaging/blob/78c2a5e4f5c04fd782a5729d93892c3a3eafe365/src/packaging/utils.py#L94-L134),
 [pdm](https://github.com/pdm-project/pdm/blob/main/src/pdm/models/requirements.py#L260-L287),
@@ -632,6 +637,8 @@ used by different package managers and packaging tooling ([auditwheel](https://g
 [poetry](https://github.com/python-poetry/poetry/blob/1c04c65149776ae4993fa508bef53373f45c66eb/src/poetry/utils/wheel.py#L23-L27),
 [uv](https://github.com/astral-sh/uv/blob/f6a9b55eb73be4f1fb9831362a192cdd8312ab96/crates/uv-distribution-filename/src/wheel.rs#L182-L299),
 [warehouse](https://github.com/pypi/warehouse/blob/main/warehouse/utils/wheel.py#L78-L81)).
+
+#### Wheel filename format
 
 Currently, the wheel filename follows the following format, as defined by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention)
 
@@ -645,17 +652,16 @@ The Wheel Variant PEP extends this filename format following this template:
 {distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}(-{variant label})?.whl
 ```
 
-**Examples:**
+#### Examples
 
-- **Non-variant wheel:**                  `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64.whl`
-- **Wheel with variant label:**           `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
-- **Wheel with null variant (see below)** `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-null.whl`
+- Non-variant wheel:           `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64.whl`
+- Wheel with variant label:    `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
+- Wheel with the null variant: `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-null.whl`
 
 #### One-to-one relationship
 
-There must be a direct one-to-one relationship between variant properties and the variant label.
-
-**A variant label must uniquely describe a specific set of variant properties for a given distribution and version.**
+There must be a direct one-to-one relationship between variant properties and the variant label:
+a variant label must uniquely describe a specific set of variant properties for a given distribution and version.
 
 In other words, for a given distribution (i.e. package name) and version:
 
