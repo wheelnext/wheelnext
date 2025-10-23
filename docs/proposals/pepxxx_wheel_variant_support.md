@@ -134,14 +134,14 @@ The current wheel format encodes compatibility through three platform tags:
 - **Python tag:** [The Python tag indicates the implementation and version required by a distribution](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#python-tag)
 (e.g., `cp313`)
 - **ABI tag:** [The ABI tag indicates which Python ABI is required by any included extension modules](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#abi-tag)
-(e.g., `cp313`)
+(e.g., `cp313`, `none`)
 - **Platform tag**: [Operating system and architecture - In its simplest form: sysconfig.get_platform()](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#platform-tag)
 (e.g., `linux_x86_64`)
 
 While these tags effectively handle traditional compatibility dimensions, they cannot express modern requirements:
 
-**GPU Accelerated Frameworks:** A wheel filename like `torch-2.8.0-cp313-cp313-manylinux_2_28_x86_64.whl`
-provides no indication whether it contains NVIDIA CUDA support, AMD ROCm support, or is CPU-only. Users cannot determine
+**GPU Accelerated Frameworks:** A wheel filename like `torch-2.9.0-cp313-cp313-manylinux_2_28_x86_64.whl`
+provides no indication whether it contains NVIDIA CUDA support, AMD ROCm support, Intel XPU support, or is CPU-only. Users cannot determine
 compatibility with their GPU hardware or drivers.
 
 **CPU Instruction Sets:** A wheel filename like
@@ -158,7 +158,7 @@ This lack of flexibility has led many projects to find sub-optimal - yet necessa
 selector provided by the PyTorch team. This complexity represents a fundamental scalability issue with the current tag
 system.
 
-![PyTorch Wheel Selector](site:assets/wheel_variants/pytorch_selector.png)
+![PyTorch Wheel Selector](../assets/images/pytorch_variant_selector.webp)
 
 **Source:** [https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/) (screen capture date: 2025/08/22)
 
@@ -194,6 +194,7 @@ pip install torch --index-url="https://download.pytorch.org/whl/cu129"
 - Complex installation instructions
 - Separate infrastructure maintenance
 - Potential security issues when combining multiple indexes
+- Managing and potentially hosting all project dependencies when using a single index which can significantly increase storage and CDN cost
 - Separate index for every combination of compatible features (e.g. GPU variants with different levels of CPU
 optimizations)
 
@@ -238,11 +239,11 @@ continuously have to create new PyPI packages, ask for limit increases, and keep
 documentation in sync with those new package names.
 
 ```bash
-cupy-cuda100 cupy-cuda101 cupy-cuda102 cupy-cuda110 cupy-cuda111 cupy-cuda112 cupy-cuda113 cupy-cuda114 cupy-cuda115 
-cupy-cuda116 cupy-cuda117 cupy-cuda118 cupy-cuda119 cupy-cuda11x cupy-cuda120 cupy-cuda121 cupy-cuda122 cupy-cuda123 
-cupy-cuda124 cupy-cuda125 cupy-cuda126 cupy-cuda127 cupy-cuda128 cupy-cuda129 cupy-cuda12x cupy-cuda13x cupy-cuda70 
-cupy-cuda75 cupy-cuda80 cupy-cuda90 cupy-cuda91 cupy-cuda92 cupy-rocm-4-0 cupy-rocm-4-1 cupy-rocm-4-2 cupy-rocm-4-3 
-cupy-rocm-4-4 cupy-rocm-4-5 cupy-rocm-5-0 cupy-rocm-5-1 cupy-rocm-5-2 cupy-rocm-5-3 cupy-rocm-5-4 cupy-rocm-5-5 
+cupy-cuda100 cupy-cuda101 cupy-cuda102 cupy-cuda110 cupy-cuda111 cupy-cuda112 cupy-cuda113 cupy-cuda114 cupy-cuda115
+cupy-cuda116 cupy-cuda117 cupy-cuda118 cupy-cuda119 cupy-cuda11x cupy-cuda120 cupy-cuda121 cupy-cuda122 cupy-cuda123
+cupy-cuda124 cupy-cuda125 cupy-cuda126 cupy-cuda127 cupy-cuda128 cupy-cuda129 cupy-cuda12x cupy-cuda13x cupy-cuda70
+cupy-cuda75 cupy-cuda80 cupy-cuda90 cupy-cuda91 cupy-cuda92 cupy-rocm-4-0 cupy-rocm-4-1 cupy-rocm-4-2 cupy-rocm-4-3
+cupy-rocm-4-4 cupy-rocm-4-5 cupy-rocm-5-0 cupy-rocm-5-1 cupy-rocm-5-2 cupy-rocm-5-3 cupy-rocm-5-4 cupy-rocm-5-5
 cupy-rocm-5-6 cupy-rocm-5-7 cupy-rocm-5-8 cupy-rocm-5-9 cupy-rocm-6-0 cupy-rocm-6-1 cupy-rocm-6-2 cupy-rocm-6-3
 ```
 
@@ -337,8 +338,8 @@ that create friction for users, increase maintenance burden, and fragment the ec
 - Enables automatic hardware-appropriate package selection
 - Maintains full backward compatibility with existing tools (by guaranteeing to not break non-variant aware installers,
 tools, and indexes)
-- Reduces package maintenance complexity by providing a unified and flexible answer to the problem
-- Improves user experience through a consistent experience that requires little to no user inputs.
+- Simplifies package maintenance by offering a unified and flexible solution to the challenge of managing multiple platform-specific package builds and distributions.
+- Provides a seamless and predictable experience for users, that requires little to no user inputs.
 - Supports the full spectrum of modern computing hardware
 - Provides a future-proof and flexible system that can evolve with the ecosystem and future use cases.
 
@@ -436,9 +437,9 @@ TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org
 
 #### PyTorch CPU/GPU variants
 
-As of October 2025, [PyTorch](https://pytorch.org/get-started/locally/) publishes builds a total of five variants
+As of October 2025, [PyTorch](https://pytorch.org/get-started/locally/) publishes builds a total of seven variants
 for every release: a CPU-only variant, three CUDA variants with different minimal CUDA runtime versions and supported
-GPUs and a single ROCm variant.
+GPUs, two ROCm variants and a Linux XPU variant.
 
 This setup could be improved using two GPU plugins that query the installed runtime version and installed GPUs to filter
 out the wheels for which the runtime is unavailable, it is too old or the user's GPU is not supported, and order
@@ -527,15 +528,15 @@ supported but has the lowest priority among wheel variants, while being preferab
 - **Variant Provider**: A provider of supported and valid variant properties for a specific namespace, usually
 in the form of a Python package that implements system detection.
 
-- **Install-time Provider (Plugin)**: A provider in the form of a plugin that is queried while installing the wheel.
+- **Install-time Provider (Plugin)**: A provider implemented as a plugin that can be queried during wheel installation.
 
 - **Ahead-of-Time Provider**: A provider that features a static list of supported properties which is then embedded
 in the wheel metadata.
 
-- **Ahead-of-Time Provider Plugin**: A plugin that can be queried while building a wheel to provide the metadata for
+- **Ahead-of-Time Provider (Plugin)**: A provider implemented as a plugin that can be queried while building a wheel to provide the metadata for
 an AoT provider.
 
-- **Non-Plugin Provider**: A variant provider in the form of fixed list of supported properties encoded in the package
+- **Ahead-of-Time Provider Non-Plugin**: A variant provider in the form of fixed list of supported properties encoded in the package
 metadata, therefore not requiring an external plugin.
 
 ### Overview
@@ -618,16 +619,15 @@ A variant lable must adhere to the following rules:
 
 Equivalent regex: `^[0-9a-z._]{1,16}$`
 
-#### Build tag and variant label
+#### Incompatibility with tools that do not support variants
 
-Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants:
+Backwards compatibility behavior for build tag and variant label with tools that don't support wheel variants. The wheel will be rejected by installers and package indexes in the following cases:
 
-- If both are present, the wheel will be rejected by installers and package indexes since the filename has too many
-components.
+* If both the build tag and variant label are present:
+   * The filename will contain too many components, making it invalid.
+* If only the variant label is present:
+   * The variant label will be misinterpreted as the build number. Since the build number must start with a digit—and Python tags do not start with digits (assuming no Python tags starting with a digit will be introduced in the foreseeable future)—this results in an invalid filename.
 
-- If only the variant label is present, it will be rejected by installers and package indexes since the python tag is
-misinterpreted as the build number, and the build number must start with a digit. This assumes that no Python tags
-starting with a digit will be introduced in the foreseeable future.
 
 This critical behavior to ensure backward compatibility was confirmed by a survey of wheel filename verification methods
 used by different package managers and packaging tooling ([auditwheel](https://github.com/pypa/auditwheel/blob/6839107e9b918e035ab2df4927a25a5f81f1b8b6/src/auditwheel/repair.py#L61-L64),
@@ -762,9 +762,9 @@ returned by the variant provider plugin. Similarly, the order of property values
 `default-priorities.property`, with missing properties appended in order from the variant provider output. In each list,
 earlier elements have higher priority than later elements.
 
-A variant wheel has a higher priority than another variant wheel if its most important property is more important than
-the most important property of the other variant wheel. If both wheels have the same most important property, compare
-the second most important property, and so on, until a tie-breaker is found. If the same set of the most important
+A variant wheel has a higher priority than another variant wheel if its highest priority property is of higher priority
+than the highest priority property of the other variant wheel. If both wheels have the same highest priority property,
+compare the second highest priority property, and so on, until a tie-breaker is found. If the same set of highest priority
 properties is shared by both wheels, the wheel having additional properties has higher priority.
 
 A different way to describe the same algorithm:
@@ -838,7 +838,7 @@ A provider information dictionary can contain the following keys:
 - `install-time: bool`: Whether this is an install-time provider. Defaults to `true`. `false` means that it is
   an AoT provider instead.
 
-- `optional: bool`: Whether the provider is optional, as a boolean value. If it is true, the provider
+- `optional: bool`: Whether the provider is optional, as a boolean value. Defaults to `false`. If it is true, the provider
   is considered optional and should not be used unless the user opts in to it, effectively rendering the variants
   using its properties incompatible. If it is false or missing, the provider is considered obligatory.
 
@@ -863,21 +863,21 @@ The `default-priorities` dictionary controls the ordering of variants.
 
 It has a single required key:
 
-- `namespace: list[str]`: All namespaces used by the wheel variants, from the most important to the least
-  important. This list must have the same members as the keys of the `providers` dictionary.
+- `namespace: list[str]`: All namespaces used by the wheel variants, ordered in decreasing priority.
+   This list must have the same members as the keys of the `providers` dictionary.
 
 It may have the following optional keys:
 
 - `feature: dict[str, list[str]]`: A dictionary with namespaces as keys, and ordered list of corresponding feature names
   as values. The values in each list override the default ordering from the provider output. They are listed
-  from the most important to the least important. Features not present on the list are considered of lower
-  importance than those present, and their relative importance is defined by the plugin.
+  from the highest priority to the lowest priority. Features not present on the list are considered of lower priority
+  than those present, and their relative priority is defined by the plugin.
 
 - `property: dict[str, dict[str, list[str]]]`: A nested dictionary with namespaces as first-level keys, feature names as
   second-level keys and ordered lists of corresponding property values as second-level values. The values present in the
-  list override the default ordering from the provider output. They are listed from the most important to the least
-  important. Properties not present on the list are considered of lower importance than these present, and their
-  relative importance is defined by the plugin output.
+  list override the default ordering from the provider output. They are listed from the the highest priority to the lowest priority.
+  Properties not present on the list are considered of lower priority than these present, and their
+  relative priority is defined by the plugin output.
 
 #### Static properties
 
@@ -1124,10 +1124,7 @@ plugin defines all the valid feature names and values within that namespace.
 It is recommended that providers choose namespaces that can be clearly associated with the project they represent, and
 avoid namespaces that refer to other projects or generic terms that could lead to naming conflicts in the future.
 
-Within a single package, only one plugin can be used for a given namespace. Attempting to load a second plugin sharing
-the same namespace must cause a fatal error. However, it is possible for multiple plugins using the namespace to exist,
-which implies that they become mutually exclusive. For example, this could happen if a plugin becomes unmaintained and
-needs to be forked into a new package.
+Within a single package and for a specific release version, only one plugin can be used for a given namespace. Attempting to load more than one plugin for the same namespace in the same release version must result in a fatal error. While multiple plugins for the same namespace may exist across different packages or release versions (such as when a plugin is forked due to being unmaintained), they are mutually exclusive within any single release version.
 
 To make it easier to discover and install plugins, they should be published in the same indexes that the packages using
 them. In particular, packages published to PyPI must not rely on plugins that need to be installed from other indexes.
@@ -1333,8 +1330,8 @@ class MyPlugin:
     def get_supported_configs(self) -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
-               name="version", 
-               values=["v2", "v1"], 
+               name="version",
+               values=["v2", "v1"],
                multi_value=False
             ),
         ]
@@ -1365,7 +1362,7 @@ Note that the properties returned by `get_supported_configs()` must be a subset 
 ```python
 class MyPlugin:
     namespace = "example"
-  
+
     # all valid properties as:
     # example :: accelerated :: yes
     # example :: version :: v4
@@ -1375,12 +1372,12 @@ class MyPlugin:
     def get_all_configs(self) -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
-               name="accelerated", 
+               name="accelerated",
                values=["yes"],
                multi_value=False
             ),
             VariantFeatureConfig(
-               name="version", 
+               name="version",
                values=["v1", "v2", "v3", "v4"],
                multi_value=False
             ),
