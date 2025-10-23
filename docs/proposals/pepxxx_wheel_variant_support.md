@@ -528,16 +528,11 @@ supported but has the lowest priority among wheel variants, while being preferab
 - **Variant Provider**: A provider of supported and valid variant properties for a specific namespace, usually
 in the form of a Python package that implements system detection.
 
-- **Install-time Provider (Plugin)**: A provider implemented as a plugin that can be queried during wheel installation.
+- **Install-time Provider**: A provider implemented as a plugin that can be queried during wheel installation.
 
 - **Ahead-of-Time Provider**: A provider that features a static list of supported properties which is then embedded
-in the wheel metadata.
-
-- **Ahead-of-Time Provider (Plugin)**: A provider implemented as a plugin that can be queried while building a wheel to provide the metadata for
-an AoT provider.
-
-- **Ahead-of-Time Provider Non-Plugin**: A variant provider in the form of fixed list of supported properties encoded in the package
-metadata, therefore not requiring an external plugin.
+in the wheel metadata. Such a list can either be embedded in `pyproject.toml` or provided by a plugin queried at build
+time.
 
 ### Overview
 
