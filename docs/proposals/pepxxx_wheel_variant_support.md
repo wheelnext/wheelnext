@@ -618,7 +618,7 @@ The variant label is separated using the same `-` character as other wheel filen
 filename verification algorithms currently used by installers. Wheel filenames have two optional components now: the
 build tag (at the third position), and the variant label (at the last position).
 
-The wheel will be rejected by installers and package indexes in the following cases:
+The wheel will be ignored by installers in the following cases:
 
 * If both the build tag and the variant label are present:
     * The filename will contain too many components, making it invalid.
