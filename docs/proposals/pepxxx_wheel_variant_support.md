@@ -1298,6 +1298,9 @@ class VariantFeatureConfig:
 class MyPlugin:
     namespace = "example"
 
+    # optional, defaults to False
+    is_aot_plugin = False
+
     # defines features compatible with the system as:
     # example :: version :: v2 (more preferred)
     # example :: version :: v1 (less preferred)
