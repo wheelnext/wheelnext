@@ -1309,8 +1309,8 @@ class MyPlugin:
     is_aot_plugin = False
 
     # all valid properties
-    @classmethod
-    def get_all_configs(self) -> list[VariantFeatureConfig]:
+    @staticmethod
+    def get_all_configs() -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
                # example :: gpu -- multi-valued, since the package can target multiple GPUs
@@ -1329,8 +1329,8 @@ class MyPlugin:
         ]
 
     # properties compatible with the system
-    @classmethod
-    def get_supported_configs(self) -> list[VariantFeatureConfig]:
+    @staticmethod
+    def get_supported_configs() -> list[VariantFeatureConfig]:
         current_version = get_current_version()
         if current_version is None:
             # no runtime found, system not supported at all
