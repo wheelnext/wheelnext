@@ -1287,8 +1287,6 @@ Note that the properties returned by `get_supported_configs()` must be a subset 
 ```python
 from dataclasses import dataclass
 
-from .helpers import get_current_version, is_gpu_supported
-
 
 @dataclass
 class VariantFeatureConfig:
@@ -1297,9 +1295,19 @@ class VariantFeatureConfig:
     multi_value: bool
 
 
-# internal
+# internal -- provided for illustrative purpose
 _MAX_VERSION = 4
 _ALL_GPUS = ["narf", "poit", "zort"]
+
+
+def _get_current_version() -> int:
+    """Returns currently installed runtime version"""
+    ...  # implementation not provided
+
+
+def _is_gpu_available(codename: str) -> bool:
+    """Is specified GPU installed?"""
+    ...  # implementation not provided
 
 
 class MyPlugin:
@@ -1331,7 +1339,7 @@ class MyPlugin:
     # properties compatible with the system
     @staticmethod
     def get_supported_configs() -> list[VariantFeatureConfig]:
-        current_version = get_current_version()
+        current_version = _get_current_version()
         if current_version is None:
             # no runtime found, system not supported at all
             return []
@@ -1347,7 +1355,7 @@ class MyPlugin:
                name="gpu",
                # this may be empty if no GPUs are supported -- 'example :: gpu feature' is not supported then
                # but wheels with no GPU-specific code and only 'example :: min_version' could still be installed
-               values=[x for x in _ALL_GPUS if is_gpu_supported(x)],
+               values=[x for x in _ALL_GPUS if _is_gpu_available(x)],
                multi_value=True,
             ),
         ]
