@@ -363,30 +363,31 @@ taken by various communities.
 #### Conda - conda-forge
 
 [Conda](https://docs.conda.io) is a binary-only package ecosystem that uses aggregated metadata indexes for resolution
-rather than filename parsing. Unlike PEP
-[503](https://peps.python.org/pep-0503/)/[691](https://peps.python.org/pep-0691/) approaches, conda's resolution relies
-on [repodata indexes per platform](https://docs.conda.io/projects/conda-build/en/stable/concepts/generating-index.html)
+rather than filename parsing. Unlike the
+[Simple Repository API](https://packaging.python.org/en/latest/specifications/simple-repository-api/#simple-repository-api),
+conda's resolution relies on [repodata indexes per platform](https://docs.conda.io/projects/conda-build/en/stable/concepts/generating-index.html)
 containing full metadata, making filenames purely identifiers with no parsing requirements.
 
 **Variant System**: In [2016-2017](https://www.anaconda.com/blog/package-better-conda-build-3), conda-build introduced
 variants to differentiate packages with identical name/version but different dependencies.
 
 ```bash
-somepackage-1.2.3-py310h12341234_0.conda  # openblas variant
-somepackage-1.2.3-py310habcdabcd_0.conda  # mkl variant
+pytorch-2.8.0-cpu_mkl_py313_he1d8d61_100.conda      # CPU + MKL variant
+pytorch-2.8.0-cuda128_mkl_py313_hf206996_300.conda  # CUDA 12.8 + MKL variant
+pytorch-2.8.0-cuda129_mkl_py313_he100a2c_300.conda  # CUDA 12.9 + MKL variant
 ```
 
 A hash (computed from variant metadata) prevents filename collisions; actual variant selection happens via standard
 dependency constraints in the solver. No special metadata parsing is needed—installers simply resolve dependencies like:
 
 ```bash
-conda install somepackage mkl
+conda install pytorch mkl
 ```
 
 **Mutex Metapackages**: Ensure environment consistency by preventing conflicting implementations. Packages depend on
 specific mutex builds (e.g., `blas=*=openblas` vs `blas=*=mkl`), forcing a single implementation per environment.
 
-**Current software variants**: [BLAS](https://conda-forge.org/docs/maintainer/knowledge_base/#blas),
+**Example software variants**: [BLAS](https://conda-forge.org/docs/maintainer/knowledge_base/#blas),
 [MPI](https://conda-forge.org/docs/maintainer/knowledge_base/#message-passing-interface-mpi),
 [OpenMP](https://conda-forge.org/docs/maintainer/knowledge_base/#openmp),
 [noarch vs native](https://conda-forge.org/blog/2024/10/15/python-noarch-variants/)
