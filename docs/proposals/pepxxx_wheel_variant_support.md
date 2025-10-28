@@ -1287,6 +1287,8 @@ Note that the properties returned by `get_supported_configs()` must be a subset 
 ```python
 from dataclasses import dataclass
 
+from .helpers import get_current_version, is_gpu_supported
+
 
 @dataclass
 class VariantFeatureConfig:
@@ -1295,46 +1297,66 @@ class VariantFeatureConfig:
     multi_value: bool
 
 
+# internal
+_MAX_VERSION = 4
+_ALL_GPUS = ["narf", "poit", "zort"]
+
+
 class MyPlugin:
     namespace = "example"
 
     # optional, defaults to False
     is_aot_plugin = False
 
-    # defines features compatible with the system as:
-    # example :: version :: v2 (more preferred)
-    # example :: version :: v1 (less preferred)
-    # (a wheel with no "example :: version" is the least preferred)
-    #
-    # the system does not support "example :: something_else" at all
-    def get_supported_configs(self) -> list[VariantFeatureConfig]:
-        return [
-            VariantFeatureConfig(
-               name="version",
-               values=["v2", "v1"],
-               multi_value=False
-            ),
-        ]
-
-    # all valid properties as:
-    # example :: accelerated :: yes
-    # example :: version :: v4
-    # example :: version :: v3
-    # example :: version :: v2
-    # example :: version :: v1
+    # all valid properties
+    @classmethod
     def get_all_configs(self) -> list[VariantFeatureConfig]:
         return [
             VariantFeatureConfig(
-               name="accelerated",
-               values=["yes"],
-               multi_value=False
+               # example :: gpu -- multi-valued, since the package can target multiple GPUs
+               name="gpu",
+               # [narf, poit, zort]
+               values=_ALL_GPUS,
+               multi_value=True,
             ),
             VariantFeatureConfig(
-               name="version",
-               values=["v1", "v2", "v3", "v4"],
-               multi_value=False
+               # example :: min_version -- single-valued, since there is always one minimum
+               name="min_version",
+               # [1, 2, 3, 4] (order doesn't matter)
+               values=[str(x) for x in range(1, _MAX_VERSION + 1)],
+               multi_value=False,
             ),
         ]
+
+    # properties compatible with the system
+    @classmethod
+    def get_supported_configs(self) -> list[VariantFeatureConfig]:
+        current_version = get_current_version()
+        if current_version is None:
+            # no runtime found, system not supported at all
+            return []
+
+        supported = [
+            VariantFeatureConfig(
+               name="min_version",
+               # [current, current - 1, ..., 1]
+               values=[str(x) for x in range(current_version, 0, -1)],
+               multi_value=False,
+            ),
+        ]
+
+        supported_gpus = [x for x in _ALL_GPUS if is_gpu_supported(x)]
+        # if no GPUs are supported, we just return compatible min_version, and accept wheels that are not GPU-specific
+        if supported_gpus:
+            supported += [
+                VariantFeatureConfig(
+                   name="gpu",
+                   values=supported_gpus,
+                   multi_value=True,
+                ),
+            ]
+
+        return supported
 ```
 
 #### Python version compatibility
