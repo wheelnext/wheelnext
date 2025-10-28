@@ -9,41 +9,30 @@
 
 ## Abstract
 
-The Python wheel packaging format uses platform
-[compatibility tags](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/) to specify
+The Python wheel packaging format uses
+[platform compatibility tags](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/) to specify
 wheel's supported environments based on Python version, ABI, and platform (operating system, architecture, core system
 libraries). These tags are not able to express features of modern hardware. This is particularly challenging for the
 scientific computing, artificial intelligence (AI), machine learning (ML), and high-performance computing communities,
 where packages are often built with specific hardware accelerations (e.g., NVIDIA CUDA, AMD ROCm), specialized CPU
 instructions (e.g., AVX512_BF16), or other system dependencies.
 
-This PEP proposes "Wheel Variants," a backward-compatible extension to the wheel specification
-(PEP [427](https://peps.python.org/pep-0427/) & [491](https://peps.python.org/pep-0491/)). This extension introduces a
-mechanism for package maintainers to declare multiple build variants for the same version and standard
-[compatibility tags](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/) (as defined
-by [PEP 425](https://peps.python.org/pep-0425/), and later extended by PEPs [513](https://peps.python.org/pep-0513/),
-[571](https://peps.python.org/pep-0571/), [599](https://peps.python.org/pep-0599/),
-[600](https://peps.python.org/pep-0600/), [656](https://peps.python.org/pep-0656/),
-[730](https://peps.python.org/pep-0730/), [738](https://peps.python.org/pep-0738/)) while allowing installers to
+This PEP proposes "Wheel Variants," an extension to the
+[binary distribution format specification](https://packaging.python.org/en/latest/specifications/binary-distribution-format/).
+This extension introduces a
+mechanism for package maintainers to declare multiple build variants for the same package version, while allowing installers to
 automatically select the most appropriate variant based on system hardware and software capabilities and
-characteristics.
-
-To enable fine-grained package selection without fragmenting the Python ecosystem, this PEP proposes:
+characteristics. More specifically, it proposes:
 
 - An evolution of the wheel format called **Wheel Variant** that allows wheels to be distinguished by hardware or
 software attributes.
 
-- A **variant provider plugin** interface allowing to dynamically detect platform attributes and recommend the most
+- A **variant provider plugin** interface allowing to dynamically detect platform attributes and select the most
 suitable wheel.
 
-- A **hash-based identification mechanism** for wheel variants, ensuring not breaking the current packaging ecosystem
-while allowing quick visual identifications of which Python wheel artifact corresponds to what.
-
 The goal is to simplify the user experience to a familiar `pip install <package>`, while ensuring optimal
-performance and compatibility.
-
-This approach allows seamless package resolution without requiring intrusive changes to installers, ensures backward
-compatibility, and minimizes the burden on package maintainers.
+performance and compatibility.  This approach allows seamless package resolution without requiring intrusive changes to
+installers, ensures backward compatibility, and minimizes the burden on package maintainers.
 
 ## Definitions
 
