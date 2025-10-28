@@ -1336,27 +1336,21 @@ class MyPlugin:
             # no runtime found, system not supported at all
             return []
 
-        supported = [
+        return [
             VariantFeatureConfig(
                name="min_version",
                # [current, current - 1, ..., 1]
                values=[str(x) for x in range(current_version, 0, -1)],
                multi_value=False,
             ),
+            VariantFeatureConfig(
+               name="gpu",
+               # this may be empty if no GPUs are supported -- 'example :: gpu feature' is not supported then
+               # but wheels with no GPU-specific code and only 'example :: min_version' could still be installed
+               values=[x for x in _ALL_GPUS if is_gpu_supported(x)],
+               multi_value=True,
+            ),
         ]
-
-        supported_gpus = [x for x in _ALL_GPUS if is_gpu_supported(x)]
-        # if no GPUs are supported, we just return compatible min_version, and accept wheels that are not GPU-specific
-        if supported_gpus:
-            supported += [
-                VariantFeatureConfig(
-                   name="gpu",
-                   values=supported_gpus,
-                   multi_value=True,
-                ),
-            ]
-
-        return supported
 ```
 
 #### Python version compatibility
