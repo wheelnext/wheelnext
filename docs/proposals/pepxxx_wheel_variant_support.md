@@ -362,7 +362,41 @@ taken by various communities.
 
 #### Conda - conda-forge
 
-The project that will come to most people’s mind is [conda / conda-forge](https://conda.org/), TO BE FOLLOWED BY MICHAEL
+[Conda](https://docs.conda.io) is a binary-only package ecosystem that uses aggregated metadata indexes for resolution
+rather than filename parsing. Unlike PEP
+[503](https://peps.python.org/pep-0503/)/[691](https://peps.python.org/pep-0691/) approaches, conda's resolution relies
+on [repodata indexes per platform](https://docs.conda.io/projects/conda-build/en/stable/concepts/generating-index.html)
+containing full metadata, making filenames purely identifiers with no parsing requirements.
+
+**Variant System**: In [2016-2017](https://www.anaconda.com/blog/package-better-conda-build-3), conda-build introduced
+variants to differentiate packages with identical name/version but different dependencies.
+
+```bash
+somepackage-1.2.3-py310h12341234_0.conda  # openblas variant
+somepackage-1.2.3-py310habcdabcd_0.conda  # mkl variant
+```
+
+A hash (computed from variant metadata) prevents filename collisions; actual variant selection happens via standard
+dependency constraints in the solver. No special metadata parsing is needed—installers simply resolve dependencies like:
+
+```bash
+conda install somepackage mkl
+```
+
+**Mutex Metapackages**: Ensure environment consistency by preventing conflicting implementations. Packages depend on
+specific mutex builds (e.g., `blas=*=openblas` vs `blas=*=mkl`), forcing a single implementation per environment.
+
+**Current software variants**: [BLAS](https://conda-forge.org/docs/maintainer/knowledge_base/#blas),
+[MPI](https://conda-forge.org/docs/maintainer/knowledge_base/#message-passing-interface-mpi),
+[OpenMP](https://conda-forge.org/docs/maintainer/knowledge_base/#openmp),
+[noarch vs native](https://conda-forge.org/blog/2024/10/15/python-noarch-variants/)
+
+**Virtual Packages**: [Introduced in 2019](https://github.com/conda/conda/pull/8267), virtual packages inject system
+detection (CUDA version, glibc, CPU features) as solver constraints. Built packages express dependencies like
+`__cuda >=12.8`, and the installer verifies compatibility at install time. Current virtual packages include `archspec`
+(CPU capabilities), OS/system libraries, and CUDA driver version. Detection logic is tool-specific
+([rattler](https://github.com/conda/rattler/tree/main/crates/rattler_virtual_packages/src),
+[mamba](https://github.com/mamba-org/mamba/blob/main/libmamba/src/core/virtual_packages.cpp)).
 
 #### Spack / Archspec
 
