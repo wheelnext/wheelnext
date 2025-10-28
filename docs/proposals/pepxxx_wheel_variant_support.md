@@ -104,6 +104,17 @@ affects the installation process for users and increases the maintenance burden 
 compiler flags further emphasizes the urgent need for a more expressive and efficient solution in the Python packaging
 ecosystem.
 
+As illustrated by `archspec`'s authors and maintainers, the ability to optimize a package for a specific architecture
+can lead to significant performance improvement (and often also reduce power requirements, etc.).
+
+![GROMACS AVX512 Benchmark](../assets/wheel_variants/avx512_gromacs_benchmark.png)
+
+> "Compiling [GROMACS](https://www.gromacs.org/) for architectures that can exploit the AVX-512 instructions supported
+> by the Intel Cascade Lake microarchitecture gives an additional 18% performance improvement relative to using AVX2
+> instructions, with a speedup of about 70% compared to a generic GROMACS installation with only SSE2."
+>
+> Source: [archspec: A library for detecting, labeling, and reasoning about microarchitectures](https://tgamblin.github.io/pubs/archspec-canopie-hpc-2020.pdf)
+
 This PEP proposes a systematic and scalable approach to selecting optimized wheels based on platform characteristics,
 which will help Python’s usage expand across diverse computing environments, from cloud computing to embedded systems
 and AI accelerators.
