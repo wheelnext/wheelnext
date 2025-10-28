@@ -141,8 +141,8 @@ The current wheel format encodes compatibility through three platform tags:
 While these tags effectively handle traditional compatibility dimensions, they cannot express modern requirements:
 
 **GPU Accelerated Frameworks:** A wheel filename like `torch-2.9.0-cp313-cp313-manylinux_2_28_x86_64.whl`
-provides no indication whether it contains NVIDIA CUDA support, AMD ROCm support, Intel XPU support, or is CPU-only. Users cannot determine
-compatibility with their GPU hardware or drivers.
+provides no indication whether it contains NVIDIA CUDA support, AMD ROCm support, Intel XPU support, or is CPU-only.
+Users cannot determine compatibility with their GPU hardware or drivers.
 
 **CPU Instruction Sets:** A wheel filename like
 `numpy-2.3.2-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl` provides no indication whether it contains
@@ -158,7 +158,7 @@ This lack of flexibility has led many projects to find sub-optimal - yet necessa
 selector provided by the PyTorch team. This complexity represents a fundamental scalability issue with the current tag
 system.
 
-![PyTorch Wheel Selector](../assets/images/pytorch_variant_selector.webp)
+![PyTorch Wheel Selector](../assets/wheel_variants/pytorch_variant_selector.png)
 
 **Source:** [https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/) (screen capture date: 2025/08/22)
 
@@ -194,7 +194,8 @@ pip install torch --index-url="https://download.pytorch.org/whl/cu129"
 - Complex installation instructions
 - Separate infrastructure maintenance
 - Potential security issues when combining multiple indexes
-- Managing and potentially hosting all project dependencies when using a single index which can significantly increase storage and CDN cost
+- Managing and potentially hosting all project dependencies when using a single index which can significantly increase
+storage and CDN cost
 - Separate index for every combination of compatible features (e.g. GPU variants with different levels of CPU
 optimizations)
 
@@ -260,7 +261,7 @@ don’t read in detail the documentation.
 It should be noted that most of these "extras" are technically mutually exclusive, though it is currently impossible to
 correctly express this incompatibility within the package metadata.
 
-```
+```yaml
 Provides-Extra: minimum-jaxlib
 Provides-Extra: cpu
 Provides-Extra: ci
@@ -338,7 +339,8 @@ that create friction for users, increase maintenance burden, and fragment the ec
 - Enables automatic hardware-appropriate package selection
 - Maintains full backward compatibility with existing tools (by guaranteeing to not break non-variant aware installers,
 tools, and indexes)
-- Simplifies package maintenance by offering a unified and flexible solution to the challenge of managing multiple platform-specific package builds and distributions.
+- Simplifies package maintenance by offering a unified and flexible solution to the challenge of managing multiple
+platform-specific package builds and distributions.
 - Provides a seamless and predictable experience for users, that requires little to no user inputs.
 - Supports the full spectrum of modern computing hardware
 - Provides a future-proof and flexible system that can evolve with the ecosystem and future use cases.
@@ -565,9 +567,10 @@ The label length is strictly limited (16 characters max) to prevent issues on sy
 #### Variant label validation
 
 A variant lable must adhere to the following rules:
-  - Lower case only (to prevent issues with case-sensitive vs. case-insensitive filesystems)
-  - Between 1-16 characters
-  - Using only `0-9`, `a-z`, `.` or `_` characters
+
+- Lower case only (to prevent issues with case-sensitive vs. case-insensitive filesystems)
+- Between 1-16 characters
+- Using only `0-9`, `a-z`, `.` or `_` characters
 
 Equivalent regex: `^[0-9a-z._]{1,16}$`
 
@@ -579,11 +582,11 @@ build tag (at the third position), and the variant label (at the last position).
 
 The wheel will be ignored by installers in the following cases:
 
-* If both the build tag and the variant label are present:
-    * The filename will contain too many components, making it invalid.
+- If both the build tag and the variant label are present:
+    - The filename will contain too many components, making it invalid.
 
-* If only the variant label is present:
-    * The higher number of filename components will result in the third component (the Python tag) being misinterpreted
+- If only the variant label is present:
+    - The higher number of filename components will result in the third component (the Python tag) being misinterpreted
       as the build number. Since the build number must start with a digit and no Python tags at the time start with
       digits, the filename is considered invalid. This assumes that no Python tags introduced in the future will start
       with a digit.
@@ -716,11 +719,11 @@ variant properties.
 The order of variant properties is defined first by the order of namespaces, then the order of features in the namespace
 and then the order of property values in a feature.
 
-The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is initially defined by
-`default-priorities.feature`. Features not listed in `default-priorities.feature` are appended in the order they are
-returned by the variant provider plugin. Similarly, the order of property values in a feature is defined by their order in
-`default-priorities.property`, with missing properties appended in order from the variant provider output. In each list,
-earlier elements have higher priority than later elements.
+The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is initially
+defined by `default-priorities.feature`. Features not listed in `default-priorities.feature` are appended in the order
+they are returned by the variant provider plugin. Similarly, the order of property values in a feature is defined by
+their order in `default-priorities.property`, with missing properties appended in order from the variant provider
+output. In each list, earlier elements have higher priority than later elements.
 
 A variant wheel has a higher priority than another variant wheel if its highest priority property is of higher priority
 than the highest priority property of the other variant wheel. If both wheels have the same highest priority property,
@@ -752,7 +755,7 @@ format is used in three locations, with slight variations:
 
 All three variants metadata files share a common JSON-compatible structure:
 
-```
+```txt
 (root)
 |
 +- providers
@@ -785,7 +788,8 @@ All three variants metadata files share a common JSON-compatible structure:
 
 #### Provider information
 
-`providers` is a dictionary, the keys are namespaces, the values are dictionaries with provider information. It specifies how to install and use variant providers. A provider information dictionary must be declared in
+`providers` is a dictionary, the keys are namespaces, the values are dictionaries with provider information. It
+specifies how to install and use variant providers. A provider information dictionary must be declared in
 `pyproject.toml` for every supported variant namespace. It must be copied to `variant.json` as-is, including data for
 providers that are not used in the particular wheel.
 
@@ -835,8 +839,8 @@ It may have the following optional keys:
 
 - `property: dict[str, dict[str, list[str]]]`: A nested dictionary with namespaces as first-level keys, feature names as
   second-level keys and ordered lists of corresponding property values as second-level values. The values present in the
-  list override the default ordering from the provider output. They are listed from the the highest priority to the lowest priority.
-  Properties not present on the list are considered of lower priority than these present, and their
+  list override the default ordering from the provider output. They are listed from the the highest priority to the
+  lowest priority. Properties not present on the list are considered of lower priority than these present, and their
   relative priority is defined by the plugin output.
 
 #### Static properties
@@ -1084,7 +1088,10 @@ plugin defines all the valid feature names and values within that namespace.
 It is recommended that providers choose namespaces that can be clearly associated with the project they represent, and
 avoid namespaces that refer to other projects or generic terms that could lead to naming conflicts in the future.
 
-Within a single package and for a specific release version, only one plugin can be used for a given namespace. Attempting to load more than one plugin for the same namespace in the same release version must result in a fatal error. While multiple plugins for the same namespace may exist across different packages or release versions (such as when a plugin is forked due to being unmaintained), they are mutually exclusive within any single release version.
+Within a single package and for a specific release version, only one plugin can be used for a given namespace.
+Attempting to load more than one plugin for the same namespace in the same release version must result in a fatal error.
+While multiple plugins for the same namespace may exist across different packages or release versions (such as when a
+plugin is forked due to being unmaintained), they are mutually exclusive within any single release version.
 
 To make it easier to discover and install plugins, they should be published in the same indexes that the packages using
 them. In particular, packages published to PyPI must not rely on plugins that need to be installed from other indexes.
@@ -1100,7 +1107,7 @@ The location of the plugin code is called an "API endpoint", and it is expressed
 following the [entry point specification](https://packaging.python.org/en/latest/specifications/entry-points/).
 They are in the form of:
 
-```
+```python
 {import path}(:{object path})?
 ```
 
@@ -1379,7 +1386,7 @@ it is an empty string.
 
 The markers evaluating to sets of strings MUST be matched via the `in` or `not in` operator, e.g.:
 
-```
+```toml
 dep1; "foo" in variant_namespaces
 dep2; "foo :: bar" in variant_features
 dep3; "foo :: bar :: baz" in variant_properties
@@ -1387,7 +1394,7 @@ dep3; "foo :: bar :: baz" in variant_properties
 
 The `variant_label` marker is a plain string:
 
-```
+```toml
 dep4; variant_label == "foobar"
 dep5; variant_label != "null"
 dep6; variant_label == ""
@@ -1482,7 +1489,9 @@ plugins on installation altogether.
 
 ## Reference implementation
 
-The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of all the protocols and algorithms introduced in this PEP, as well as a command-line tool to convert wheels, generate the `*-variants.json` index and query plugins.
+The [variantlib](https://github.com/wheelnext/variantlib) project contains a reference implementation of all the
+protocols and algorithms introduced in this PEP, as well as a command-line tool to convert wheels, generate the
+`*-variants.json` index and query plugins.
 
 A client for installing variant wheels is implemented in [uv](https://github.com/astral-sh/uv).
 
