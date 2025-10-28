@@ -1189,19 +1189,6 @@ be orderred from the most preferred to the least preferred.
 
 All features are interpreted as being within the plugin's namespace.
 
-**Example implementation:**
-
-```python
-from dataclasses import dataclass
-
-
-@dataclass
-class VariantFeatureConfig:
-    name: str
-    values: list[str]
-    multi_value: bool
-```
-
 #### Plugin class
 
 ##### Protocol
@@ -1255,13 +1242,6 @@ The plugin class must define the following properties or attributes:
 `get_supported_configs()` must always return the same value as `get_all_configs()` (modulo ordering), which must be a
 fixed list independent of the platform on which the plugin is running. Defaults to `False` if unspecified.
 
-**Example implementation:**
-
-```python
-class MyPlugin:
-    namespace = "example"
-```
-
 ##### `def get_supported_configs(...):`
 
 - Purpose: get features and their values supported on this system
@@ -1281,28 +1261,6 @@ configs", where every config defines a single feature along with all the support
 from the most preferred value to the least preferred.
 
 The method must return a fixed list of supported features.
-
-**Example implementation:**
-
-```python
-class MyPlugin:
-    namespace = "example"
-
-    # defines features compatible with the system as:
-    # example :: version :: v2 (more preferred)
-    # example :: version :: v1 (less preferred)
-    # (a wheel with no "example :: version" is the least preferred)
-    #
-    # the system does not support "example :: something_else" at all
-    def get_supported_configs(self) -> list[VariantFeatureConfig]:
-        return [
-            VariantFeatureConfig(
-               name="version",
-               values=["v2", "v1"],
-               multi_value=False
-            ),
-        ]
-```
 
 ##### `def get_all_configs(...):`
 
@@ -1324,11 +1282,36 @@ be fixed for a given plugin version, it is primarily used to verify properties p
 
 Note that the properties returned by `get_supported_configs()` must be a subset of those returned by this function.
 
-**Example implementation:**
+#### Example implementation
 
 ```python
+from dataclasses import dataclass
+
+
+@dataclass
+class VariantFeatureConfig:
+    name: str
+    values: list[str]
+    multi_value: bool
+
+
 class MyPlugin:
     namespace = "example"
+
+    # defines features compatible with the system as:
+    # example :: version :: v2 (more preferred)
+    # example :: version :: v1 (less preferred)
+    # (a wheel with no "example :: version" is the least preferred)
+    #
+    # the system does not support "example :: something_else" at all
+    def get_supported_configs(self) -> list[VariantFeatureConfig]:
+        return [
+            VariantFeatureConfig(
+               name="version",
+               values=["v2", "v1"],
+               multi_value=False
+            ),
+        ]
 
     # all valid properties as:
     # example :: accelerated :: yes
