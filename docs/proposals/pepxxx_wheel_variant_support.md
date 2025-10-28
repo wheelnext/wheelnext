@@ -384,8 +384,11 @@ dependency constraints in the solver. No special metadata parsing is needed—in
 conda install pytorch mkl
 ```
 
-**Mutex Metapackages**: Ensure environment consistency by preventing conflicting implementations. Packages depend on
-specific mutex builds (e.g., `blas=*=openblas` vs `blas=*=mkl`), forcing a single implementation per environment.
+**Mutex Metapackages**: Python metadata and conda metadata do not have good ways to express ideas like "this package
+conflicts with that one." The main mechanism for enforcement is sharing a common package name - only one package with a
+given name can exist at one time. Mutex metapackages are sets of packages with the same name, but different build
+string. Packages depend on specific mutex builds (e.g., `blas=*=openblas` vs `blas=*=mkl`) to avoid problems with related
+packages using different dependency libraries, such as numpy using openblas and scipy using mkl.
 
 **Example software variants**: [BLAS](https://conda-forge.org/docs/maintainer/knowledge_base/#blas),
 [MPI](https://conda-forge.org/docs/maintainer/knowledge_base/#message-passing-interface-mpi),
