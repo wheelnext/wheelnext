@@ -1,7 +1,10 @@
 // .devcontainer/devcontainer.json
 {
 	"name": "MkDocs Material editor",
-	"image": "squidfunk/mkdocs-material:latest",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
 	"workspaceMount": "source=${localWorkspaceFolder},target=/docs,type=bind",
 	"workspaceFolder": "/docs",
 	"customizations": {
@@ -33,8 +36,8 @@
 			"onAutoForward": "openBrowserOnce"
 		}
 	},
-	"postCreateCommand": "pip install -r requirements.txt",
-	"postStartCommand": "mkdocs serve -a localhost:8080",
+	"postCreateCommand": "uv sync",
+	"postStartCommand": "uv run mkdocs serve -a localhost:8080",
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"username": "wheelnext",
@@ -42,9 +45,6 @@
 			"installOhMyZsh": true,
 			"configureZshAsDefaultShell": true,
 			"upgradePackages": false
-		},
-		"ghcr.io/devcontainers/features/git:1": {
-			"version": "latest"
 		}
 	}
 }

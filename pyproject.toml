@@ -1,0 +1,14 @@
+[tool.uv]
+package = false
+
+[project]
+name = "WheelNext.dev"
+version = "1.0.0"
+readme = "README.md"
+dependencies = [
+    "mkdocs>=1.6,<1.7",
+    "mkdocs-material>=9.6,<9.7",
+    "mkdocs-git-revision-date-localized-plugin>=1.4,<1.5",
+    "mkdocs-site-urls>=0.3,<0.4"
+]
+requires-python = ">=3.10"
