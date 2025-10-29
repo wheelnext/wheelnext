@@ -424,18 +424,6 @@ binary caching. The [European Environment for Scientific Software Installations 
 distributes optimized builds in separate subdirectories per microarchitecture (e.g., `x86_64`/``armv8.1a`/`haswell`);
 runtime initialization uses `archspec` to select best compatible build when no exact match exists.
 
-#### Docker / Kubernetes / Container
-
-TO BE ADDED
-
-#### Homebrew: Bottle DSL (Domain Specific Language)
-
-TO BE ADDED: [https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language](https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language)
-
-#### Nix / Nixpkgs
-
-<TO BE ADDED>
-
 #### Gentoo Linux
 
 [Gentoo Linux](https://www.gentoo.org) is a source-first distribution with support for extensive package customization.
@@ -443,10 +431,6 @@ This is primarily achieved via [USE flags](https://devmanual.gentoo.org/general-
 flags exposed by individual packages and permitting fine-tuning the enabled features, optional dependencies and some
 build parameters. Flags can be toggled individually, and separate binary packages can be built for different sets of
 flags. The package manager can either pick a binary package with matching configuration or build from source.
-
-#### Debian / Ubuntu
-
-TO BE ADDED: [https://wiki.debian.org/CategoryMultiarch](https://wiki.debian.org/CategoryMultiarch)
 
 ## Rationale
 

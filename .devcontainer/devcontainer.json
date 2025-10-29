@@ -37,7 +37,7 @@
 		}
 	},
 	"postCreateCommand": "uv sync",
-	"postStartCommand": "uv run mkdocs serve -a localhost:8080",
+	"postStartCommand": "uv run mkdocs serve --livereload -a localhost:8080",
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"username": "wheelnext",
