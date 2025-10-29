@@ -93,8 +93,9 @@ affects the installation process for users and increases the maintenance burden 
 compiler flags further emphasizes the urgent need for a more expressive and efficient solution in the Python packaging
 ecosystem.
 
-As illustrated by `archspec`'s authors and maintainers, the ability to optimize a package for a specific architecture
-can lead to significant performance improvement (and often also reduce power requirements, etc.).
+As illustrated by [`archspec`](https://github.com/archspec/archspec)'s authors and maintainers, the ability to optimize
+a package for a specific architecture can lead to significant performance improvement (and often also reduce power
+requirements, etc.).
 
 ![GROMACS AVX512 Benchmark](../assets/wheel_variants/avx512_gromacs_benchmark.png)
 
@@ -404,7 +405,24 @@ detection (CUDA version, glibc, CPU features) as solver constraints. Built packa
 
 #### Spack / Archspec
 
-TO BE ADDED
+[`archspec`](https://github.com/archspec/archspec) is a library for detecting, labeling, and reasoning about CPU
+microarchitecture variants, developed from the [Spack](https://spack.io/) package manager.
+
+**Variant Model:** CPU Microarchitectures (e.g., `haswell`, `skylake`, `zen2`, `armv8.1a`) form a
+[Directed Acyclic Graph (DAG) encoding binary compatibility](https://tgamblin.github.io/pubs/archspec-canopie-hpc-2020.pdf),
+which helps at resolve to express that `packageB` depends on `packageA`. The ordering is partial because (1) separate
+ISA families are incomparable, and (2) contemporary designs may have incompatible feature sets—cascadelake and
+cannonlake are incomparable despite both descending from skylake, as each has unique AVX-512 extensions.
+
+**Implementation:** A language-agnostic JSON database stores microarchitecture metadata (features, compatibility
+relationships, compiler-specific optimization flags). Language bindings provide detection (queries /proc/cpuinfo,
+matches to microarchitecture with largest compatible feature subset) and compatibility comparison operators.
+
+**Package Manager Integration:** Spack records target microarchitecture as package provenance
+(`spack install fftw target=broadwell`), automatically selects compiler flags, and enables microarchitecture-aware
+binary caching. The [European Environment for Scientific Software Installations (EESSI)](https://onlinelibrary.wiley.com/doi/full/10.1002/spe.3075)
+distributes optimized builds in separate subdirectories per microarchitecture (e.g., `x86_64`/``armv8.1a`/`haswell`);
+runtime initialization uses `archspec` to select best compatible build when no exact match exists.
 
 #### Docker / Kubernetes / Container
 
