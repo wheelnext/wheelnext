@@ -412,7 +412,28 @@ TO BE ADDED
 
 #### Homebrew: Bottle DSL (Domain Specific Language)
 
-TO BE ADDED: [https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language](https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language)
+[Homebrew Bottles](https://docs.brew.sh/Bottles) are gzipped tarballs of precompiled binaries. Bottles are specified in
+a formula's `bottle do...end` block containing SHA-256 checksums for each OS/architecture variant (e.g.,
+`arm64_big_sur`, `big_sur`, `catalina`, `mojave`). When a matching bottle exists for the host system, it is
+automatically downloaded and installed; otherwise Homebrew builds from source.
+
+Homebrew defines and utilizes the [**Bottle DSL**](https://docs.brew.sh/Bottles#bottle-dsl-domain-specific-language), which
+offers the following characteristics.
+
+**Variant Limitations**: Bottles are compiled with default formula options only. Specifying any build options
+(`brew install <formula> --with-option`) forces a source build. By default, bottles target the oldest CPU supported by
+the OS/architecture (Core 2 for x86-64) for maximum compatibility; `--bottle-arch=` can target specific
+microarchitectures (e.g.: `haswell`, `skylake`) but may exclude users with older CPUs.
+
+**Conditional Installation**: The `pour_bottle?` method allows formulae to programmatically reject bottle usage based
+on runtime conditions (e.g., `only_if: :default_prefix` requires installation to `/usr/local` on macOS Intel,
+`/opt/homebrew` on Apple Silicon).
+
+**Variant Granularity**: Bottle variants are limited to OS/architecture combinations (e.g., `arm64_big_sur`, `big_sur`,
+`catalina`, `mojave`). The Bottle DSL provides no support for `x86_64` or `ARM` architecture version differentiation
+(e.g. `armv6/7/8/9`), specific instruction set extensions (AVX512), or accelerator platforms (e.g. NVIDIA CUDA). While
+`--bottle-arch=` permits microarchitecture targeting, the emphasis is on broad compatibility by targeting the oldest
+supported CPU per OS/architecture.
 
 #### Nix / Nixpkgs
 
