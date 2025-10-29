@@ -408,7 +408,29 @@ TO BE ADDED
 
 #### Docker / Kubernetes / Container
 
-TO BE ADDED
+[Docker multi-platform builds](https://docs.docker.com/build/building/multi-platform/) package multiple OS/CPU
+architecture variants (e.g., `linux/amd64`, `linux/arm64`, `windows/amd64`) into a single image using a manifest list
+structure. Single-platform images contain one manifest pointing to one configuration and layer set; multi-platform
+images contain a manifest list pointing to multiple platform-specific manifests, each with distinct configurations and
+layers. When pulling an image, the registry returns the manifest list and Docker automatically selects the correct
+variant based on host architecture.
+
+Platform granularity is limited to OS/architecture combinations (e.g., `linux/amd64`, `linux/arm/v9`).
+Multi-platform builds do not differentiate between microarchitecture features (e.g., `AVX512` vs `SSE2` within
+`linux/amd64`) or accelerator platforms (e.g. `NVIDIA CUDA`).
+
+**Build Strategies** (via `--platform` flag in `docker buildx build --platform linux/amd64,linux/arm64`):
+
+1. **QEMU emulation**: Easiest, requires no Dockerfile changes; BuildKit auto-detects available architectures. Slowest
+for compute-intensive tasks (compilation, compression). Uses `binfmt_misc` registration.
+
+2. **Multiple native nodes**: Better performance for complex cases. Uses `docker buildx create --append` to add
+platform-specific Docker contexts to a builder. Docker Build Cloud provides managed multi-node builders.
+
+3. **Cross-compilation**: Leverages language-specific cross-compilation in multi-stage builds using pre-defined
+BuildKit arguments (`BUILDPLATFORM`, `TARGETPLATFORM`, `TARGETOS`, `TARGETARCH`). Pin base image to builder's native
+platform (`FROM --platform=$BUILDPLATFORM`) to prevent emulation, then pass target variables to compiler
+(e.g., Go: `GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build`).
 
 #### Homebrew: Bottle DSL (Domain Specific Language)
 
