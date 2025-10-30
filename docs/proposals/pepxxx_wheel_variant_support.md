@@ -721,13 +721,13 @@ a complete boolean logic.
 
 Variant properties use a structured 3-tuple format inspired by [PEP 301 for Trove Classifiers](https://peps.python.org/pep-0301/#distutils-trove-classification)
 
-```shell
+```
 namespace :: feature-name :: feature-value
 ```
 
 Examples:
 
-```shell
+```
 nvidia :: cuda_version_lower_bound :: 12.8
 x86_64 :: level :: v3
 aarch64 :: version :: 8.1a
