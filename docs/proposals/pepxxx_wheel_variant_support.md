@@ -1434,7 +1434,7 @@ that the wheel variant was built for.
 4. `variant_label` corresponding to the exact variant label that the wheel was built with. For the non-variant wheel,
 it is an empty string.
 
-The markers evaluating to sets of strings MUST be matched via the `in` or `not in` operator, e.g.:
+The markers evaluating to sets of strings must be matched via the `in` or `not in` operator, e.g.:
 
 ```toml
 dep1; "foo" in variant_namespaces
@@ -1450,9 +1450,9 @@ dep5; variant_label != "null"
 dep6; variant_label == ""
 ```
 
-Implementations MUST ignore differences in whitespace while matching the features and properties.
+Implementations must ignore differences in whitespace while matching the features and properties.
 
-Variant marker expressions MUST be evaluated against the variant properties stored in the wheel being installed, not
+Variant marker expressions must be evaluated against the variant properties stored in the wheel being installed, not
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
 
