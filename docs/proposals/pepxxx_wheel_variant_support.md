@@ -429,8 +429,21 @@ runtime initialization uses `archspec` to select best compatible build when no e
 [Gentoo Linux](https://www.gentoo.org) is a source-first distribution with support for extensive package customization.
 This is primarily achieved via [USE flags](https://devmanual.gentoo.org/general-concepts/use-flags/index.html): boolean
 flags exposed by individual packages and permitting fine-tuning the enabled features, optional dependencies and some
-build parameters. Flags can be toggled individually, and separate binary packages can be built for different sets of
-flags. The package manager can either pick a binary package with matching configuration or build from source.
+build parameters (e.g. `jpegxl`, `cpu_flags_x86_avx2`). Flags can be toggled individually, and separate binary packages
+can be built for different sets of flags. The package manager can either pick a binary package with matching
+configuration or build from source.
+
+API and ABI matching is primarily done through use of [slotting](https://devmanual.gentoo.org/general-concepts/slotting/index.html).
+Slots are generally used to provide multiple versions or variants of given package that can be installed alongside
+(e.g. different major GTK+ or LLVM versions, or GTK+3 and GTK4 builds of WebKitGTK), whereas subslots are merely used
+to group versions within a slot, usually corresponding to the library SOVERSION. Packages can then declare dependencies
+bound to the slot and subslot used at build time. Again, separate binary packages can be built bound to different
+dependency slots, and when installing a dependency version falling into a different slot or subslot, the package manager
+may either choose a binary packages bound to that slot or rebuild from source.
+
+Normally, the use of slots assumes that upgrading to the newest version possible is desirable. When more fine-grained
+control is desired, slots are used in conjunction with USE flags. For example, `llvm_slot_${major}` flags are used
+to select a LLVM major version to build against.
 
 ## Rationale
 
