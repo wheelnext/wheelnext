@@ -1274,13 +1274,13 @@ class PluginType(Protocol):
 
     @classmethod
     @abstractmethod
-    def get_all_configs(self) -> list[VariantFeatureConfigType]:
+    def get_all_configs(cls) -> list[VariantFeatureConfigType]:
         """Get all valid configs for the plugin"""
         raise NotImplementedError
 
     @classmethod
     @abstractmethod
-    def get_supported_configs(self) -> list[VariantFeatureConfigType]:
+    def get_supported_configs(cls) -> list[VariantFeatureConfigType]:
         """Get supported configs for the current system"""
         raise NotImplementedError
 ```
@@ -1304,8 +1304,9 @@ fixed list independent of the platform on which the plugin is running. Defaults 
 **Prototype:**
 
 ```python
+    @classmethod
     @abstractmethod
-    def get_supported_configs(self) -> list[VariantFeatureConfigType]:
+    def get_supported_configs(cls) -> list[VariantFeatureConfigType]:
         ...
 ```
 
@@ -1324,8 +1325,9 @@ The method must return a fixed list of supported features.
 **Prototype:**
 
 ```python
+    @classmethod
     @abstractmethod
-    def get_all_configs(self) -> list[VariantFeatureConfigType]:
+    def get_all_configs(cls) -> list[VariantFeatureConfigType]:
         ...
 ```
 
