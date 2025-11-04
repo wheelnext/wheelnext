@@ -1584,3 +1584,24 @@ For comparison, the plugin design essentially democratizes the variant propertie
 independently by people having the necessary knowledge and hardware. They can be updated as frequently as necessary,
 independently of package managers. The decision to use a particular provider falls entirely on the maintainer
 of package needing it.
+
+### Resolving variants to separate packages
+
+An alternative proposal was to publish the variants of the package as separate projects on the index, along with
+the main package serving as a "resolver" directing to other variants via its metadata. For example, a `torch` package
+could indicate the conditions for using `torch-cpu`, `torch-cu129`, etc. subpackages.
+
+Such an approach could possibly feature better backwards compatibility with existing tools. The changes would be limited
+to installers, and even with pre-variant installers the users could explicitly request installing a specific variant.
+However, it poses problems at multiple levels.
+
+The necessity of creating a new project for every variant will lead to the proliferation of old projects, such as
+`torch-cu123`.  While the use of resolver package will ensure that only the modern variants are used, users manually
+installing packages and cross-package dependencies may accidentally be pinning to old variant projects, or even fall
+victim to name squatting. For comparison, the variant wheel proposal scopes variants to each project version,
+and ensures that only the project maintainers can upload them.
+
+Furthermore, it requires significant changes to the dependency resolver and package metadata formats. In particular,
+the dependency resolver would need to query all "resolver" packages before performing resolution. It is unclear how to
+account for such variants while performing universal solution. The one-to-one mapping between dependencies and installed
+packages would be lost, as a `torch` dependency could effectively be satisfied by `torch-cu129`.
