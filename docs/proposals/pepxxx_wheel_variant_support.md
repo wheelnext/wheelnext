@@ -1478,6 +1478,71 @@ Variant marker expressions must be evaluated against the variant properties stor
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
 
+### ABI Dependency Variant Namespace (Optional)
+
+This section describes an **optional** extension to the wheel variant specification. Tools that choose to implement this
+feature MUST follow this specification. Tools that do not implement this feature MUST treat wheels using this namespace
+as incompatible.
+
+The variant namespace `abi_dependency` is reserved for expressing dependencies on specific ABIs (Application Binary
+Interfaces) provided by other Python wheel packages. This namespace MUST NOT be used by any variant provider and can
+only appear as a wheel variant property.
+
+#### Motivation
+
+Some Python packages with extension modules are built against the ABI of another package and must be used with a
+compatible version of that package at runtime. Traditional Python dependency specifications are insufficient for this
+use case because:
+
+1. The dependency must be satisfied at wheel selection time, not just at install time
+2. Multiple ABI-compatible versions may exist
+3. The package may be built against one of several possible ABI versions
+
+**Example:** vLLM can be built for multiple versions of PyTorch, but once built, it must be used with the exact PyTorch
+ABI it was compiled against. This requirement cannot be expressed with standard dependencies like
+`pip install pytorch==2.8.0 vllm`, forcing projects to distribute source distributions instead of pre-built wheels.
+
+#### Specification
+
+- The namespace identifier MUST be `abi_dependency`
+- This namespace MUST NOT be registered with any variant provider
+- Package managers MUST reject any attempt to register a variant provider using this namespace
+- The feature name represents the package providing the ABI
+- The feature value represents the version constraint
+
+Version values follow a simplified semantic versioning scheme with the following matching rules:
+
+| Variant Property                   | Matching Rule       | Example            |
+|------------------------------------|---------------------|--------------------|
+| `abi_dependency :: torch :: 2.8.0` | Exact match         | `torch==2.8.0`     |
+| `abi_dependency :: torch :: 2.9`   | Minor version range | `torch>=2.9,<2.10` |
+| `abi_dependency :: torch :: 3`     | Major version range | `torch>=3,<4`      |
+
+Multiple variant properties with the same namespace and feature name express an OR relationship:
+
+```
+abi_dependency :: torch :: 2.8.0
+abi_dependency :: torch :: 2.9.0
+```
+
+This means the wheel is compatible with either PyTorch 2.8.0 OR 2.9.0.
+
+#### Supporting Tools
+
+Tools that implement this feature:
+
+- MUST evaluate `abi_dependency` constraints during version and wheel resolution
+- MUST only select wheels whose `abi_dependency` constraints are satisfied by installed (or soon-to-be) packages
+- MUST interpret version values according to the matching rules specified above
+
+#### Non-Supporting Tools
+
+Tools that do not implement this feature:
+
+- MUST treat any wheel containing `abi_dependency` variant properties as incompatible
+- MUST NOT attempt to install such wheels
+- SHOULD provide a clear error message indicating the feature is not supported
+
 ## How to teach this
 
 ### Python package users
