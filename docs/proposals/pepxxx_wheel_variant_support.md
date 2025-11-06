@@ -979,10 +979,6 @@ It is serialized into JSON, with a variant metadata dictionary being the top obj
 imported from `pyproject.toml`, it contains a `variants` object that must list exactly one variant - the variant
 provided by the wheel.
 
-The `default-priorities`, `providers` and `static-properties` for all wheels of the same package version on the same
-index must be the same and
-be equal to value in `{name}-{version}-variants.json` hosted on the index and described below.
-
 The `$schema` URL must correspond to the schema file supplied in the appendix of this PEP. The URL contains the version
 of the format, and a new version must be added to the appendix whenever the format changes in the future.
 
@@ -1051,7 +1047,10 @@ normalized according to the same rules as wheel files, as found in the
 The link to this file must be present on all index pages where the variant wheels are linked.
 
 This file uses the same structure as `variant.json` described above, except that the variants object must list all
-variants available on the package index for the package version in question.
+variants available on the package index for the package version in question. It is recommended that tools enforce
+the same contents of the `default-priorities`, `providers` and `static-properties` sections for all variants listed
+in the file, though careful merging is possible, as long as no conflicting information is introduced, and the resolution
+results within a subset of variants do not change.
 
 **The following behaviors must be respected and verified during the generation of the `{name}-{version}-variants.json` file:**
 
