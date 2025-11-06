@@ -979,7 +979,8 @@ It is serialized into JSON, with a variant metadata dictionary being the top obj
 imported from `pyproject.toml`, it contains a `variants` object that must list exactly one variant - the variant
 provided by the wheel.
 
-The default-priorities and providers for all wheels of the same package version on the same index must be the same and
+The `default-priorities`, `providers` and `static-properties` for all wheels of the same package version on the same
+index must be the same and
 be equal to value in `{name}-{version}-variants.json` hosted on the index and described below.
 
 **The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:**
