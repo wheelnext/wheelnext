@@ -983,10 +983,15 @@ The `default-priorities`, `providers` and `static-properties` for all wheels of 
 index must be the same and
 be equal to value in `{name}-{version}-variants.json` hosted on the index and described below.
 
+The `$schema` URL must correspond to the schema file supplied in the appendix of this PEP. The URL contains the version
+of the format, and a new version must be added to the appendix whenever the format changes in the future.
+
 **The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:**
 
 ```jsonc
 {
+   // TODO: replace this with appendix URL for the PEP
+   "$schema": "https://variants-schema.wheelnext.dev/v0.0.3.json",
    "default-priorities": {
       "feature": {
          "aarch64": ["version"],
@@ -1059,6 +1064,8 @@ previous example, would look like:
 
 ```jsonc
 {
+   // TODO: replace this with appendix URL for the PEP
+   "$schema": "https://variants-schema.wheelnext.dev/v0.0.3.json",
    "default-priorities": {
       // identical to above
    },
