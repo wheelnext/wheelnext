@@ -1481,12 +1481,12 @@ evaluate to `False`.
 ### ABI Dependency Variant Namespace (Optional)
 
 This section describes an **optional** extension to the wheel variant specification. Tools that choose to implement this
-feature MUST follow this specification. Tools that do not implement this feature MUST treat wheels using this namespace
+feature must follow this specification. Tools that do not implement this feature must treat wheels using this namespace
 as incompatible.
 
 The variant namespace `abi_dependency` is reserved for expressing dependencies on specific ABIs (Application Binary
-Interfaces) provided by other Python wheel packages. This namespace MUST NOT be used by any variant provider and can
-only appear as a wheel variant property.
+Interfaces) provided by other Python wheel packages. This namespace must not be used by any variant provider plugin,
+it must not be listed in `providers` metadata, and can only appear in a built wheel variant property.
 
 #### Motivation
 
@@ -1504,44 +1504,49 @@ ABI it was compiled against. This requirement cannot be expressed with standard 
 
 #### Specification
 
-- The namespace identifier MUST be `abi_dependency`
-- This namespace MUST NOT be registered with any variant provider
-- Package managers MUST reject any attempt to register a variant provider using this namespace
-- The feature name represents the package providing the ABI
-- The feature value represents the version constraint
+- The namespace identifier must be `abi_dependency`
+- This namespace must not be registered with any variant provider
+- Tools must reject any attempt to register a variant provider using this namespace
+- The feature name represents the distribution name of the package providing the ABI, normalized per the
+  [Binary distribution format](https://packaging.python.org/en/latest/specifications/binary-distribution-format/)
+  specification
+- The feature value represents the version pin
 
 Version values follow a simplified semantic versioning scheme with the following matching rules:
 
-| Variant Property                   | Matching Rule       | Example            |
-|------------------------------------|---------------------|--------------------|
-| `abi_dependency :: torch :: 2.8.0` | Exact match         | `torch==2.8.0`     |
-| `abi_dependency :: torch :: 2.9`   | Minor version range | `torch>=2.9,<2.10` |
-| `abi_dependency :: torch :: 3`     | Major version range | `torch>=3,<4`      |
+| Variant Property                   | Matching Rule       | Example               |
+|------------------------------------|---------------------|-----------------------|
+| `abi_dependency :: torch :: 2.8.0` | Exact match         | `torch>=2.8.0,<2.8.1` |
+| `abi_dependency :: torch :: 2.9`   | Minor version range | `torch>=2.9,<2.10`    |
+| `abi_dependency :: torch :: 3`     | Major version range | `torch>=3,<4`         |
 
-Multiple variant properties with the same namespace and feature name express an OR relationship:
+Only the release segment is permitted, with one to three components.
+
+Per the general rules for variant property matching, multiple variant properties with the feature name express an OR
+relationship, and therefore can be used to indicate wheels compatible with multiple providing package versions, e.g.:
 
 ```
 abi_dependency :: torch :: 2.8.0
 abi_dependency :: torch :: 2.9.0
 ```
 
-This means the wheel is compatible with either PyTorch 2.8.0 OR 2.9.0.
+This means the wheel is compatible with both PyTorch 2.8.0 and 2.9.0.
 
 #### Supporting Tools
 
 Tools that implement this feature:
 
-- MUST evaluate `abi_dependency` constraints during version and wheel resolution
-- MUST only select wheels whose `abi_dependency` constraints are satisfied by installed (or soon-to-be) packages
-- MUST interpret version values according to the matching rules specified above
+- must evaluate `abi_dependency` constraints during version and wheel resolution
+- must only select wheels whose `abi_dependency` constraints are satisfied by installed (or soon-to-be) packages
+- must interpret version values according to the matching rules specified above
 
 #### Non-Supporting Tools
 
 Tools that do not implement this feature:
 
-- MUST treat any wheel containing `abi_dependency` variant properties as incompatible
-- MUST NOT attempt to install such wheels
-- SHOULD provide a clear error message indicating the feature is not supported
+- must treat any wheel containing `abi_dependency` variant properties as incompatible
+- must not attempt to install such wheels
+- should provide a clear warning message indicating that the feature is not supported
 
 ## How to teach this
 
