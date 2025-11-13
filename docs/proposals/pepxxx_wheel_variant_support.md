@@ -329,6 +329,18 @@ The recent advances in modern AI workflows increasingly rely on GPU acceleration
 deployment complex and adds a significant burden on open source developers of the entire tool stack (from build backends
 to installers, not forgetting the package maintainers).
 
+### ABI (Application Binary Interface) compatibility
+
+Some Python packages with extension modules are built against the Application Binary Interfaces (ABI) of another package
+and must be used with a compatible version of that package at runtime. Traditional Python dependency specifications are
+insufficient for this use case: for these packages the source tree is compatible with a wide range of versions of the
+dependency, and the compatibility is narrowed during build. Due to the lack of wheel-specific dependencies, this is
+currently not expressible.
+
+**Example:** vLLM can be built for multiple versions of PyTorch, but once built, it must be used with the exact PyTorch
+ABI it was compiled against. This requirement cannot be expressed with standard dependencies like
+`pip install pytorch==2.8.0 vllm`, forcing projects to distribute source distributions instead of pre-built wheels.
+
 ### Motivation summary
 
 As highlighted in the previous section, the current Python packaging system cannot adequately serve the needs of modern
@@ -1488,18 +1500,6 @@ The variant namespace `abi_dependency` is reserved for expressing that different
 are compatible with different versions or version ranges of a dependency.
 This namespace must not be used by any variant provider plugin,
 it must not be listed in `providers` metadata, and can only appear in a built wheel variant property.
-
-
-#### Motivation
-
-Some Python packages with extension modules are built against the Application Binary Interfaces (ABI) of another package and must be used with a
-compatible version of that package at runtime. Traditional Python dependency specifications are insufficient for this
-use case: for these packages the source tree is compatible with a wide range of versions of the dependency,
-and the compatibility is narrowed during build. Due to the lack of wheel-specific dependencies, this is currently not expressible.
-
-**Example:** vLLM can be built for multiple versions of PyTorch, but once built, it must be used with the exact PyTorch
-ABI it was compiled against. This requirement cannot be expressed with standard dependencies like
-`pip install pytorch==2.8.0 vllm`, forcing projects to distribute source distributions instead of pre-built wheels.
 
 #### Specification
 
