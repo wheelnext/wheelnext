@@ -1508,15 +1508,17 @@ variant provider uses this namespace. The feature name is the
 [normalized name](https://packaging.python.org/en/latest/specifications/name-normalization/#name-normalization) of the
 dependency, the feature value defines the version range.
 
-The range matched by the version value is greater equal to the version and lower than the version with the last segment increased by one. 
+The value must be a valid release segment of a public version identifier, as defined by the [version specifier
+specification](https://packaging.python.org/en/latest/specifications/version-specifiers/#version-specifiers). It must
+contain up to three version components, that are matched against the installed version same as the `=={value}.*`
+specifier. Notably, trailing zeroes match versions with fewer components (e.g. `2.0` matches release `2` but not `2.1`).
+Versions with nonzero epoch are not supported.
 
-| Variant Property                   | Matching Rule       | Example               |
-|------------------------------------|---------------------|-----------------------|
-| `abi_dependency :: torch :: 2.8.0` | Exact match         | `torch>=2.8.0,<2.8.1` |
-| `abi_dependency :: torch :: 2.9`   | Minor version range | `torch>=2.9,<2.10`    |
-| `abi_dependency :: torch :: 3`     | Major version range | `torch>=3,<4`         |
-
-Only the release segment is permitted, with one to three components.
+| Variant Property                   | Matching Rule       |
+|------------------------------------|---------------------|
+| `abi_dependency :: torch :: 3`     | `torch==3.*`        |
+| `abi_dependency :: torch :: 2.9`   | `torch==2.9.*`      |
+| `abi_dependency :: torch :: 2.8.0` | `torch==2.8.0.*`    |
 
 Multiple variant properties with the same feature name can be used to indicate wheels compatible with multiple providing package versions, e.g.:
 
