@@ -1490,7 +1490,7 @@ it must not be listed in `providers` metadata, and can only appear in a built wh
 
 #### Motivation
 
-Some Python packages with extension modules are built against the ABI of another package and must be used with a
+Some Python packages with extension modules are built against the Application Binary Interfaces (ABI) of another package and must be used with a
 compatible version of that package at runtime. Traditional Python dependency specifications are insufficient for this
 use case because:
 
@@ -1504,15 +1504,12 @@ ABI it was compiled against. This requirement cannot be expressed with standard 
 
 #### Specification
 
-- The namespace identifier must be `abi_dependency`
-- This namespace must not be registered with any variant provider
-- Tools must reject any attempt to register a variant provider using this namespace
-- The feature name represents the distribution name of the package providing the ABI, normalized per the
-  [Binary distribution format](https://packaging.python.org/en/latest/specifications/binary-distribution-format/)
-  specification
-- The feature value represents the version pin
+The namespace identifier is `abi_dependency`, which must not be used any variant provider and must be rejected if any
+variant provider uses this namespace. The feature name is the
+[normalized name](https://packaging.python.org/en/latest/specifications/name-normalization/#name-normalization) of the
+dependency, the feature value defines the version range.
 
-Version values follow a simplified semantic versioning scheme with the following matching rules:
+The range matched by the version value is greater equal to the version and lower than the version with the last segment increased by one. 
 
 | Variant Property                   | Matching Rule       | Example               |
 |------------------------------------|---------------------|-----------------------|
@@ -1522,8 +1519,7 @@ Version values follow a simplified semantic versioning scheme with the following
 
 Only the release segment is permitted, with one to three components.
 
-Per the general rules for variant property matching, multiple variant properties with the feature name express an OR
-relationship, and therefore can be used to indicate wheels compatible with multiple providing package versions, e.g.:
+Multiple variant properties with the same feature name can be used to indicate wheels compatible with multiple providing package versions, e.g.:
 
 ```
 abi_dependency :: torch :: 2.8.0
