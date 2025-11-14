@@ -637,13 +637,21 @@ by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention) to:
 {distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}(-{variant label})?.whl
 ```
 
-Wheels using extensions introduced by this PEP must feature the variant label component. It must match the following
-regular expression: `^[0-9a-z._]{1,16}$` (ASCII, case-sensitive). Every label must uniquely correspond to a specific
-set of variant properties, same for all wheels using the same label within a single package version. Variant labels
-should be specified at wheel build time, as human-readable strings. The label `null` is reserved for the null variant.
+Wheels using extensions introduced by this PEP must feature the variant label component. It must adhere to the following
+rules:
 
-Installers that do not implement this specification must ignore wheels with variant label present, and fall back
-to a wheel without such label if it is available.
+- Lower case only (to prevent issues with case-sensitive vs. case-insensitive filesystems)
+- Between 1-16 characters
+- Using only `0-9`, `a-z`, `.` or `_` ASCII characters
+
+This is equivalent to the following regular expression: `^[0-9a-z._]{1,16}$`.
+
+Every label must uniquely correspond to a specific set of variant properties, same for all wheels using the same label
+within a single package version. Variant labels should be specified at wheel build time, as human-readable strings.
+The label `null` is reserved for the null variant.
+
+Installers that do not implement this specification must ignore wheels with variant label when installing from an index,
+and fall back to a wheel without such label if it is available.
 
 Examples:
 
