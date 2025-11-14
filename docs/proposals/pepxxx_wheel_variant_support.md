@@ -449,6 +449,10 @@ to select a LLVM major version to build against.
 
 ### Modified wheel filename
 
+One of the core requirements of the design is to ensure that installers predating this PEP will ignore wheel variant
+files. This makes it possible to publish both variant wheels and non-variant wheels on a single index, with installers
+that do not support variants securely ignoring the former, and falling back to the latter.
+
 A variant label component is added to the filename for the twofold purpose of providing a unique mapping from the
 filename to a set of variant properties, and providing a human-readable identification for the variant. The label
 is kept short and lowercase to avoid issues with different filesystems. It is added as a `-`-separated component
