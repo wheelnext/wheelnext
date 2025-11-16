@@ -1445,7 +1445,7 @@ not define any specific configuration.
 
 ### Variant environment markers
 
-Three new environment markers are introduced in dependency specifications:
+Four new environment markers are introduced in dependency specifications:
 
 1. `variant_namespaces` corresponding to the set of namespaces of all the variant properties that the wheel variant was
 built for.
@@ -1458,18 +1458,18 @@ it is an empty string.
 
 The markers evaluating to sets of strings must be matched via the `in` or `not in` operator, e.g.:
 
-```toml
+```
 dep1; "foo" in variant_namespaces
-dep2; "foo :: bar" in variant_features
-dep3; "foo :: bar :: baz" in variant_properties
+dep2; "foo :: bar" not in variant_features
+dep3; "foo :: bar :: baz" in variant_properties or platform_system == "Windows"
 ```
 
 The `variant_label` marker is a plain string:
 
-```toml
-dep4; variant_label == "foobar"
+```
+dep4; variant_label == "foobar" and platform_machine == "x86_64"
 dep5; variant_label != "null"
-dep6; variant_label == ""
+dep6; variant_label == "" and python_version >= "3.11"
 ```
 
 Implementations must ignore differences in whitespace while matching the features and properties.
@@ -1477,6 +1477,33 @@ Implementations must ignore differences in whitespace while matching the feature
 Variant marker expressions must be evaluated against the variant properties stored in the wheel being installed, not
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
+
+To preserve best backwards compatibility with pre-variant tools, when build a non-variant wheel, the build backends MUST
+evaluate variant environment markers immediately and remove them or the respective dependencies appropriately from
+the resulting metadata.  The variant wheels MUST contain the original metadata with unevaluated environment markers,
+and therefore installers that rely on consistent metadata MUST use the metadata from variant wheels.
+
+For example, the two example snippets presented earlier would be partially evaluated onto the following dependency list:
+
+```
+# dep1 removed -- ["foo" in variant_namespaces] is false
+
+# dep2 left -- ["foo :: bar" not in variant_features] is true
+dep2
+
+# dep3 first clause removed -- ["foo :: bar :: baz" in variant_properties] is false
+# but the second "or" branch can be true
+dep3; platform_system == "Windows"
+
+# dep4 removed -- [variant_label == "foobar"] is false
+
+# dep5 left -- [variant_label != "null"] is true
+dep5
+
+# dep6 first clause removed -- [variant_label == ""] is true
+# the second "and" branch needs to be preserved
+dep6; python_version >= "3.11"
+```
 
 ## How to teach this
 
@@ -1536,10 +1563,10 @@ package format. The variant metadata is placed in a separate file in the `.dist-
 preserved by tools that are not concerned with variants, limiting the necessary changes to updating the filename
 validation algorithm (if there is one).
 
-The use of new environment markers in wheel dependencies introduces incompatibility with existing tools. This is
-a general problem with the design of environment markers, and not specific to wheel variants. It is possible to work
-around this problem by partially evaluating environment markers at build time, and removing the markers or dependencies
-specific to variant wheels from the regular wheel.
+The use of new environment markers in wheel dependencies would introduce incompatibility with existing tools. This is
+a general problem with the design of environment markers, and not specific to wheel variants. To work around
+the problem, the specification requires that new variants are pre-evaluated for non-variant wheels where backwards
+compatibility is intended.
 
 PEP 517 and PEP 660 builds must be non-variant wheels by default as they can't determine whether the frontend supports variants.
 
