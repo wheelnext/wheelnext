@@ -23,6 +23,7 @@ Below you will find the list of communities, projects and companies involved in 
 - RAPIDS: <https://rapids.ai/>
 - scikit-build: <https://scikit-build.readthedocs.io/>
 - scikit-learn: <https://scikit-learn.org/>
+- SGLang: <https://docs.sglang.ai/>
 - uv: <https://docs.astral.sh/uv/>
 - vLLM: <https://github.com/vllm-project/vllm>
 - XGBoost: <https://xgboost.readthedocs.io/>
