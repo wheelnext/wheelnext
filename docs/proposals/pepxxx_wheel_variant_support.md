@@ -504,12 +504,19 @@ by enabling the optional provider or selecting the variant explicitly.
 #### Package ABI matching
 
 Packages such as [vLLM](https://docs.vllm.ai/en/latest/index.html) need to be pinned to the PyTorch version they were
-built against to preserve ABI compatibility. This often results in unnecessarily strict pins in package versions, making
+built against to preserve Application Binary Interface (ABI) compatibility. This often results in unnecessarily strict
+pins in package versions, making
 it impossible to find a satisfactory resolution for an environment involving multiple packages requiring different
-versions of PyTorch. Variant wheels can be used to publish variants of vLLM built against different PyTorch version,
+versions of PyTorch, or resorting to source builds. Variant wheels can be used to publish variants of vLLM built against
+different PyTorch version,
 therefore enabling upstream to easily provide support for multiple versions simultaneously.
 
-TODO: fill in when https://github.com/wheelnext/pep_xxx_wheel_variants/issues/87 concludes
+The optional `abi_dependency` extension can be used to build multiple `vllm` variants that are pinned to different
+PyTorch versions, e.g.:
+
+- `vllm-0.11.0-...-torch29.wheel` with `abi_dependency :: torch :: 2.9`
+- `vllm-0.11.0-...-torch28.wheel` with `abi_dependency :: torch :: 2.8`
+- `vllm-0.11.0-...-torch27.wheel` with `abi_dependency :: torch :: 2.7`
 
 ## Specification
 
@@ -1477,6 +1484,53 @@ Implementations must ignore differences in whitespace while matching the feature
 Variant marker expressions must be evaluated against the variant properties stored in the wheel being installed, not
 against the current output of the provider plugins. If a non-variant wheel was selected or built, all variant markers
 evaluate to `False`.
+
+### ABI Dependency Variant Namespace (Optional)
+
+This section describes an **optional** extension to the wheel variant specification. Tools that choose to implement this
+feature must follow this specification. Tools that do not implement this feature must treat wheels using this namespace
+as incompatible.
+
+The variant namespace `abi_dependency` is reserved for expressing that different builds of the same version of a package
+are compatible with different versions or version ranges of a dependency.
+This namespace must not be used by any variant provider plugin,
+it must not be listed in `providers` metadata, and can only appear in a built wheel variant property.
+
+#### Specification
+
+The namespace identifier is `abi_dependency`, which must not be used any variant provider and must be rejected if any
+variant provider uses this namespace. The feature name is the
+[normalized name](https://packaging.python.org/en/latest/specifications/name-normalization/#name-normalization) of the
+dependency, the feature value defines the version range.
+
+The value must be a valid release segment of a public version identifier, as defined by the [version specifier
+specification](https://packaging.python.org/en/latest/specifications/version-specifiers/#version-specifiers). It must
+contain up to three version components, that are matched against the installed version same as the `=={value}.*`
+specifier. Notably, trailing zeroes match versions with fewer components (e.g. `2.0` matches release `2` but not `2.1`).
+This also implies that the property values have different semantics than PEP 440 versions, in particular
+`2`, `2.0` and `2.0.0` represent different ranges.
+
+Versions with nonzero epoch are not supported.
+
+| Variant Property                   | Matching Rule       |
+|------------------------------------|---------------------|
+| `abi_dependency :: torch :: 2`     | `torch==2.*`        |
+| `abi_dependency :: torch :: 2.9`   | `torch==2.9.*`      |
+| `abi_dependency :: torch :: 2.8.0` | `torch==2.8.0.*`    |
+
+Multiple variant properties with the same feature name can be used to indicate wheels compatible with multiple providing package versions, e.g.:
+
+```
+abi_dependency :: torch :: 2.8.0
+abi_dependency :: torch :: 2.9.0
+```
+
+This means the wheel is compatible with both PyTorch 2.8.0 and 2.9.0.
+
+#### Non-Supporting Tools
+
+Tools that do not implement this feature must treat the properties in `abi_dependency` namespace as incompatible,
+and should show a hint to the users.
 
 ## How to teach this
 
