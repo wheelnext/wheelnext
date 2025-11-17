@@ -489,46 +489,18 @@ disjunction, i.e. only a single value needs to be supported. Features are treate
 to be supported. This provides some flexibility in designating variant compatibility while avoiding having to implement
 a complete boolean logic.
 
-**This hierarchical structure enables:**
+This hierarchical structure enables:
 
 - Organized property management without naming conflicts
 - Independent development of provider plugins
 - Extensible support for new hardware and software capabilities without requiring changes to tools or a new PEP
 - Clear ownership and validation responsibilities
 
-#### Variant property format
-
-Variant properties use a structured 3-tuple format inspired by [PEP 301 for Trove Classifiers](https://peps.python.org/pep-0301/#distutils-trove-classification)
+Variant properties are serialized into a structured 3-tuple format inspired by [PEP 301 for Trove Classifiers](https://peps.python.org/pep-0301/#distutils-trove-classification):
 
 ```
-namespace :: feature-name :: feature-value
+{namespace} :: {feature_name} :: {feature_value}
 ```
-
-Examples:
-
-```
-nvidia :: cuda_version_lower_bound :: 12.8
-x86_64 :: level :: v3
-aarch64 :: version :: 8.1a
-x86_64 :: avx512_bf16 :: on
-```
-
-#### Variant property validation
-
-**Variant Namespace:** identifies the provider and must be unique within the provider set used by a single package
-version.
-
-- It **must** match this regex: `^[a-z0-9_]+$`
-
-**Variant Feature Name**: Names a specific “characteristic” within the namespace.
-
-- It **must** match this regex: `^[a-z0-9_]+$`
-
-**Variant Feature Value**: A single value corresponding to the combination `namespace :: feature`.
-
-- It **must** match this regex: `^[a-z0-9_.]+$`
-- In a “multi-value” feature, a single variant wheel can specify multiple values corresponding to a single feature key.
-Otherwise, only a single value can be present.
 
 ### Null variant
 
