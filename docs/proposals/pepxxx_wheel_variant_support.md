@@ -12,7 +12,7 @@
 The Python wheel packaging format uses
 [platform compatibility tags](https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/) to specify
 wheel's supported environments based on Python version, ABI, and platform (operating system, architecture, core system
-libraries). These tags are not able to express features of modern hardware. This is particularly challenging for the
+libraries). These tags are not able to express detailed characteristics of modern hardware. This is particularly challenging for the
 scientific computing, artificial intelligence (AI), machine learning (ML), and high-performance computing communities,
 where packages are often built with specific hardware accelerations (e.g., NVIDIA CUDA, AMD ROCm), specialized CPU
 instructions (e.g., AVX512_BF16), or other system dependencies.
@@ -70,7 +70,7 @@ any other software that produces or consumes distribution version and dependency
 
 The Python packaging ecosystem has evolved to support increasingly diverse computing environments. The current software
 ecosystem often relies on platform specific features to pick which binaries are compatible with a particular computer.
-Unfortunately the current wheel format cannot adequately express the features  of modern hardware. This limitation
+Unfortunately the current wheel format cannot fully express the features of modern hardware. This limitation
 forces package authors into suboptimal distribution strategies and creates friction for users attempting to install
 performance-critical packages.
 
@@ -85,10 +85,10 @@ a significant portion of respondents over the last years have been successively 
 purposes, covering such areas as Data analysis (steadily over 40% respondents), Machine learning (grown to 40% in 2024),
 Data engineering (around 30%), and more. Many of these use cases are directly impacted by suboptimal packaging.
 
-This issue is often crossing the boundaries of scientific computing - as highlighted in the following issue:
+This issue isn't limited to scientific computing, as highlighted in the following issue:
 [manylinux_2_34 x86-64 builds produce binaries that are not compatible with all x86-64 CPUs](https://github.com/pypa/manylinux/issues/1725),
 where `manylinux_2_34_x86_64` now implicitly requires `x86_64-v2` with no support for other x86 version. This
-lack of support results in complexity in managing platform-specific dependencies and compatibility. That complexity
+lack of support often forces additional complexity for managing platform-specific dependencies and compatibility. That complexity
 affects the installation process for users and increases the maintenance burden for package authors. The `x86_64`
 compiler flags further emphasizes the urgent need for a more expressive and efficient solution in the Python packaging
 ecosystem.
@@ -105,7 +105,7 @@ requirements, etc.).
 >
 > Source: [archspec: A library for detecting, labeling, and reasoning about microarchitectures](https://tgamblin.github.io/pubs/archspec-canopie-hpc-2020.pdf)
 
-This PEP proposes a systematic and scalable approach to selecting optimized wheels based on platform characteristics,
+This PEP proposes a systematic and scalable approach for selecting optimized wheels based on detailed platform characteristics,
 which will help Python’s usage expand across diverse computing environments, from cloud computing to embedded systems
 and AI accelerators.
 
@@ -143,13 +143,13 @@ While these tags effectively handle traditional compatibility dimensions, they c
 
 **GPU Accelerated Frameworks:** A wheel filename like `torch-2.9.0-cp313-cp313-manylinux_2_28_x86_64.whl`
 provides no indication whether it contains NVIDIA CUDA support, AMD ROCm support, Intel XPU support, or is CPU-only.
-Users cannot determine compatibility with their GPU hardware or drivers.
+Users cannot determine or express compatibility with their GPU hardware or drivers.
 
 **CPU Instruction Sets:** A wheel filename like
 `numpy-2.3.2-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl` provides no indication whether it contains
 CPUs optimized instructions ranging from basic x86-64 to modern processors with AVX512, SHA-NI, and other specialized
-instructions. Packages cannot indicate whether they require or benefit from specific CPU features. In turns having to
-rely on the lowest common denominator forces to leave performance on the table.
+instructions. Packages cannot indicate whether they require or benefit from specific CPU features. Having to
+rely on the lowest common denominator leaves significant performance improvements on the table.
 
 **Runtime Dependencies:** Scientific computing packages often depend on specific BLAS implementations (OpenBLAS vs
 Intel MKL), MPI providers (OpenMPI vs MPICH), or other system libraries that affect both functionality and performance.
@@ -202,7 +202,7 @@ optimizations)
 
 **Induced Security Risk:** This approach has unfortunately led to supply chain attacks - More details on
 [PyTorch Blog](https://pytorch.org/blog/compromised-nightly-dependency/).  It’s a non-trivial problem to address which
-has forced the PyTorch to create a complete mirror of all their dependencies. Which is one of the core motivations
+has forced the PyTorch to create a complete mirror of all their dependencies, which is one of the core motivations
 behind [PEP 766](https://peps.python.org/pep-0766/).
 
 The complexity of configuration often leads to projects providing ad-hoc installation instructions rather than covering
@@ -236,8 +236,8 @@ pip install xgboost-cpu  # CPU-only variant
 
 [cupy](https://github.com/cupy/cupy) for diverse reasons had to build a total of 52 different packages - all with
 different names - which clearly highlights the limit of such an approach. End users need to carefully read the `CuPy`
-installation documentation to figure out which package they need. And for maintainers it’s labor-intensive to
-continuously have to create new PyPI packages, ask for limit increases, and keep their wheel build infrastructure and
+installation documentation to figure out which package they need. It’s quite labor-intensive for maintainers to
+continuously have to create, build, and upload new PyPI packages, ask for limit increases, and keep their wheel build infrastructure and
 documentation in sync with those new package names.
 
 ```bash
@@ -287,11 +287,13 @@ artifacts cannot be hosted on PyPI because they exceed its size limits.
 
 [Flash-attention](https://github.com/Dao-AILab/flash-attention) does not publish wheels on PyPI at all, but instead
 publishes a customized source distribution that performs platform detection, downloads the appropriate wheel from
-upstream server, and then provides it to the installer. Such an approach can provide a good end-user experience by
-selecting the most optimal variant automatically. However, it prevents `--only-binary` installs from working and
+upstream server, and then provides it to the installer. The [wheel-stub](https://pypi.org/project/wheel-stub/)
+project provides a generic approach to such sdist build redirection techniques.  While these approaches can
+fill this use case, there are several downsides.  Sdist stubs  prevent `--only-binary` installs from working and
 requires downloading source distribution and running its build phase. In this case, it also requires running with
-`--no-build-isolation`. It requires hosting wheels separately, and does not provide for uniform experience across the
-ecosystem.
+`--no-build-isolation`. It requires hosting wheels externally to PyPI, and does not provide for uniform
+experience across the ecosystem.  These techniques also make it more difficult to cross-install packages,
+e.g. for building a container that runs on a platform different than the one being detected.
 
 **Induced Security Risk:** similarly to regular source builds, this model requires running arbitrary code at install
 time.
@@ -343,14 +345,15 @@ tools, and indexes)
 - Simplifies package maintenance by offering a unified and flexible solution to the challenge of managing multiple
 platform-specific package builds and distributions.
 - Provides a seamless and predictable experience for users, that requires little to no user inputs.
-- Supports the full spectrum of modern computing hardware
+- Is extensible enough to support the full spectrum of modern computing hardware
 - Provides a future-proof and flexible system that can evolve with the ecosystem and future use cases.
 
 ### Out-of-scope features
 
-This PEP tries to present the minimal scope required and leaves aspects to tools to evolve. A non-exhaustive list:
+This PEP presents the minimal scope required and leaves aspects to tools to evolve. A non-exhaustive list:
 
-- The format of the static variants file, and how to include them in a pylock.toml
+- The format of the static variants file, and how to include them in a [PEP
+  751](https://peps.python.org/pep-0751/)-style `pylock.toml` file.
 - The list of variant providers that are vendored or re-implemented, as well as opt-in mechanisms
 - How to instruct build backends to emit variants through the PEP 517 mechanism. For backwards compatibility, build
   backends have to default to non-variant builds
@@ -410,9 +413,9 @@ microarchitecture variants, developed from the [Spack](https://spack.io/) packag
 
 **Variant Model:** CPU Microarchitectures (e.g., `haswell`, `skylake`, `zen2`, `armv8.1a`) form a
 [Directed Acyclic Graph (DAG) encoding binary compatibility](https://tgamblin.github.io/pubs/archspec-canopie-hpc-2020.pdf),
-which helps at resolve to express that `packageB` depends on `packageA`. The ordering is partial because (1) separate
-ISA families are incomparable, and (2) contemporary designs may have incompatible feature sets—cascadelake and
-cannonlake are incomparable despite both descending from skylake, as each has unique AVX-512 extensions.
+which helps to express that `packageB` depends on `packageA` at resolve time. The ordering is partial because (1) separate
+ISA families are incomparable, and (2) contemporary designs may have incompatible feature sets, e.g. cascadelake and
+cannonlake which are incomparable despite both descending from skylake, as each has unique AVX-512 extensions.
 
 **Implementation:** A language-agnostic JSON database stores microarchitecture metadata (features, compatibility
 relationships, compiler-specific optimization flags). Language bindings provide detection (queries /proc/cpuinfo,
@@ -520,8 +523,10 @@ PyTorch versions, e.g.:
 
 ## Specification
 
+TODO: Use RFC 2119 **MUST**, **MUST NOT**, etc. language in this section.
+
 This PEP proposes a set of backward-compatible extensions to the wheel format (PEP [427](https://peps.python.org/pep-0427/)
-& [491](https://peps.python.org/pep-0491/)) and the packaging ecosystem version while maintaining complete backward
+& [491](https://peps.python.org/pep-0491/)) and the packaging ecosystem, while maintaining complete backward
 compatibility with existing package managers and tools. The design was made with the intent to protect
 non-variant-aware tools from failure when a new type of wheel appears that they don’t know how to manage.
 
@@ -662,7 +667,7 @@ used by different package managers and packaging tooling ([auditwheel](https://g
 
 #### Wheel filename format
 
-Currently, the wheel filename follows the following format, as defined by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention)
+Currently, the wheel filename conforms to the following format, as defined by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention)
 
 ```re
 {distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}.whl
@@ -779,6 +784,9 @@ variant properties.
 The order of variant properties is defined first by the order of namespaces, then the order of features in the namespace
 and then the order of property values in a feature.
 
+Q: It's not clear where these properties are defined.  Is it in the `pyproject.toml` for the consuming package
+or somewhere else?
+
 The order of namespaces is defined by `default-priorities.namespace`. The order of features in a namespace is initially
 defined by `default-priorities.feature`. Features not listed in `default-priorities.feature` are appended in the order
 they are returned by the variant provider plugin. Similarly, the order of property values in a feature is defined by
@@ -791,6 +799,12 @@ compare the second highest priority property, and so on, until a tie-breaker is 
 properties is shared by both wheels, the wheel having additional properties has higher priority.
 
 A different way to describe the same algorithm:
+
+Q: Would a diagram or numbered list be better?
+Q: Aside from that, is it helpful to describe the algorithm in two different ways?  I generally think
+   algorithms should be described as pedantically and precisely as possible to avoid any confusion.
+Q: Sure are a lot of "features" featured here!
+Q: I find this alternative explanation actually *more* confusing :/
 
 Use the index in `default-priorities.namespace` to assign each namespace a priority score. For each namespace, build a
 feature priority list by concatenating its `default-priorities.feature` features with its features in the provider
@@ -809,7 +823,7 @@ highest score is the most preferred wheel.
 This section describes the metadata format for the providers, variants and properties of a package and its wheels. The
 format is used in three locations, with slight variations:
 
-- in the source tree, inside the `pyproject.toml` file
+- in the source tree of the producer project, inside the `pyproject.toml` file
 - in the built wheel, as a `*.dist-info/variant.json` file
 - on the package index, as a `{name}-{version}-variants.json` file.
 
@@ -853,14 +867,14 @@ specifies how to install and use variant providers. A provider information dicti
 `pyproject.toml` for every supported variant namespace. It must be copied to `variant.json` as-is, including data for
 providers that are not used in the particular wheel.
 
-A provider information dictionary can contain the following keys:
+A provider information dictionary (**MUST**? **MAY**? which are required?) can contain the following keys:
 
 - `enable-if: str`: An environment marker defining when the plugin should be used. If the environment marker
   does not match the running environment, the provider will be disabled and the variants using its properties
   will be deemed incompatible. If not provided, the plugin will be used in all environments.
 
 - `install-time: bool`: Whether this is an install-time provider. Defaults to `true`. `false` means that it is
-  an AoT provider instead.
+  an AoT provider instead.  *Can a provider be both?*
 
 - `optional: bool`: Whether the provider is optional, as a boolean value. Defaults to `false`. If it is true, the provider
   is considered optional and should not be used unless the user opts in to it, effectively rendering the variants
@@ -988,6 +1002,8 @@ provided by the wheel.
 
 The `$schema` URL must correspond to the schema file supplied in the appendix of this PEP. The URL contains the version
 of the format, and a new version must be added to the appendix whenever the format changes in the future.
+
+Q: Why the leading `$`?
 
 **The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:**
 
@@ -1170,6 +1186,10 @@ with class methods or static methods.
 
 #### API endpoint
 
+Q: Should they be called [entry
+points](https://packaging.python.org/en/latest/specifications/pyproject-toml/#entry-points) and maybe
+reference that specification?
+
 The location of the plugin code is called an "API endpoint", and it is expressed using the object reference notation
 following the [entry point specification](https://packaging.python.org/en/latest/specifications/entry-points/).
 They are in the form of:
@@ -1252,7 +1272,7 @@ A "variant feature config" must provide three properties or attributes:
 wheel. If it is `False`, then it is an error to specify multiple values for the feature.
 
 - `values` specifying feature values, as a list of strings. In contexts where the order is significant, the values must
-be orderred from the most preferred to the least preferred.
+be ordered from the most preferred to the least preferred.
 
 All features are interpreted as being within the plugin's namespace.
 
