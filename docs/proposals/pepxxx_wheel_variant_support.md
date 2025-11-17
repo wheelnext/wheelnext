@@ -782,9 +782,9 @@ Examples:
 
 ```
 # all of the following must be supported
-nvidia :: cuda_version_lower_bound :: 12.8
-aarch64 :: version :: 8.1a
+x86_64 :: level :: v3
 x86_64 :: avx512_bf16 :: on
+nvidia :: cuda_version_lower_bound :: 12.8
 # additionally, at least one of the following must be supported
 nvidia :: sm_arch :: 120_real
 nvidia :: sm_arch :: 110_real
