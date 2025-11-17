@@ -757,104 +757,6 @@ nvidia :: sm_arch :: 120_real
 nvidia :: sm_arch :: 110_real
 ```
 
-### Variant ordering
-
-To determine which variant wheel to install when multiple wheels are compatible, variant wheels must be ordered by their
-variant properties.
-
-For the purpose of ordering, variant properties are grouped into features, and features into namespaces. The ordering
-must be equivalent to the following algorithm:
-
-1. Construct the ordered list of namespaces by copying the value of the `default-priorities.namespace` key.
-
-2. For every namespace:
-
-   1. Construct the initial ordered list of feature names by copying the value of the respective
-      `default-priorities.feature.{namespace}` key.
-
-   2. Obtain the supported feature names from the provider, in order. For every feature name that is not present in
-      the constructed list, append it to the end.
-
-   After this step, a list of ordered feature names is available for every namespace.
-
-3. For every feature:
-
-   1. Construct the initial ordered list of values by copying the value of the respective
-      `default-priorities.property.{namespace}.{feature_name}` key.
-
-   2. Obtain the supported values from the provider, in order. For every value that is not present in the constructed
-      list, append it to the end.
-
-   After this step, a list of ordered property values is available for every feature.
-
-4. For every variant property present in at least one of the compatible variant wheels, construct a sort key that is
-   a 3-tuple consisting of its namespace, feature name and feature value indices in the respective ordered lists.
-
-5. For every compatible variant wheel, order its properties by their sort keys, by ascending values.
-
-6. To order variant wheels, compare their sorted properties. If the properties at the first position are different,
-   the variant with the lower 3-tuple of the respective property is sorted earlier. If they are the same,
-   compare the properties at the second position, and so on, until either a tie-breaker is found or the list
-   of properties of one wheel is exhausted. In the latter case, the variant with more properties is sorted earlier.
-
-After this process, the variant wheels are sorted from the most preferred to the least preferred.
-
-Alternatively, the sort algorithm could be described using the following pseudocode:
-
-```python
-from typing import Self
-
-
-def get_supported_feature_names(namespace: str) -> list[str]:
-    ...
-
-
-def get_supported_feature_values(namespace: str, feature_name: str) -> list[str]:
-    ...
-
-
-namespace_order = default_priorities["namespace"]
-feature_order = {}
-value_order = {}
-
-for namespace in namespace_order:
-    feature_order[namespace] = default_priorities["feature"].get(namespace, [])
-    for feature_name in get_supported_feature_names(namespace):
-        if feature_name not in feature_order[namespace]:
-            feature_order[namespace].append(feature_name)
-
-    value_order[namespace] = {}
-    for feature_name in feature_order[namespace]:
-        value_order[namespace][feature_name] = default_priorities["property"].get(namespace, {}).get(feature_name, [])
-        for feature_value in get_supported_feature_values(namespace, feature_name):
-            if feature_value not in value_order[namespace][feature_name]:
-                value_order[namespace][feature_name].append(feature_value)
-
-
-def property_key(prop: tuple[str, str, str]) -> tuple[int, int, int]:
-    namespace, feature_name, feature_value = prop
-    return (
-        namespace_order.index(namespace),
-        feature_order[namespace].index(feature_name),
-        value_order[namespace][feature_name].index(feature_value),
-    )
-
-
-class VariantWheel:
-    properties: list[tuple[str, str, str]]
-
-    def __lt__(self: Self, other: Self) -> bool:
-        for self_prop, other_prop in zip(self.properties, other.properties):
-            if self_prop != other_prop:
-                return property_key(self_prop) < property_key(other_prop)
-        return len(self.properties) > len(other.properties)
-
-
-for wheel in wheels:
-    wheel.properties.sort(key=property_key)
-wheels.sort()
-```
-
 ### Variant metadata
 
 This section describes the metadata format for the providers, variants and properties of a package and its wheels. The
@@ -1152,6 +1054,104 @@ previous example, would look like:
       }
   }
 }
+```
+
+### Variant ordering
+
+To determine which variant wheel to install when multiple wheels are compatible, variant wheels must be ordered by their
+variant properties.
+
+For the purpose of ordering, variant properties are grouped into features, and features into namespaces. The ordering
+must be equivalent to the following algorithm:
+
+1. Construct the ordered list of namespaces by copying the value of the `default-priorities.namespace` key.
+
+2. For every namespace:
+
+   1. Construct the initial ordered list of feature names by copying the value of the respective
+      `default-priorities.feature.{namespace}` key.
+
+   2. Obtain the supported feature names from the provider, in order. For every feature name that is not present in
+      the constructed list, append it to the end.
+
+   After this step, a list of ordered feature names is available for every namespace.
+
+3. For every feature:
+
+   1. Construct the initial ordered list of values by copying the value of the respective
+      `default-priorities.property.{namespace}.{feature_name}` key.
+
+   2. Obtain the supported values from the provider, in order. For every value that is not present in the constructed
+      list, append it to the end.
+
+   After this step, a list of ordered property values is available for every feature.
+
+4. For every variant property present in at least one of the compatible variant wheels, construct a sort key that is
+   a 3-tuple consisting of its namespace, feature name and feature value indices in the respective ordered lists.
+
+5. For every compatible variant wheel, order its properties by their sort keys, by ascending values.
+
+6. To order variant wheels, compare their sorted properties. If the properties at the first position are different,
+   the variant with the lower 3-tuple of the respective property is sorted earlier. If they are the same,
+   compare the properties at the second position, and so on, until either a tie-breaker is found or the list
+   of properties of one wheel is exhausted. In the latter case, the variant with more properties is sorted earlier.
+
+After this process, the variant wheels are sorted from the most preferred to the least preferred.
+
+Alternatively, the sort algorithm could be described using the following pseudocode:
+
+```python
+from typing import Self
+
+
+def get_supported_feature_names(namespace: str) -> list[str]:
+    ...
+
+
+def get_supported_feature_values(namespace: str, feature_name: str) -> list[str]:
+    ...
+
+
+namespace_order = default_priorities["namespace"]
+feature_order = {}
+value_order = {}
+
+for namespace in namespace_order:
+    feature_order[namespace] = default_priorities["feature"].get(namespace, [])
+    for feature_name in get_supported_feature_names(namespace):
+        if feature_name not in feature_order[namespace]:
+            feature_order[namespace].append(feature_name)
+
+    value_order[namespace] = {}
+    for feature_name in feature_order[namespace]:
+        value_order[namespace][feature_name] = default_priorities["property"].get(namespace, {}).get(feature_name, [])
+        for feature_value in get_supported_feature_values(namespace, feature_name):
+            if feature_value not in value_order[namespace][feature_name]:
+                value_order[namespace][feature_name].append(feature_value)
+
+
+def property_key(prop: tuple[str, str, str]) -> tuple[int, int, int]:
+    namespace, feature_name, feature_value = prop
+    return (
+        namespace_order.index(namespace),
+        feature_order[namespace].index(feature_name),
+        value_order[namespace][feature_name].index(feature_value),
+    )
+
+
+class VariantWheel:
+    properties: list[tuple[str, str, str]]
+
+    def __lt__(self: Self, other: Self) -> bool:
+        for self_prop, other_prop in zip(self.properties, other.properties):
+            if self_prop != other_prop:
+                return property_key(self_prop) < property_key(other_prop)
+        return len(self.properties) > len(other.properties)
+
+
+for wheel in wheels:
+    wheel.properties.sort(key=property_key)
+wheels.sort()
 ```
 
 ### Integration with `pylock.toml`
