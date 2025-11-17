@@ -476,33 +476,6 @@ This behavior was confirmed for a number of existing tools:
 [poetry](https://github.com/python-poetry/poetry/blob/1c04c65149776ae4993fa508bef53373f45c66eb/src/poetry/utils/wheel.py#L23-L27),
 [uv](https://github.com/astral-sh/uv/blob/f6a9b55eb73be4f1fb9831362a192cdd8312ab96/crates/uv-distribution-filename/src/wheel.rs#L182-L299).
 
-### Null variant
-
-The concept of a null variant makes it possible to distinguish a fallback wheel variant from a regular wheel
-published for backwards compatibility. For example, a package that features optional GPU support could publish the
-following wheels:
-
-- One or more wheel variants built for specific hardware for wheel variant enabled systems with
-suitable hardware.
-
-- A CPU-only null variant for systems with wheel variant support but without suitable hardware.
-
-- A GPU+CPU regular wheel for systems without wheel variant support (i.e. the “mega-wheel” approach)
-
-The null variant must not have any properties and it must use the variant label `null`.
-Conversely, wheel variants that declare any variant properties must not use the variant label `null`.
-
-In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable
-hardware, with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
-and therefore GPU support cannot be determined.
-
-Not being compatible with any of the available variants gives the installer more information about the system
-(e.g. not having specialized hardware) than systems which do not support wheel variants. Consequently, it makes sense
-that package maintainers may wish to propose a different “fallback” to their users whether their system is Wheel Variant
-enabled or not. Publishing a null variant is optional. If one is published, a wheel variant enabled
-installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
-The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
-
 ### Variant properties system
 
 Variant properties follow a key-value design, where namespace and feature name constitute the key. Namespaces are used
@@ -556,6 +529,33 @@ version.
 - It **must** match this regex: `^[a-z0-9_.]+$`
 - In a “multi-value” feature, a single variant wheel can specify multiple values corresponding to a single feature key.
 Otherwise, only a single value can be present.
+
+### Null variant
+
+The concept of a null variant makes it possible to distinguish a fallback wheel variant from a regular wheel
+published for backwards compatibility. For example, a package that features optional GPU support could publish the
+following wheels:
+
+- One or more wheel variants built for specific hardware for wheel variant enabled systems with
+suitable hardware.
+
+- A CPU-only null variant for systems with wheel variant support but without suitable hardware.
+
+- A GPU+CPU regular wheel for systems without wheel variant support (i.e. the “mega-wheel” approach)
+
+The null variant must not have any properties and it must use the variant label `null`.
+Conversely, wheel variants that declare any variant properties must not use the variant label `null`.
+
+In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable
+hardware, with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
+and therefore GPU support cannot be determined.
+
+Not being compatible with any of the available variants gives the installer more information about the system
+(e.g. not having specialized hardware) than systems which do not support wheel variants. Consequently, it makes sense
+that package maintainers may wish to propose a different “fallback” to their users whether their system is Wheel Variant
+enabled or not. Publishing a null variant is optional. If one is published, a wheel variant enabled
+installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
+The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
 
 ### Example use cases
 
@@ -782,7 +782,6 @@ x86_64 :: level :: v3
 aarch64 :: version :: 8.1a
 x86_64 :: avx512_bf16 :: on
 ```
-
 
 ### Variant ordering
 
