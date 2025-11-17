@@ -515,8 +515,7 @@ suitable hardware.
 
 - A GPU+CPU regular wheel for systems without wheel variant support (i.e. the “mega-wheel” approach)
 
-The null variant must not have any properties and it must use the variant label `null`.
-Conversely, wheel variants that declare any variant properties must not use the variant label `null`.
+The null variant uses a reserved `null` label to make it clearly distinguishable from regular variants.
 
 In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable
 hardware, with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
