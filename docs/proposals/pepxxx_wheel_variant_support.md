@@ -447,6 +447,35 @@ to select a LLVM major version to build against.
 
 ## Rationale
 
+### Modified wheel filename
+
+One of the core requirements of the design is to ensure that installers predating this PEP will ignore wheel variant
+files. This makes it possible to publish both variant wheels and non-variant wheels on a single index, with installers
+that do not support variants securely ignoring the former, and falling back to the latter.
+
+A variant label component is added to the filename for the twofold purpose of providing a unique mapping from the
+filename to a set of variant properties, and providing a human-readable identification for the variant. The label
+is kept short and lowercase to avoid issues with different filesystems. It is added as a `-`-separated component
+at the end to ensure that the existing filename validation algorithms reject it:
+
+- If both the build tag and the variant label are present, the filename contains too many components.
+
+  Example: `numpy-2.3.2-1-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
+
+- If only the variant label is present, the Python tag at third position will be misinterpreted as a build number.
+  Since the build number must start with a digit and no Python tags at the time start with digits, the filename is
+  considered invalid.
+
+  Example: `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
+
+This behavior was confirmed for a number of existing tools:
+[auditwheel](https://github.com/pypa/auditwheel/blob/6839107e9b918e035ab2df4927a25a5f81f1b8b6/src/auditwheel/repair.py#L61-L64),
+[packaging](https://github.com/pypa/packaging/blob/78c2a5e4f5c04fd782a5729d93892c3a3eafe365/src/packaging/utils.py#L94-L134),
+[pdm](https://github.com/pdm-project/pdm/blob/66c86908c9b9d07ad8d101d07879d69a55de5c54/src/pdm/models/requirements.py#L259-L286),
+[pip](https://github.com/pypa/pip/blob/c46141c29c3646a3328bc4e51d354cc732fb1432/src/pip/_internal/models/wheel.py#L38-L46),
+[poetry](https://github.com/python-poetry/poetry/blob/1c04c65149776ae4993fa508bef53373f45c66eb/src/poetry/utils/wheel.py#L23-L27),
+[uv](https://github.com/astral-sh/uv/blob/f6a9b55eb73be4f1fb9831362a192cdd8312ab96/crates/uv-distribution-filename/src/wheel.rs#L182-L299).
+
 ### Example use cases
 
 #### PyTorch CPU/GPU variants
@@ -610,85 +639,35 @@ compatibility.
 
 4. **Environment Markers**: New environment markers to declare dependencies that are applicable to a subset of variants only.
 
-### Extended wheel filename format
+### Extended wheel filename
 
-One of the core requirements of the design is to ensure that installers predating this PEP will ignore wheel variant
-files. We propose to achieve this intent by appending a `-{variant label}` just before the `.whl` file extension.
-This makes it possible to publish both variant wheels and non-variant wheels on a single index, with installers
-that do not support variants securely ignoring the former, and falling back to the latter.
-
-**The variant label serves two objectives:**
-
-- It guarantees a unique filename for different variants sharing identical tags.
-- It provides a human-readable identifier that helps to visually distinguish different variants.
-
-The label length is strictly limited (16 characters max) to prevent issues on systems with restrictions on total path length.
-
-#### Variant label validation
-
-A variant lable must adhere to the following rules:
-
-- Lower case only (to prevent issues with case-sensitive vs. case-insensitive filesystems)
-- Between 1-16 characters
-- Using only `0-9`, `a-z`, `.` or `_` characters
-
-Equivalent regex: `^[0-9a-z._]{1,16}$`
-
-#### Incompatibility with tools that do not support variants
-
-The variant label is separated using the same `-` character as other wheel filename components to be rejected by
-filename verification algorithms currently used by installers. Wheel filenames have two optional components now: the
-build tag (at the third position), and the variant label (at the last position).
-
-The wheel will be ignored by installers in the following cases:
-
-- If both the build tag and the variant label are present:
-    - The filename will contain too many components, making it invalid.
-
-- If only the variant label is present:
-    - The higher number of filename components will result in the third component (the Python tag) being misinterpreted
-      as the build number. Since the build number must start with a digit and no Python tags at the time start with
-      digits, the filename is considered invalid. This assumes that no Python tags introduced in the future will start
-      with a digit.
-
-This behavior was confirmed by a survey of wheel filename verification methods
-used by different package managers and packaging tooling ([auditwheel](https://github.com/pypa/auditwheel/blob/6839107e9b918e035ab2df4927a25a5f81f1b8b6/src/auditwheel/repair.py#L61-L64),
-[packaging](https://github.com/pypa/packaging/blob/78c2a5e4f5c04fd782a5729d93892c3a3eafe365/src/packaging/utils.py#L94-L134),
-[pdm](https://github.com/pdm-project/pdm/blob/main/src/pdm/models/requirements.py#L260-L287),
-[pip](https://github.com/pypa/pip/blob/c46141c29c3646a3328bc4e51d354cc732fb1432/src/pip/_internal/models/wheel.py#L38-L46),
-[poetry](https://github.com/python-poetry/poetry/blob/1c04c65149776ae4993fa508bef53373f45c66eb/src/poetry/utils/wheel.py#L23-L27),
-[uv](https://github.com/astral-sh/uv/blob/f6a9b55eb73be4f1fb9831362a192cdd8312ab96/crates/uv-distribution-filename/src/wheel.rs#L182-L299),
-[warehouse](https://github.com/pypi/warehouse/blob/main/warehouse/utils/wheel.py#L78-L81)).
-
-#### Wheel filename format
-
-Currently, the wheel filename follows the following format, as defined by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention)
-
-```re
-{distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}.whl
-```
-
-The Wheel Variant PEP extends this filename format following this template:
+This PEP changes the wheel filename template originally defined
+by [PEP 427](https://peps.python.org/pep-0427/#file-name-convention) to:
 
 ```re
 {distribution}-{version}(-{build tag})?-{python tag}-{abi tag}-{platform tag}(-{variant label})?.whl
 ```
 
-#### Examples
+Wheels using extensions introduced by this PEP must feature the variant label component. It must adhere to the following
+rules:
+
+- Lower case only (to prevent issues with case-sensitive vs. case-insensitive filesystems)
+- Between 1-16 characters
+- Using only `0-9`, `a-z`, `.` or `_` ASCII characters
+
+This is equivalent to the following regular expression: `^[0-9a-z._]{1,16}$`.
+
+Every label must uniquely correspond to a specific set of variant properties, same for all wheels using the same label
+within a single package version. Variant labels should be specified at wheel build time, as human-readable strings.
+The label `null` is reserved for the null variant.
+
+Installers that do not implement this specification must ignore wheels with variant label when installing from an index,
+and fall back to a wheel without such label if it is available.
+
+Examples:
 
 - Non-variant wheel:           `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64.whl`
 - Wheel with variant label:    `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
-- Wheel with the null variant: `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-null.whl`
-
-#### One-to-one relationship
-
-There must be a direct one-to-one relationship between variant properties and the variant label:
-a variant label must uniquely describe a specific set of variant properties for a given distribution and version.
-
-In other words, for a given distribution (i.e. package name) and version:
-
-- Two different labels must not refer to the same set of variant properties.
-- The set of variant properties must always point to the same variant label.
 
 ### Null variant
 
