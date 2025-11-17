@@ -774,13 +774,20 @@ If a feature is marked as "multi-value" by the provider, a single variant wheel 
 sharing the same namespace and feature name. Otherwise, only a single value can correspond to a single namespace
 and feature name within a variant wheel.
 
+For a variant wheel to be considered compatible with the system, all of the features defined within it must be
+determined to be compatible. For a feature to be compatible, at least a single value corresponding to it must be
+compatible.
+
 Examples:
 
 ```
+# all of the following must be supported
 nvidia :: cuda_version_lower_bound :: 12.8
-x86_64 :: level :: v3
 aarch64 :: version :: 8.1a
 x86_64 :: avx512_bf16 :: on
+# additionally, at least one of the following must be supported
+nvidia :: sm_arch :: 120_real
+nvidia :: sm_arch :: 110_real
 ```
 
 ### Variant ordering
