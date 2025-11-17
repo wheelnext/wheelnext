@@ -1507,7 +1507,7 @@ The value must be a valid release segment of a public version identifier, as def
 specification](https://packaging.python.org/en/latest/specifications/version-specifiers/#version-specifiers). It must
 contain up to three version components, that are matched against the installed version same as the `=={value}.*`
 specifier. Notably, trailing zeroes match versions with fewer components (e.g. `2.0` matches release `2` but not `2.1`).
-This also implies that the property values do not strictly follow the standard semantics for versions, in particular
+This also implies that the property values have different semantics than PEP 440 versions, in particular
 `2`, `2.0` and `2.0.0` represent different ranges.
 
 Versions with nonzero epoch are not supported.
