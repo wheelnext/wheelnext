@@ -724,7 +724,8 @@ Examples:
 ### Variant properties
 
 Every variant wheel must be described by zero or more variant properties. A variant wheel with exactly zero properties
-represents the null variant.
+represents the null variant. The properties are specified when the variant wheel is being built, using a mechanism
+defined by the project's build backend.
 
 Each variant property is described by a 3-tuple that is serialized into the following format:
 
