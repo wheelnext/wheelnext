@@ -30,13 +30,13 @@ which is an alias for `uv run`.
 Now you can build the docs like this:
 
 ```sh
-uvx --with-requirements requirements.txt mkdocs build
+uv run mkdocs build
 ```
 
 or build the docs locally and serve them over local HTTP:
 
 ```sh
-uvx --with-requirements requirements.txt mkdocs serve
+uv run mkdocs serve
 ```
 
 ## Code of Conduct
