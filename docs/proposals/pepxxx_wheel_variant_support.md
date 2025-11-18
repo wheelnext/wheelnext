@@ -476,6 +476,53 @@ This behavior was confirmed for a number of existing tools:
 [poetry](https://github.com/python-poetry/poetry/blob/1c04c65149776ae4993fa508bef53373f45c66eb/src/poetry/utils/wheel.py#L23-L27),
 [uv](https://github.com/astral-sh/uv/blob/f6a9b55eb73be4f1fb9831362a192cdd8312ab96/crates/uv-distribution-filename/src/wheel.rs#L182-L299).
 
+### Variant properties system
+
+Variant properties follow a key-value design, where namespace and feature name constitute the key. Namespaces are used
+to group features defined by a single provider, and avoid conflicts should multiple providers define a feature with the
+same name. This permits independent governance and evolution of every namespace.
+
+The keys are restricted to lowercase letters, digits and underscores. Uppercase characters are disallowed to avoid
+different spellings of the same name. The character set for values is more relaxed, to permit values resembling
+versions.
+
+Variant features can be declared as allowing multiple values. If that is the case, these values are matched as a logical
+disjunction, i.e. only a single value needs to be supported. Features are treated conjunctively, i.e. all of them need
+to be supported. This provides some flexibility in designating variant compatibility while avoiding having to implement
+a complete boolean logic.
+
+Variant properties are serialized into a structured 3-tuple format inspired by [PEP 301 for Trove Classifiers](https://peps.python.org/pep-0301/#distutils-trove-classification):
+
+```
+{namespace} :: {feature_name} :: {feature_value}
+```
+
+### Null variant
+
+The concept of a null variant makes it possible to distinguish a fallback wheel variant from a regular wheel
+published for backwards compatibility. For example, a package that features optional GPU support could publish the
+following wheels:
+
+- One or more wheel variants built for specific hardware for wheel variant enabled systems with
+suitable hardware.
+
+- A CPU-only null variant for systems with wheel variant support but without suitable hardware.
+
+- A GPU+CPU regular wheel for systems without wheel variant support (i.e. the “mega-wheel” approach)
+
+The null variant uses a reserved `null` label to make it clearly distinguishable from regular variants.
+
+In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable
+hardware, with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
+and therefore GPU support cannot be determined.
+
+Not being compatible with any of the available variants gives the installer more information about the system
+(e.g. not having specialized hardware) than systems which do not support wheel variants. Consequently, it makes sense
+that package maintainers may wish to propose a different “fallback” to their users whether their system is Wheel Variant
+enabled or not. Publishing a null variant is optional. If one is published, a wheel variant enabled
+installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
+The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
+
 ### Example use cases
 
 #### PyTorch CPU/GPU variants
@@ -659,7 +706,7 @@ This is equivalent to the following regular expression: `^[0-9a-z._]{1,16}$`.
 
 Every label must uniquely correspond to a specific set of variant properties, same for all wheels using the same label
 within a single package version. Variant labels should be specified at wheel build time, as human-readable strings.
-The label `null` is reserved for the null variant.
+The label `null` is reserved for the null variant and must use an empty set of variant properties.
 
 Installers that do not implement this specification must ignore wheels with variant label when installing from an index,
 and fall back to a wheel without such label if it is available.
@@ -669,88 +716,48 @@ Examples:
 - Non-variant wheel:           `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64.whl`
 - Wheel with variant label:    `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
 
-### Null variant
+### Variant properties
 
-The concept of a null variant makes it possible to distinguish a fallback wheel variant from a regular wheel
-published for backwards compatibility. For example, a package that features optional GPU support could publish the
-following wheels:
+Every variant wheel must be described by zero or more variant properties. A variant wheel with exactly zero properties
+represents the null variant. The properties are specified when the variant wheel is being built, using a mechanism
+defined by the project's build backend.
 
-- One or more wheel variants built for specific hardware for wheel variant enabled systems with
-suitable hardware.
-
-- A CPU-only null variant for systems with wheel variant support but without suitable hardware.
-
-- A GPU+CPU regular wheel for systems without wheel variant support (i.e. the “mega-wheel” approach)
-
-The null variant must not have any properties and it must use the variant label `null`.
-Conversely, wheel variants that declare any variant properties must not use the variant label `null`.
-
-In particular, this makes it possible to publish a smaller null variant for systems that do not feature suitable
-hardware, with a fallback regular wheel with support for CPU and all GPUs for systems where variants are not supported
-and therefore GPU support cannot be determined.
-
-Not being compatible with any of the available variants gives the installer more information about the system
-(e.g. not having specialized hardware) than systems which do not support wheel variants. Consequently, it makes sense
-that package maintainers may wish to propose a different “fallback” to their users whether their system is Wheel Variant
-enabled or not. Publishing a null variant is optional. If one is published, a wheel variant enabled
-installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
-The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
-
-### Variant properties system
-
-Variant properties follow a key-value design, where namespace and feature name constitute the key. Namespaces are used
-to group features defined by a single provider, and avoid conflicts should multiple providers define a feature with the
-same name. These keys are restricted to lowercase letters, digits and underscores, to make it easier to preserve
-consistency between different providers. In particular, uppercase characters are disallowed to avoid different spellings
-of the same name. The character set for values is more relaxed, to permit values resembling versions.
-
-Variant features can be declared as allowing multiple values. If that is the case, these values are matched as a logical
-disjunction, i.e. only a single value needs to be supported. Features are treated conjunctively, i.e. all of them need
-to be supported. This provides some flexibility in designating variant compatibility while avoiding having to implement
-a complete boolean logic.
-
-**This hierarchical structure enables:**
-
-- Organized property management without naming conflicts
-- Independent development of provider plugins
-- Extensible support for new hardware and software capabilities without requiring changes to tools or a new PEP
-- Clear ownership and validation responsibilities
-
-#### Variant property format
-
-Variant properties use a structured 3-tuple format inspired by [PEP 301 for Trove Classifiers](https://peps.python.org/pep-0301/#distutils-trove-classification)
+Each variant property is described by a 3-tuple that is serialized into the following format:
 
 ```
-namespace :: feature-name :: feature-value
+{namespace} :: {feature_name} :: {feature_value}
 ```
+
+The namespace must consist only of `0-9`, `a-z` and `_` ASCII characters (`^[a-z0-9_]+$`).
+It must correspond to a single variant provider.
+
+The feature name must consist only of `0-9`, `a-z` and `_` ASCII characters (`^[a-z0-9_]+$`).
+It must correspond to a valid feature name defined by the respective variant provider in the namespace.
+
+The feature value must consist only of `0-9`, `a-z`, `_` and `.` ASCII Characters (`^[a-z0-9_.]+$`).
+It must correspond to a valid value defined by the respective variant provider for the feature.
+
+If a feature is marked as "multi-value" by the provider, a single variant wheel may define multiple properties
+sharing the same namespace and feature name. Otherwise, only a single value can correspond to a single namespace
+and feature name within a variant wheel.
+
+For a variant wheel to be considered compatible with the system, all of the features defined within it must be
+determined to be compatible. For a feature to be compatible, at least a single value corresponding to it must be
+compatible.
 
 Examples:
 
 ```
-nvidia :: cuda_version_lower_bound :: 12.8
+# all of the following must be supported
 x86_64 :: level :: v3
-aarch64 :: version :: 8.1a
 x86_64 :: avx512_bf16 :: on
+nvidia :: cuda_version_lower_bound :: 12.8
+# additionally, at least one of the following must be supported
+nvidia :: sm_arch :: 120_real
+nvidia :: sm_arch :: 110_real
 ```
 
-#### Variant property validation
-
-**Variant Namespace:** identifies the provider and must be unique within the provider set used by a single package
-version.
-
-- It **must** match this regex: `^[a-z0-9_]+$`
-
-**Variant Feature Name**: Names a specific “characteristic” within the namespace.
-
-- It **must** match this regex: `^[a-z0-9_]+$`
-
-**Variant Feature Value**: A single value corresponding to the combination `namespace :: feature`.
-
-- It **must** match this regex: `^[a-z0-9_.]+$`
-- In a “multi-value” feature, a single variant wheel can specify multiple values corresponding to a single feature key.
-Otherwise, only a single value can be present.
-
-#### Variant ordering
+### Variant ordering
 
 To determine which variant wheel to install when multiple wheels are compatible, variant wheels are ordered by their
 variant properties.
