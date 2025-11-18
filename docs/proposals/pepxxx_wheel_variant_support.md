@@ -1089,7 +1089,7 @@ must be equivalent to the following algorithm:
 4. For every variant property present in at least one of the compatible variant wheels, construct a sort key that is
    a 3-tuple consisting of its namespace, feature name and feature value indices in the respective ordered lists.
 
-5. For every compatible variant wheel, order its properties by their sort keys, by ascending values.
+5. For every compatible variant wheel, order its properties by their sort keys, in ascending order.
 
 6. To order variant wheels, compare their sorted properties. If the properties at the first position are different,
    the variant with the lower 3-tuple of the respective property is sorted earlier. If they are the same,
