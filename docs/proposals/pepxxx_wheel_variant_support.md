@@ -773,28 +773,28 @@ All three variants metadata files share a common JSON-compatible structure:
 |
 +- providers
 |  +- <namespace>
-|     +- enable-if     : str | None
-|     +- install-time  : bool = True
-|     +- optional      : bool = False
-|     +- plugin-api    : str | None
-|     +- requires      : list[str]
+|     +- enable-if     : str | None = None
+|     +- install-time  : bool       = True
+|     +- optional      : bool       = False
+|     +- plugin-api    : str | None = None
+|     +- requires      : list[str]  = []
 |
 +- default-priorities
 |  +- namespace        : list[str]
 |  +- feature
-|     +- <namespace>   : list[str]
+|     +- <namespace>   : list[str]  = []
 |  +- property
 |     +- <namespace>
-|        +- <feature>  : list[str]
+|        +- <feature>  : list[str]  = []
 |
 +- static-properties
 |  +- <namespace>
-|     +- <feature>     : list[str]
+|     +- <feature>     : list[str]  = []
 |
 +- variants
    +- <variant-label>
       +- <namespace>
-         +- <feature>  : list[str]
+         +- <feature>  : list[str]  = []
 ```
 
 [A JSON Schema is included in the Appendix of this PEP. TODO: Move to appendix](../assets/wheel_variants/variant_schema.json)
