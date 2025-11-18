@@ -482,9 +482,9 @@ Variant properties follow a key-value design, where namespace and feature name c
 to group features defined by a single provider, and avoid conflicts should multiple providers define a feature with the
 same name. This permits independent governance and evolution of every namespace.
 
-The keys are restricted to lowercase letters, digits and underscores, to make it easier to preserve
-consistency between different providers. In particular, uppercase characters are disallowed to avoid different spellings
-of the same name. The character set for values is more relaxed, to permit values resembling versions.
+The keys are restricted to lowercase letters, digits and underscores. Uppercase characters are disallowed to avoid
+different spellings of the same name. The character set for values is more relaxed, to permit values resembling
+versions.
 
 Variant features can be declared as allowing multiple values. If that is the case, these values are matched as a logical
 disjunction, i.e. only a single value needs to be supported. Features are treated conjunctively, i.e. all of them need
