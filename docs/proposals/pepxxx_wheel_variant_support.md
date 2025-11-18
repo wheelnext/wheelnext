@@ -711,7 +711,7 @@ This is equivalent to the following regular expression: `^[0-9a-z._]{1,16}$`.
 
 Every label must uniquely correspond to a specific set of variant properties, same for all wheels using the same label
 within a single package version. Variant labels should be specified at wheel build time, as human-readable strings.
-The label `null` is reserved for the null variant.
+The label `null` is reserved for the null variant and must use an empty set of variant properties.
 
 Installers that do not implement this specification must ignore wheels with variant label when installing from an index,
 and fall back to a wheel without such label if it is available.
