@@ -1068,23 +1068,23 @@ must be equivalent to the following algorithm:
 
 2. For every namespace:
 
-   1. Construct the initial ordered list of feature names by copying the value of the respective
-      `default-priorities.feature.{namespace}` key.
+    1. Construct the initial ordered list of feature names by copying the value of the respective
+       `default-priorities.feature.{namespace}` key.
 
-   2. Obtain the supported feature names from the provider, in order. For every feature name that is not present in
-      the constructed list, append it to the end.
+    2. Obtain the supported feature names from the provider, in order. For every feature name that is not present in
+       the constructed list, append it to the end.
 
-   After this step, a list of ordered feature names is available for every namespace.
+    After this step, a list of ordered feature names is available for every namespace.
 
 3. For every feature:
 
-   1. Construct the initial ordered list of values by copying the value of the respective
-      `default-priorities.property.{namespace}.{feature_name}` key.
+    1. Construct the initial ordered list of values by copying the value of the respective
+       `default-priorities.property.{namespace}.{feature_name}` key.
 
-   2. Obtain the supported values from the provider, in order. For every value that is not present in the constructed
-      list, append it to the end.
+    2. Obtain the supported values from the provider, in order. For every value that is not present in the constructed
+       list, append it to the end.
 
-   After this step, a list of ordered property values is available for every feature.
+    After this step, a list of ordered property values is available for every feature.
 
 4. For every variant property present in at least one of the compatible variant wheels, construct a sort key that is
    a 3-tuple consisting of its namespace, feature name and feature value indices in the respective ordered lists.
