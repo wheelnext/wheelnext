@@ -1503,7 +1503,7 @@ not define any specific configuration.
 
 ### Variant environment markers
 
-Three new environment markers are introduced in dependency specifications:
+Four new environment markers are introduced in dependency specifications:
 
 1. `variant_namespaces` corresponding to the set of namespaces of all the variant properties that the wheel variant was
 built for.
