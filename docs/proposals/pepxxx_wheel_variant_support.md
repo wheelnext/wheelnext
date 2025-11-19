@@ -799,7 +799,8 @@ All three variants metadata files share a common JSON-compatible structure:
 
 The top-level object is a dictionary rooted at a specific point in the containing file. Its invidual keys are
 sub-dictionaries that are described in the subsequent sections, along with the requirements for their presence.
-The dictionary and its sub-dictionaries must not contain any keys not listed in this PEP.
+The tools must ignore unknown keys in the dictionaries to permit future backwards compatible updates to the PEP.
+However, users should not introduce custom keys to avoid potential future conflicts.
 
 [A JSON Schema is included in the Appendix of this PEP. TODO: Move to appendix](../assets/wheel_variants/variant_schema.json)
 
