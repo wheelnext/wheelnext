@@ -523,6 +523,24 @@ enabled or not. Publishing a null variant is optional. If one is published, a wh
 installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
 The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
 
+### Plugin stability and versioning
+
+Given that provider plugins may be necessary to install old variant wheels, it is important that provider plugin
+behavior remain stable within their lifetime. Ideally, no properties previously supported should ever be removed.
+
+If a breaking change needs to be performed, it is recommended to either introduce a new provider package for that,
+or add a new plugin API endpoint to the existing package. In both cases, it may be necessary to preserve the old
+endpoint in minimal maintenance mode, to ensure that old wheels can still be installed. The old endpoint can trigger
+deprecation warnings in the `get_all_configs()` hook that is used when building packages.
+
+An alternative approach is to use semantic versioning to cut off breaking changes. However, this relies on package
+authors reliably using caps on dependencies, as otherwise old wheels will start using incompatible plugin versions.
+This is already a problem with Python build backends used today.
+
+When vendoring or reimplementing plugins, installers need to follow the current API. In particular, they should
+recognize the relevant provider versions numbers, and possibly fall back to installing the external plugin when
+the package in question is incompatible with the installer's implementation.
+
 ### Example use cases
 
 #### PyTorch CPU/GPU variants
@@ -1210,12 +1228,13 @@ variants to select the best wheel file.
 
 Every provider plugin must operate within a single namespace. This namespace is used as a unique key for all
 plugin-related operations. All the properties defined by the plugin are bound within the plugin's namespace, and the
-plugin defines all the valid feature names and values within that namespace.
+plugin defines all the valid feature names and values within that namespace. When building wheels, the tools should
+query the respective provider plugins to verify that the properties specified by the user are valid.
 
-It is recommended that providers choose namespaces that can be clearly associated with the project they represent, and
+Provider plugin authors should choose namespaces that can be clearly associated with the project they represent, and
 avoid namespaces that refer to other projects or generic terms that could lead to naming conflicts in the future.
 
-Within a single package and for a specific release version, only one plugin can be used for a given namespace.
+In different variants of the same package version, the same provider plugin must always be used for a given namespace.
 Attempting to load more than one plugin for the same namespace in the same release version must result in a fatal error.
 While multiple plugins for the same namespace may exist across different packages or release versions (such as when a
 plugin is forked due to being unmaintained), they are mutually exclusive within any single release version.
@@ -1226,13 +1245,12 @@ them. In particular, packages published to PyPI must not rely on plugins that ne
 Plugins are implemented as Python packages. They need to expose two kinds of Python objects at a specified API endpoint:
 attributes that return a specific value after being accessed via `{API endpoint}.{attribute name}`, and callables that
 are called via `{API endpoint}.{callable name}({arguments}...)`. These can be implemented either as modules, or classes
-with class methods or static methods.
+with class methods or static methods. The specifics are provided in the subsequent sections.
 
 #### API endpoint
 
 The location of the plugin code is called an "API endpoint", and it is expressed using the object reference notation
-following the [entry point specification](https://packaging.python.org/en/latest/specifications/entry-points/).
-They are in the form of:
+following the [entry point specification](https://packaging.python.org/en/latest/specifications/entry-points/):
 
 ```python
 {import path}(:{object path})?
@@ -1255,18 +1273,9 @@ API endpoints are used in two contexts:
 a. in the `plugin-api` key of variant metadata, either explicitly or inferred from the package name in the `requires`
    key. This is the primary method of using the plugin when building and installing wheels.
 
-b. as the value of an installed entry point in the `variant_plugins`. The name of said entry point is insignificant.
+b. as the value of an installed entry point in the `variant_plugins` group. The name of said entry point is insignificant.
    This is optional but recommended, as it permits variant-related utilities to discover variant plugins installed
    to the user's environment.
-
-#### Behavior stability and versioning
-
-It is recommended that the plugin’s output remains stable within the plugin’s lifetime, and that packages do not pin to
-specific plugin versions. This ensures that the installer can vendor or reimplement the newest version of the plugin
-while ensuring that variant wheels created earlier would still be installable.
-
-If a need arises to introduce a breaking change in the plugin's output, it is recommended to add a new API endpoint to
-the plugin. The old endpoints should continue being provided, preserving the previous output.
 
 #### Helper classes
 
@@ -1309,18 +1318,18 @@ A "variant feature config" must provide three properties or attributes:
 - `name` specifying the feature name, as a string.
 
 - `multi_value` specifying whether the feature is allowed to have multiple corresponding values within a single variant
-wheel. If it is `False`, then it is an error to specify multiple values for the feature.
+  wheel. If it is `False`, then it is an error to specify multiple values for the feature.
 
 - `values` specifying feature values, as a list of strings. In contexts where the order is significant, the values must
-be orderred from the most preferred to the least preferred.
+  be ordered from the most preferred to the least preferred.
 
 All features are interpreted as being within the plugin's namespace.
 
-#### Plugin class
+#### Plugin interface
 
 ##### Protocol
 
-The plugin class must implement the following protocol:
+The plugin interface must follow the following protocol:
 
 ```python
 from abc import abstractmethod
@@ -1359,57 +1368,45 @@ class PluginType(Protocol):
         raise NotImplementedError
 ```
 
-##### Properties
+##### Attributes
 
-The plugin class must define the following properties or attributes:
+The plugin class must define the following attributes:
 
 - `namespace: str` specifying the plugin's namespace.
 
 - `is_aot_plugin: bool` indicating whether the plugin is a valid AoT plugin. If that is the case,
-`get_supported_configs()` must always return the same value as `get_all_configs()` (modulo ordering), which must be a
-fixed list independent of the platform on which the plugin is running. Defaults to `False` if unspecified.
+  `get_supported_configs()` must always return the same value as `get_all_configs()` (modulo ordering), which must be a
+  fixed list independent of the platform on which the plugin is running. Defaults to `False` if unspecified.
 
-##### `def get_supported_configs(...):`
+##### get_all_configs() function
 
-- Purpose: get features and their values supported on this system
-
-- Required: yes
-
-**Prototype:**
+Prototype:
 
 ```python
-    @classmethod
-    @abstractmethod
-    def get_supported_configs(cls) -> list[VariantFeatureConfigType]:
-        ...
+def get_all_configs() -> list[VariantFeatureConfigType]:
+    ...
 ```
 
-This method is used to determine which features are supported on this system. It must return a list of "variant feature
-configs", where every config defines a single feature along with all the supported values. The values should be ordered
-from the most preferred value to the least preferred.
+The plugin must implement a `get_all_config()` function that returns a list of "variant feature configs" describing
+all valid variant features within the plugin's namespace, along with all their permitted values. The ordering
+of the lists is insignificant here. A particular plugin version must always return the same value (modulo ordering),
+irrespective of any runtime conditions.
 
-The method must return a fixed list of supported features.
+##### get_supported_configs() function
 
-##### `def get_all_configs(...):`
-
-- Purpose: get all valid features and their values
-
-- Required: yes
-
-**Prototype:**
+Prototype:
 
 ```python
-    @classmethod
-    @abstractmethod
-    def get_all_configs(cls) -> list[VariantFeatureConfigType]:
-        ...
+def get_supported_configs() -> list[VariantFeatureConfigType]:
+    ...
 ```
 
-This method is used to validate available features and their values for the given plugin version. It must return a list
-of "variant feature configs", where every config defines a single feature along with all its valid values. The list must
-be fixed for a given plugin version, it is primarily used to verify properties prior to building a variant wheel.
+The plugin must implement a `get_supported_configs()` function that returns a list of "variant feature configs"
+describing the variant features within the plugin's namespace that are compatible with this particular system, along
+with their values that are supported. The variant feature and value lists must be ordered from the most preferred
+to the least preferred, as they affect [variant ordering](#variant-ordering). The returned value must be a subset
+of the feature names and values returned by `get_all_configs()` (modulo ordering).
 
-Note that the properties returned by `get_supported_configs()` must be a subset of those returned by this function.
 
 #### Example implementation
 
@@ -1490,19 +1487,13 @@ class MyPlugin:
         ]
 ```
 
-#### Python version compatibility
-
-It is recommended for plugins to avoid using any Python syntax or API not supported by any Python which has not yet
-reached [end-of-life support](https://devguide.python.org/versions/). It is best to maximize compatibility by avoiding
-new syntaxes whenever possible.
-
 #### Future extensions
 
 The future versions of this specification, as well as third-party extensions may introduce additional properties and
 methods on the plugin instances. The implementations should ignore additional attributes.
 
-For best compatibility, it is recommended that all private attributes are prefixed with an underscore (_) character to
-avoid incidental conflicts with future extensions.
+For best compatibility, all private attributes should be prefixed with an underscore (`_`) character to avoid incidental
+conflicts with future extensions.
 
 ### Build backends
 
