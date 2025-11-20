@@ -1470,11 +1470,6 @@ class MyPlugin:
         ]
 ```
 
-#### Python version compatibility
-
-Plugins must correctly indicate their minimum required Python version using the [`Requires-Python` Core Metadata](https://packaging.python.org/en/latest/specifications/core-metadata/#requires-python) key.
-Plugin should remain compatible with all Python versions that have not reached [end-of-life](https://devguide.python.org/versions/) yet.
-
 #### Future extensions
 
 The future versions of this specification, as well as third-party extensions may introduce additional properties and
