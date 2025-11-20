@@ -523,6 +523,24 @@ enabled or not. Publishing a null variant is optional. If one is published, a wh
 installer must select in priority the null variant. If none is published, fallback on the non-variant wheel instead.
 The non-variant wheel is also used if variant support is explicitly disabled by an installer flag.
 
+### Plugin stability and versioning
+
+Given that provider plugins may be necessary to install old variant wheels, it is important that provider plugin
+behavior remain stable within their lifetime. Ideally, no properties previously supported should ever be removed.
+
+If a breaking change needs to be performed, it is recommended to either introduce a new provider package for that,
+or add a new plugin API endpoint to the existing package. In both cases, it may be necessary to preserve the old
+endpoint in minimal maintenance mode, to ensure that old wheels can still be installed. The old endpoint can trigger
+deprecation warnings in the `get_all_configs()` hook that is used when building packages.
+
+An alternative approach is to use semantic versioning to cut off breaking changes. However, this relies on package
+authors reliably using caps on dependencies, as otherwise old wheels will start using incompatible plugin versions.
+This is already a problem with Python build backends used today.
+
+When vendoring or reimplementing plugins, installers need to follow the current API. In particular, they should
+recognize the relevant provider versions numbers, and possibly fall back to installing the external plugin when
+the package in question is incompatible with the installer's implementation.
+
 ### Example use cases
 
 #### PyTorch CPU/GPU variants
@@ -1249,16 +1267,6 @@ a. in the `plugin-api` key of variant metadata, either explicitly or inferred fr
 b. as the value of an installed entry point in the `variant_plugins` group. The name of said entry point is insignificant.
    This is optional but recommended, as it permits variant-related utilities to discover variant plugins installed
    to the user's environment.
-
-#### Behavior stability and versioning
-
-The plugin should preserve backwards compatibility within its lifetime. In particular, variant wheels created by older
-versions of a plugin must remain installable with its newer versions. Packages should not pin to specific plugin
-versions, as installers are permitted to vendor or reimplement arbitrary plugin versions. Should installers do that,
-they should ensure to timely update their versions following upstream plugin releases.
-
-If a breaking change needs to be introduced in the plugin's output, a new package or API endpoint should be introduced.
-The old interface should remain supported for backwards compatibility.
 
 #### Helper classes
 
