@@ -772,30 +772,35 @@ All three variants metadata files share a common JSON-compatible structure:
 (root)
 |
 +- providers
-|  +- <namespace>
-|     +- enable-if     : str | None
-|     +- install-time  : bool = True
-|     +- optional      : bool = False
-|     +- plugin-api    : str | None
-|     +- requires      : list[str]
+|  +- {namespace}
+|     +- enable-if     : str | None = None
+|     +- install-time  : bool       = True
+|     +- optional      : bool       = False
+|     +- plugin-api    : str | None = None
+|     +- requires      : list[str]  = []
 |
 +- default-priorities
 |  +- namespace        : list[str]
 |  +- feature
-|     +- <namespace>   : list[str]
+|     +- {namespace}   : list[str]  = []
 |  +- property
-|     +- <namespace>
-|        +- <feature>  : list[str]
+|     +- {namespace}
+|        +- {feature}  : list[str]  = []
 |
 +- static-properties
-|  +- <namespace>
-|     +- <feature>     : list[str]
+|  +- {namespace}
+|     +- {feature}     : list[str]  = []
 |
 +- variants
-   +- <variant-label>
-      +- <namespace>
-         +- <feature>  : list[str]
+   +- {variant_label}
+      +- {namespace}
+         +- {feature}  : list[str]  = []
 ```
+
+The top-level object is a dictionary rooted at a specific point in the containing file. Its invidual keys are
+sub-dictionaries that are described in the subsequent sections, along with the requirements for their presence.
+The tools must ignore unknown keys in the dictionaries to permit future backwards compatible updates to the PEP.
+However, users should not introduce custom keys to avoid potential future conflicts.
 
 [A JSON Schema is included in the Appendix of this PEP. TODO: Move to appendix](../assets/wheel_variants/variant_schema.json)
 
@@ -803,10 +808,10 @@ All three variants metadata files share a common JSON-compatible structure:
 
 `providers` is a dictionary, the keys are namespaces, the values are dictionaries with provider information. It
 specifies how to install and use variant providers. A provider information dictionary must be declared in
-`pyproject.toml` for every supported variant namespace. It must be copied to `variant.json` as-is, including data for
+`pyproject.toml` for every variant namespace supported by the package. It must be copied to `variant.json` as-is, including data for
 providers that are not used in the particular wheel.
 
-A provider information dictionary can contain the following keys:
+A provider information dictionary may contain the following keys:
 
 - `enable-if: str`: An environment marker defining when the plugin should be used. If the environment marker
   does not match the running environment, the provider will be disabled and the variants using its properties
@@ -820,23 +825,31 @@ A provider information dictionary can contain the following keys:
   using its properties incompatible. If it is false or missing, the provider is considered obligatory.
 
 - `plugin-api: str`: The API endpoint for the plugin. If it is specified, it must be an object reference
-  as explained in the "API endpoint" section. If it is missing, the package name from the first dependency specifier
+  as explained in the [API endpoint](#api-endpoint) section. If it is missing, the package name from the first dependency specifier
   in `requires` is used, after replacing all `-` characters with `_` in the normalized package name.
 
-- `requires: list[str]`: A list of one or more package dependency specifiers. When installing the provider,
-  all the items are processed (provided their environment markers match), but they must always resolve
-  to a single distribution to be installed. Multiple dependencies can be used when different plugins providing
-  the same namespace need to be used conditionally to environment markers, e.g. for different Python versions
-  or platforms.
+- `requires: list[str]`: A list of zero or more package dependency specifiers, that are used to install the provider
+  plugin. If the dependency specifiers include environment markers, these are evaluated against the environment where
+  the plugin is being installed and the requirements for which the markers evaluate to false are filtered out.
+  In that case, at least one dependency must remain present in every possible environment. Additionally, if `plugin-api`
+  is not specified, the first dependency present after filtering must always evaluate to the same API endpoint.
 
-For install-time providers (i.e. when `install-time` is true), the `requires` key is obligatory. For AoT providers
-(i.e. otherwise), the `requires` key is optional. If it specified, it needs to specify an AoT provider plugin that
-is queried at build time to fill `static-properties`. If it is not specified, `static-properties` need to be specified
-in `pyproject.toml`.
+All the fields are optional, except that:
+
+1. If `install-time` is true, the dictionary describes an install-time provider and the `requires` key must be present
+   and specify at least one dependency.
+
+2. If `install-time` is false, it describes an AoT provider and the `requires` key is optional. In that case:
+
+    1. If `requires` is provided and non-empty, the provider dictionary must reference an AOT provider plugin that
+       will be queried at build time to fill `static-properties`.
+
+    2. Otherwise, `static-properties` must be specified in `pyproject.toml`.
 
 #### Default priorities
 
-The `default-priorities` dictionary controls the ordering of variants.
+The `default-priorities` dictionary controls the ordering of variants. The exact algorithm is described
+in the [Variant ordering](#variant-ordering) section.
 
 It has a single required key:
 
@@ -863,7 +876,7 @@ with namespaces as first level keys, feature name as second level keys and order
 level values.
 
 In `pyproject.toml` file, the namespaces present in this dictionary in `pyproject.toml` file must correspond to all AoT
-providers without a plugin (i.e. with `install-time` of `false` and no `requires`). When building a wheel, the build
+providers without a plugin (i.e. with `install-time` of `false` and no or empty `requires`). When building a wheel, the build
 backend must query the AoT provider plugins (i.e. these with `install-time` being false and non-empty `requires`)
 to obtain supported properties and embed them into the dictionary. Therefore, the dictionary in `variant.json`
 and `*-variants.json` must contain namespaces for all AoT providers (i.e. all providers with `install-time` being
@@ -889,11 +902,10 @@ feature names, and the third level values are lists of feature values.
 
 The `pyproject.toml` file is the standard project configuration file as defined in
 [pyproject.toml specification](https://packaging.python.org/en/latest/specifications/pyproject-toml/#pyproject-toml-spec).
-The variant metadata is rooted at the top-level variant table. This format does not include the variant dictionary.
+The variant metadata must be rooted at a top-level table named `variant`. It must not specify the `variants` dictionary.
+It is used by build backends to build variant wheels.
 
-Under a `[variant]` key, it defines the providers and default priorities needed to build and consume the variants.
-
-**Example Structure:**
+Example Structure:
 
 ```toml
 [variant.default-priorities]
@@ -934,15 +946,18 @@ install-time = false
 
 #### `*.dist-info/variant.json`: the packaged variant metadata file
 
-The `variant.json` file is placed inside variant wheels, in the `*.dist-info/` directory containing the wheel metadata.
-It is serialized into JSON, with a variant metadata dictionary being the top object. In addition to the shared metadata
-imported from `pyproject.toml`, it contains a `variants` object that must list exactly one variant - the variant
-provided by the wheel.
+The `variant.json` file must be present in the `*.dist-info/` directory of a built variant wheel.
+It is serialized into JSON, with the variant metadata dictionary being the top object. It must include all the variant
+metadata present in `pyproject.toml`, copied as indicated in the individual key sections. In addition to that, it must
+contain:
 
-The `$schema` URL must correspond to the schema file supplied in the appendix of this PEP. The URL contains the version
-of the format, and a new version must be added to the appendix whenever the format changes in the future.
+- a `$schema` key whose value is the URL corresponding to the schema file supplied in the appendix of this PEP. The URL
+  contains the version of the format, and a new version must be added to the appendix whenever the format changes
+  in the future,
 
-**The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:**
+- a `variants` object listing exactly one variant - the variant provided by the wheel.
+
+The variant.json file corresponding to the wheel built from the example pyproject.toml file for x86-64-v3 would look like:
 
 ```jsonc
 {
@@ -1001,8 +1016,8 @@ of the format, and a new version must be added to the appendix whenever the form
 #### `{name}-{version}-variants.json`: the index level variant metadata file.
 
 For every package version that includes at least one variant wheel, there must exist a corresponding
-`{name}-{version}-variants.json` file, hosted and served by the package index, where the package name and version are
-normalized according to the same rules as wheel files, as found in the
+`{name}-{version}-variants.json` file, hosted and served by the package index. The `{name}` and `{version}` placeholders
+correspond to the package name and version, normalized according to the same rules as wheel files, as found in the
 [Binary Distribution Format specification](https://packaging.python.org/en/latest/specifications/binary-distribution-format/#escaping-and-unicode).
 The link to this file must be present on all index pages where the variant wheels are linked.
 
@@ -1011,12 +1026,6 @@ variants available on the package index for the package version in question. It 
 the same contents of the `default-priorities`, `providers` and `static-properties` sections for all variants listed
 in the file, though careful merging is possible, as long as no conflicting information is introduced, and the resolution
 results within a subset of variants do not change.
-
-**The following behaviors must be respected and verified during the generation of the `{name}-{version}-variants.json` file:**
-
-- Wheel Variants must declare strictly identical `default-priorities` and `providers` dictionary entries.
-- Wheel Variants with different labels must not use strictly identical sets of variant properties
-- Wheel Variants with identical labels must use strictly identical sets of variant properties
 
 The `foo-1.2.3-variants.json` corresponding to the package with two wheel variants, one of them listed in the
 previous example, would look like:
