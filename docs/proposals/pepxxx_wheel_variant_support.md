@@ -1548,22 +1548,18 @@ evaluate to `False`.
 ### ABI Dependency Variant Namespace (Optional)
 
 This section describes an **optional** extension to the wheel variant specification. Tools that choose to implement this
-feature must follow this specification. Tools that do not implement this feature must treat wheels using this namespace
-as incompatible.
+feature must follow this specification. Tools that do not implement this feature must treat the variants using it
+as incompatible, and should inform users when such wheels are skipped.
 
 The variant namespace `abi_dependency` is reserved for expressing that different builds of the same version of a package
 are compatible with different versions or version ranges of a dependency.
 This namespace must not be used by any variant provider plugin,
 it must not be listed in `providers` metadata, and can only appear in a built wheel variant property.
 
-#### Specification
-
-The namespace identifier is `abi_dependency`, which must not be used any variant provider and must be rejected if any
-variant provider uses this namespace. The feature name is the
+Within this namespace, zero or more properties can be used to express compatible dependency versions. For each property,
+the feature name must be the
 [normalized name](https://packaging.python.org/en/latest/specifications/name-normalization/#name-normalization) of the
-dependency, the feature value defines the version range.
-
-The value must be a valid release segment of a public version identifier, as defined by the [version specifier
+dependency, whereas the value must be a valid release segment of a public version identifier, as defined by the [version specifier
 specification](https://packaging.python.org/en/latest/specifications/version-specifiers/#version-specifiers). It must
 contain up to three version components, that are matched against the installed version same as the `=={value}.*`
 specifier. Notably, trailing zeroes match versions with fewer components (e.g. `2.0` matches release `2` but not `2.1`).
@@ -1586,11 +1582,6 @@ abi_dependency :: torch :: 2.9.0
 ```
 
 This means the wheel is compatible with both PyTorch 2.8.0 and 2.9.0.
-
-#### Non-Supporting Tools
-
-Tools that do not implement this feature must treat the properties in `abi_dependency` namespace as incompatible,
-and should show a hint to the users.
 
 ## How to teach this
 
