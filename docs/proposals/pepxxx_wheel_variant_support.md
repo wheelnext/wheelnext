@@ -106,7 +106,7 @@ requirements, etc.).
 > Source: [archspec: A library for detecting, labeling, and reasoning about microarchitectures](https://tgamblin.github.io/pubs/archspec-canopie-hpc-2020.pdf)
 
 This PEP proposes a systematic and scalable approach to selecting optimized wheels based on platform characteristics,
-which will help Python’s usage expand across diverse computing environments, from cloud computing to embedded systems
+which will help Python's usage expand across diverse computing environments, from cloud computing to embedded systems
 and AI accelerators.
 
 ### User stories
@@ -201,7 +201,7 @@ storage and CDN cost
 optimizations)
 
 **Induced Security Risk:** This approach has unfortunately led to supply chain attacks - More details on
-[PyTorch Blog](https://pytorch.org/blog/compromised-nightly-dependency/).  It’s a non-trivial problem to address which
+[PyTorch Blog](https://pytorch.org/blog/compromised-nightly-dependency/).  It's a non-trivial problem to address which
 has forced the PyTorch to create a complete mirror of all their dependencies. Which is one of the core motivations
 behind [PEP 766](https://peps.python.org/pep-0766/).
 
@@ -227,7 +227,7 @@ wheels within a single package, but extending it to multiple packages is not a g
 
 **Induced Security Risk:** proliferation of suffixed variant packages leads users to expect these suffixes in other
 packages, making name squatting much easier. For example, one could create a malicious `numpy-cuda` package that users
-will be lead to believe it’s a CUDA variant of NumPy.
+will be lead to believe it's a CUDA variant of NumPy.
 
 ```bash
 pip install xgboost      # NVIDIA GPU variant
@@ -236,7 +236,7 @@ pip install xgboost-cpu  # CPU-only variant
 
 [cupy](https://github.com/cupy/cupy) for diverse reasons had to build a total of 52 different packages - all with
 different names - which clearly highlights the limit of such an approach. End users need to carefully read the `CuPy`
-installation documentation to figure out which package they need. And for maintainers it’s labor-intensive to
+installation documentation to figure out which package they need. And for maintainers it's labor-intensive to
 continuously have to create new PyPI packages, ask for limit increases, and keep their wheel build infrastructure and
 documentation in sync with those new package names.
 
@@ -257,7 +257,7 @@ ideal as `pip install jax` (with no extra) would provide a broken install for ev
 chains, a fundamental expected behavior in the Python ecosystem is dysfunctional.
 
 JAX includes 12 extra selectors to cover all use cases - many of which overlap and could be misleading to users if they
-don’t read in detail the documentation.
+don't read in detail the documentation.
 
 It should be noted that most of these "extras" are technically mutually exclusive, though it is currently impossible to
 correctly express this incompatibility within the package metadata.
@@ -307,11 +307,11 @@ discoverability.
 installation requirements.
 
 **Documentation Burden**: Maintainers must create and maintain complex installation guides and users must read them. If
-they don’t know or don’t take the time to read it - almost certainly their install will be dysfunctional.
+they don't know or don't take the time to read it - almost certainly their install will be dysfunctional.
 
 ### Impact on scientific computing and AI/ML workflows
 
-**TODO: Let’s insert as many quotes as possible from the community**
+**TODO: Let's insert as many quotes as possible from the community**
 
 The packaging limitations particularly affect scientific computing and AI/ML applications where performance optimization
 is critical.
@@ -614,10 +614,10 @@ PyTorch versions, e.g.:
 
 ## Specification
 
-This PEP proposes a set of backward-compatible extensions to the wheel format (PEP [427](https://peps.python.org/pep-0427/)
-& [491](https://peps.python.org/pep-0491/)) and the packaging ecosystem version while maintaining complete backward
+This PEP proposes a set of backward-compatible extensions to the [binary distribution format](https://packaging.python.org/en/latest/specifications/binary-distribution-format/) specification,
+and the packaging ecosystem version while maintaining complete backward
 compatibility with existing package managers and tools. The design was made with the intent to protect
-non-variant-aware tools from failure when a new type of wheel appears that they don’t know how to manage.
+non-variant-aware tools from failure when a new type of wheel appears that they don't know how to manage.
 
 ### Wheel variant glossary
 
@@ -626,7 +626,7 @@ This section focuses specifically on the vocabulary used by the proposed "Wheel 
 - **Variant Wheels**: Wheels that share the same distribution name, version, build number, and platform compatibility
 tags, but are distinctly identified by an arbitrary set of variant properties.
 
-- **Variant Namespace**: An identifier used to group related features provided by a single plugin (e.g., `nvidia`,
+- **Variant Namespace**: An identifier used to group related features provided by a single provider (e.g., `nvidia`,
 `x86_64`, `arm`, etc.).
 
 - **Variant Feature**: A specific characteristic (key) within a namespace (e.g., `version`, `avx512_bf16`, etc.) that
@@ -1031,7 +1031,7 @@ The variant.json file corresponding to the wheel built from the example pyprojec
 }
 ```
 
-#### `{name}-{version}-variants.json`: the index level variant metadata file.
+#### `{name}-{version}-variants.json`: the index level variant metadata file
 
 For every package version that includes at least one variant wheel, there must exist a corresponding
 `{name}-{version}-variants.json` file, hosted and served by the package index. The `{name}` and `{version}` placeholders
