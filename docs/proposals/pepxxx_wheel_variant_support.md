@@ -460,13 +460,13 @@ at the end to ensure that the existing filename validation algorithms reject it:
 
 - If both the build tag and the variant label are present, the filename contains too many components.
 
-  Example: `numpy-2.3.2-1-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
+    Example: `numpy-2.3.2-1-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
 
 - If only the variant label is present, the Python tag at third position will be misinterpreted as a build number.
   Since the build number must start with a digit and no Python tags at the time start with digits, the filename is
   considered invalid.
 
-  Example: `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
+    Example: `numpy-2.3.2-cp313-cp313t-musllinux_1_2_x86_64-x86_64_v3.whl`
 
 This behavior was confirmed for a number of existing tools:
 [auditwheel](https://github.com/pypa/auditwheel/blob/6839107e9b918e035ab2df4927a25a5f81f1b8b6/src/auditwheel/repair.py#L61-L64),
