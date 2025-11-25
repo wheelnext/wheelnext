@@ -1624,7 +1624,7 @@ for backwards compatibility.
 Existing installers must not accidentally install variant wheels, as they require additional logic to determine whether
 a wheel is compatible with the user's system. This is achieved by adding a `-{variant label}` component to the end
 of the filename, effectively causing variant wheels to be rejected by common installer implementations. For backwards
-compatibility, a regular wheel can be published in addition to the variant wheels, which will be the only wheel
+compatibility, a regular wheel can be published in addition to the variant wheels. It will be the only wheel
 supported by incompatible installers, and the least preferred wheel for variant-compatible installers.
 
 Aside from this explicit incompatibility, the specification makes minimal and non-intrusive changes to the binary
@@ -1632,12 +1632,13 @@ package format. The variant metadata is placed in a separate file in the `.dist-
 preserved by tools that are not concerned with variants, limiting the necessary changes to updating the filename
 validation algorithm (if there is one).
 
-The use of new environment markers in wheel dependencies introduces incompatibility with existing tools. This is
+If the new environment markers are used in wheel dependencies, these wheels will be incompatible with existing tools. This is
 a general problem with the design of environment markers, and not specific to wheel variants. It is possible to work
 around this problem by partially evaluating environment markers at build time, and removing the markers or dependencies
 specific to variant wheels from the regular wheel.
 
-PEP 517 and PEP 660 builds must be non-variant wheels by default as they can't determine whether the frontend supports variants.
+Build backends produce non-variant wheels to preserve backwards compatibility with existing frontends. Variant wheels
+can only be output on explicit user request.
 
 By using a separate `*-variants.json` file for shared metadata, it is possible to use variant wheels on an index that
 does not specifically support variant metadata. However, the index must permit distributing wheels that use the extended
