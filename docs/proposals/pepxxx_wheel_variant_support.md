@@ -316,6 +316,15 @@ they don't know or don't take the time to read it - almost certainly their insta
 The packaging limitations particularly affect scientific computing and AI/ML applications where performance optimization
 is critical.
 
+> The current wheel format's lack of hardware awareness creates a suboptimal experience for hardware-dependent packages.
+> While plugins help with smaller and well scoped packages, users must currently manually identify the correct variant
+> (e.g., `jax[cuda13]`) to avoid generic defaults or incompatible combinations. We need a system where `pip install jax`
+> automatically selects packages matching the user's hardware, unless explicitly overridden.
+>
+> WheelNext is a clear step in the right direction in this regard.
+>
+> — *Michael Hudgins, Jax Developer Infrastructure Lead*
+
 #### Heterogeneous computing environments
 
 Research institutions and cloud providers often manage heterogeneous computing clusters with different architectures
