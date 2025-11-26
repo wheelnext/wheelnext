@@ -1117,18 +1117,30 @@ from typing import Self
 
 
 def get_supported_feature_names(namespace: str) -> list[str]:
+    """Get feature names from plugin's get_supported_configs()"""
     ...
 
 
 def get_supported_feature_values(namespace: str, feature_name: str) -> list[str]:
+    """Get feature values from plugin's get_supported_configs()"""
     ...
 
 
+# default-priorities dict from variant metadata
+default_priorities = {
+    "namespace": [...],  # : list[str]
+    "feature": {...},    # : dict[str, list[str]]
+    "property": {...},   # : dict[str, dict[str, list[str]]]
+}
+
+
+# 1. Construct the ordered list of namespaces.
 namespace_order = default_priorities["namespace"]
 feature_order = {}
 value_order = {}
 
 for namespace in namespace_order:
+    # 2. Construct the ordered lists of feature names.
     feature_order[namespace] = default_priorities["feature"].get(namespace, [])
     for feature_name in get_supported_feature_names(namespace):
         if feature_name not in feature_order[namespace]:
@@ -1136,6 +1148,7 @@ for namespace in namespace_order:
 
     value_order[namespace] = {}
     for feature_name in feature_order[namespace]:
+        # 3. Construct the ordered lists of feature values.
         value_order[namespace][feature_name] = default_priorities["property"].get(namespace, {}).get(feature_name, [])
         for feature_value in get_supported_feature_values(namespace, feature_name):
             if feature_value not in value_order[namespace][feature_name]:
@@ -1143,6 +1156,7 @@ for namespace in namespace_order:
 
 
 def property_key(prop: tuple[str, str, str]) -> tuple[int, int, int]:
+    """Construct a sort key for variant property (akin to step 4.)"""
     namespace, feature_name, feature_value = prop
     return (
         namespace_order.index(namespace),
@@ -1152,17 +1166,26 @@ def property_key(prop: tuple[str, str, str]) -> tuple[int, int, int]:
 
 
 class VariantWheel:
+    """Example class exposing properties of a variant wheel"""
     properties: list[tuple[str, str, str]]
 
     def __lt__(self: Self, other: Self) -> bool:
+        """Variant comparison function for sorting (akin to step 6.)"""
         for self_prop, other_prop in zip(self.properties, other.properties):
             if self_prop != other_prop:
                 return property_key(self_prop) < property_key(other_prop)
         return len(self.properties) > len(other.properties)
 
 
+# A list of variant wheels to sort.
+wheels: list[VariantWheel] = [...]
+
+
 for wheel in wheels:
+    # 5. Order variant wheel properties by their sort keys.
     wheel.properties.sort(key=property_key)
+# 6. Order variant wheels by comparing their sorted properties
+# (see VariantWheel.__lt__())
 wheels.sort()
 ```
 
