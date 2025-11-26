@@ -1297,8 +1297,6 @@ from typing import Protocol
 
 
 class VariantFeatureConfigType(Protocol):
-    """A protocol for VariantFeature configs"""
-
     @property
     @abstractmethod
     def name(self) -> str:
@@ -1314,7 +1312,7 @@ class VariantFeatureConfigType(Protocol):
     @property
     @abstractmethod
     def values(self) -> list[str]:
-        """Ordered list of values, most preferred first"""
+        """List of values, possibly ordered from most preferred to least"""
         raise NotImplementedError
 ```
 
@@ -1340,15 +1338,13 @@ from typing import Protocol
 
 
 class PluginType(Protocol):
-    """A protocol for plugin classes"""
-
     # Note: properties are used here for docstring purposes, these must
     # be actually implemented as attributes.
 
     @property
     @abstractmethod
     def namespace(self) -> str:
-        """Get provider namespace"""
+        """The provider namespace"""
         raise NotImplementedError
 
     @property
