@@ -1294,10 +1294,8 @@ Depending on the context, the order of values may be significant. It is defined 
 ```python
 from abc import abstractmethod
 from typing import Protocol
-from typing import runtime_checkable
 
 
-@runtime_checkable
 class VariantFeatureConfigType(Protocol):
     """A protocol for VariantFeature configs"""
 
@@ -1339,10 +1337,8 @@ The plugin interface must follow the following protocol:
 ```python
 from abc import abstractmethod
 from typing import Protocol
-from typing import runtime_checkable
 
 
-@runtime_checkable
 class PluginType(Protocol):
     """A protocol for plugin classes"""
 
