@@ -1287,7 +1287,8 @@ b. as the value of an installed entry point in the `variant_plugins` group. The 
 
 #### Variant feature config class
 
-The variant feature config class is used to define a single variant feature, along with a list of possible values.
+The variant feature config class is used as a return value in plugin API functions. It defines a single variant feature,
+along with a list of possible values.
 Depending on the context, the order of values may be significant. It is defined using the following protocol:
 
 ```python
