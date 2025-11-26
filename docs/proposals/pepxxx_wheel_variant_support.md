@@ -42,30 +42,6 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 "OPTIONAL" in this document are to be interpreted as described in
 [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119.html).
 
-- **Projects** are software components that are made available for integration. Projects include Python libraries,
-frameworks, scripts, plugins, applications, collections of data or other resources, and various combinations thereof.
-Public Python projects are typically registered on the [Python Package Index](https://pypi.org/).
-
-- **Releases** are uniquely identified snapshots of a project.
-
-- **Distributions** are the packaged files which are used to publish and distribute a release.
-
-- **Build tools** are automated tools intended to run on development systems, producing source and binary distribution
-archives. Build tools may also be invoked by integration tools in order to build software distributed as sdists rather
-than prebuilt binary archives.
-
-- **Index servers** are active distribution registries which publish version and dependency metadata and place
-constraints on the permitted metadata.
-
-- **Publication tools** are automated tools intended to run on development systems and upload source and binary
-distribution archives to index servers.
-
-- **Installation tools** are integration tools specifically intended to run on deployment targets, consuming source and
-binary distribution archives from an index server or other designated location and deploying them to the target system.
-
-- **Automated tools** is a collective term covering build tools, index servers, publication tools, integration tools and
-any other software that produces or consumes distribution version and dependency metadata.
-
 ## Motivation
 
 The Python packaging ecosystem has evolved to support increasingly diverse computing environments. The current software
