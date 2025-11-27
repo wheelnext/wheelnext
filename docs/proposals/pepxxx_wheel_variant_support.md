@@ -36,8 +36,6 @@ installers, ensures backward compatibility, and minimizes the burden on package 
 
 ## Definitions
 
-Most of the definitions are borrowed from [PEP 440](https://peps.python.org/pep-0440/#definitions)
-
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in
 [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119.html).
