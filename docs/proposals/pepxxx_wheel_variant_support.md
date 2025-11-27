@@ -1285,23 +1285,18 @@ b. as the value of an installed entry point in the `variant_plugins` group. The 
    This is optional but recommended, as it permits variant-related utilities to discover variant plugins installed
    to the user's environment.
 
-#### Helper classes
+#### Variant feature config class
 
-##### Variant feature config
-
-The variant feature config class is used to define a single variant feature, along with a list of possible values.
+The variant feature config class is used as a return value in plugin API functions. It defines a single variant feature,
+along with a list of possible values.
 Depending on the context, the order of values may be significant. It is defined using the following protocol:
 
 ```python
 from abc import abstractmethod
 from typing import Protocol
-from typing import runtime_checkable
 
 
-@runtime_checkable
 class VariantFeatureConfigType(Protocol):
-    """A protocol for VariantFeature configs"""
-
     @property
     @abstractmethod
     def name(self) -> str:
@@ -1317,7 +1312,7 @@ class VariantFeatureConfigType(Protocol):
     @property
     @abstractmethod
     def values(self) -> list[str]:
-        """Ordered list of values, most preferred first"""
+        """List of values, possibly ordered from most preferred to least"""
         raise NotImplementedError
 ```
 
@@ -1335,27 +1330,21 @@ All features are interpreted as being within the plugin's namespace.
 
 #### Plugin interface
 
-##### Protocol
-
 The plugin interface must follow the following protocol:
 
 ```python
 from abc import abstractmethod
 from typing import Protocol
-from typing import runtime_checkable
 
 
-@runtime_checkable
 class PluginType(Protocol):
-    """A protocol for plugin classes"""
-
     # Note: properties are used here for docstring purposes, these must
     # be actually implemented as attributes.
 
     @property
     @abstractmethod
     def namespace(self) -> str:
-        """Get provider namespace"""
+        """The provider namespace"""
         raise NotImplementedError
 
     @property
@@ -1376,9 +1365,7 @@ class PluginType(Protocol):
         raise NotImplementedError
 ```
 
-##### Attributes
-
-The plugin class must define the following attributes:
+The plugin interface must define the following attributes:
 
 - `namespace: str` specifying the plugin's namespace.
 
@@ -1386,35 +1373,20 @@ The plugin class must define the following attributes:
   `get_supported_configs()` must always return the same value as `get_all_configs()` (modulo ordering), which must be a
   fixed list independent of the platform on which the plugin is running. Defaults to `False` if unspecified.
 
-##### get_all_configs() function
+The plugin interface must provide the following functions:
 
-Prototype:
+- `get_all_config() -> list[VariantFeatureConfigType]` that returns a list of "variant feature configs" describing
+  all valid variant features within the plugin's namespace, along with all their permitted values. The ordering
+  of the lists is insignificant here. A particular plugin version must always return the same value (modulo ordering),
+  irrespective of any runtime conditions.
 
-```python
-def get_all_configs() -> list[VariantFeatureConfigType]:
-    ...
-```
+- `get_supported_configs() -> list[VariantFeatureConfigType]` that returns a list of "variant feature configs"
+  describing the variant features within the plugin's namespace that are compatible with this particular system, along
+  with their values that are supported. The variant feature and value lists must be ordered from the most preferred
+  to the least preferred, as they affect [variant ordering](#variant-ordering).
 
-The plugin must implement a `get_all_config()` function that returns a list of "variant feature configs" describing
-all valid variant features within the plugin's namespace, along with all their permitted values. The ordering
-of the lists is insignificant here. A particular plugin version must always return the same value (modulo ordering),
-irrespective of any runtime conditions.
-
-##### get_supported_configs() function
-
-Prototype:
-
-```python
-def get_supported_configs() -> list[VariantFeatureConfigType]:
-    ...
-```
-
-The plugin must implement a `get_supported_configs()` function that returns a list of "variant feature configs"
-describing the variant features within the plugin's namespace that are compatible with this particular system, along
-with their values that are supported. The variant feature and value lists must be ordered from the most preferred
-to the least preferred, as they affect [variant ordering](#variant-ordering). The returned value must be a subset
-of the feature names and values returned by `get_all_configs()` (modulo ordering).
-
+The value returned by `get_supported_configs()`must be a subset of the feature names and values returned
+by `get_all_configs()` (modulo ordering).
 
 #### Example implementation
 
