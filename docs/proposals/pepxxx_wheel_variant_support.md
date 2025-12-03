@@ -285,8 +285,6 @@ they don't know or don't take the time to read it - almost certainly their insta
 
 ### Impact on scientific computing and AI/ML workflows
 
-**TODO: Let's insert as many quotes as possible from the community**
-
 The packaging limitations particularly affect scientific computing and AI/ML applications where performance optimization
 is critical.
 
@@ -297,20 +295,84 @@ is critical.
 >
 > WheelNext is a clear step in the right direction in this regard.
 >
-> — *Michael Hudgins, Jax Developer Infrastructure Lead*
+> — *Michael Hudgins, JAX Developer Infrastructure Lead*
+
+These limitations affect everyone from package authors to end users of all
+skill levels, including students, scientists and engineers. Leah Wasser, who
+designs Python and data skills training programs for scientists and is
+Executive Director and Founder of pyOpenSci, writes:
+
+> *Accessing compute to run models and process large datasets has been a pain
+> point in scientific computing for over a decade. Today, researchers and data
+> scientists still spend hours to days installing core tools like PyTorch
+> before they can begin their work. This complexity is a significant barrier to
+> entry for users who want to use Python in their daily work. The WheelNext
+> Wheel Variants proposal offers a pathway to address persistent installation
+> and compute-access problems within the broader packaging ecosystem without
+> creating another, new and separate solution. Let's focus on the big picture
+> of enhancing user experience - it will make a real difference.*
+
 
 #### Heterogeneous computing environments
 
 Research institutions and cloud providers often manage heterogeneous computing clusters with different architectures
 (CPU, Hardware accelerators, ASICS, etc.). The current system requires environment-specific installation procedures,
 making reproducible deployment difficult. This situation also contributes to making "scientific papers" difficult to
-reproduce.
+reproduce. Application authors focused on improving that are hindered by the packaging hurdles too. Carlos Córdoba,
+lead developer of the Spyder IDE, writes:
+
+> *We've been developing a package manager for Spyder, a Python IDE for
+> scientists, engineers and data analysts, with three main aims. First, to make
+> our users' life easier by allowing them to create environments and install
+> packages using a GUI instead of introducing arcane commands in a terminal.
+> Second, to make their research code reproducible, so they can share it and
+> its dependencies with their peers. And third, to allow users to transfer
+> their code to machines in HPC clusters or the cloud with no hassle, so they
+> can leverage the vast compute resources available there. With the
+> improvements proposed by this PEP, we'd able to make that a reality for all
+> PyPI users because installing widely used scientific libraries (like PyTorch
+> and CuPy) for the right GPU and instruction set and would be straightforward
+> and transparent for tools built on top of uv/pip.*
 
 #### Artificial intelligence, machine learning, and deep learning
 
 The recent advances in modern AI workflows increasingly rely on GPU acceleration, but the current packaging system makes
 deployment complex and adds a significant burden on open source developers of the entire tool stack (from build backends
 to installers, not forgetting the package maintainers).
+
+Philip Hyunsu Cho, a lead maintainer of XGBoost, enumerates a number of problems XGBoost has that he expects will be
+addressed by wheel variants:
+
+> * Large download size, due to the use of "fat binaries" for multiple SMs.
+>   Currently, XGBoost builds for 11 different SMs.
+> * The need for a separate packaging name for CPU-only package. Currently we ship a
+>   separate package named `xgboost-cpu`, requiring users to maintain separate
+>   `requirements.txt` files. See [xgboost#11632](https://github.com/dmlc/xgboost/issues/11632)
+>   for an example.
+> * Complex dispatching logic for multiple CUDA versions. Some features of
+>   XGBoost require new CUDA versions (12.5 or 12.8), while the XGBoost wheel
+>   targets 12.0. As a result, we maintain a fairly complex dispatching logic to
+>   detect CUDA and driver versions at runtime. Such dispatching logic should be
+>   best implemented in a dedicated piece of software like the NVIDIA provider
+>   plugin, so that the XGBoost project can focus on its core mission.
+> * Undefined behavior due to presence of multiple OpenMP runtimes. XGBoost is
+>   installed in a variety of systems with different OpenMP runtimes (or none at
+>   all). So far, XGBoost has been vendoring a copy of OpenMP runtime, but this
+>   is increasingly untenable. Users get undefined behavior such as crashes or
+>   hangs when multiple incompatible versions of OpenMP runtimes are present in
+>   the system. (This problem was particularly bad on MacOS, so much so that the
+>   MacOS wheel for XGBoost no longer bundles OpenMP.)
+
+
+Travis Oliphant, author of NumPy and SciPy and Chief AI Architect at OpenTeams, summarizes the potential for improvement:
+
+> *This PEP is a significant step forward in improving the deployment
+> challenges of the Python ecosystem in the face of increasingly complex and
+> varied hardware configurations.  By enabling multiple deployment targets for
+> the same libraries in a standard way, it will consolidate and simplify many
+> awkward and time-consuming work-arounds developers have been pursuing to
+> support the rapidly growing AI/ML and scientific computing worlds.*
+
 
 ### Motivation summary
 
