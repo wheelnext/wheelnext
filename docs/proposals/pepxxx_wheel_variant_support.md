@@ -329,7 +329,7 @@ lead developer of the Spyder IDE, writes:
 > its dependencies with their peers. And third, to allow users to transfer
 > their code to machines in HPC clusters or the cloud with no hassle, so they
 > can leverage the vast compute resources available there. With the
-> improvements proposed by this PEP, we'd able to make that a reality for all
+> improvements proposed by this PEP, we'd be able to make that a reality for all
 > PyPI users because installing widely used scientific libraries (like PyTorch
 > and CuPy) for the right GPU and instruction set and would be straightforward
 > and transparent for tools built on top of uv/pip.*
