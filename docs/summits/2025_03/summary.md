@@ -320,7 +320,7 @@ and distribution processes
 
 **Key Actors & Contributors:** NVIDIA, Quansight, META/PyTorch
 
-**Details on the [Full Proposal](site:proposals/pepxxx_wheel_variant_support)**
+**Details on the [Full Proposal](site:proposals/pep817_wheel_variant_support)**
 
 ### Takeaways
 

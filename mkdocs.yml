@@ -37,7 +37,7 @@ nav:
       - "Native Library Loader": "proposals/pepxxx_native_lib_loader.md"
       - "Symlink Support in Wheel": "proposals/pep778_symlink_support.md"
       - "Upload 2.0 API for Python Package Indexes": "proposals/pep694_upload_api.md"
-      - "Wheel Variant Support": "proposals/pepxxx_wheel_variant_support.md"
+      - "Wheel Variant Support": "proposals/pep817_wheel_variant_support.md"
   - "WheelNext Summits":
       - "2025 Summit":
           - "Welcome !": "summits/2025_03/index.md"

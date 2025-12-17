@@ -3,7 +3,7 @@
 ## Abstract
 
 In this workshop, we will focus on brainstorming about the best way to deliver the
-Python [Wheel Variant proposal](site:proposals/pepxxx_wheel_variant_support/), which enables
+Python [Wheel Variant proposal](site:proposals/pep817_wheel_variant_support/), which enables
 hardware-specific and platform-dependent package variants to address modern hardware diversity. It proposes a system for
 building, packaging, publishing and installing the most suitable package variant for a given platform without
 fragmenting the Python ecosystem. It also focuses on how to minimize the maintenance impact for
@@ -62,9 +62,9 @@ By the end of the workshop, we aim to converge to some ideas, strategies and con
 
 ## Useful Links
 
-- [Wheel Variant Proposal](site:proposals/pepxxx_wheel_variant_support/)
+- [Wheel Variant Proposal](site:proposals/pep817_wheel_variant_support/)
 - [Discussion on discuss.python.org](https://discuss.python.org/t/implementation-variants-rehashing-and-refocusing/54884)
-- [Tutorial and Working Demo of Wheel Variants](https://github.com/wheelnext/pep_xxx_wheel_variants)
+- [Tutorial and Working Demo of Wheel Variants](https://github.com/wheelnext/pep_817_wheel_variants)
 - [PyPackaging Native ~ Packaging projects with GPU code](https://pypackaging-native.github.io/key-issues/gpus/)
 - [PyPackaging Native ~ Distributing a package containing SIMD code](https://pypackaging-native.github.io/key-issues/simd_support/ )
 

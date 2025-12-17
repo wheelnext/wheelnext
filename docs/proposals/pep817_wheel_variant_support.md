@@ -1,10 +1,10 @@
-# PEP ### - Wheel Variants - extending platform awareness
+# PEP 817 - Wheel Variants - extending platform awareness
 
 | Resource             | Link                                                                                                                                     |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `PEP Link`           | `To Be Published`                                                                                                                        |
 | `DPO Discussion`     | [Implementation variants: rehashing and refocusing](https://discuss.python.org/t/implementation-variants-rehashing-and-refocusing/54884) |
-| `Github Repository`  | <https://github.com/wheelnext/pep_xxx_wheel_variants>                                                                                    |
+| `Github Repository`  | <https://github.com/wheelnext/pep_817_wheel_variants>                                                                                    |
 | `Demo / Wheel Index` | <https://wheelnext.github.io/variants-index/>                                                                                            |
 
 ## Abstract
@@ -1642,7 +1642,7 @@ protocols and algorithms introduced in this PEP, as well as a command-line tool 
 
 A client for installing variant wheels is implemented in [uv](https://github.com/astral-sh/uv).
 
-The [Wheel Variants monorepo](https://github.com/wheelnext/pep_xxx_wheel_variants) includes example implementations
+The [Wheel Variants monorepo](https://github.com/wheelnext/pep_817_wheel_variants) includes example implementations
 of provider plugins, as well as modified versions of build backends featuring variant wheel building support
 and modified versions of some Python packages demonstrating variant wheel uses.
 
