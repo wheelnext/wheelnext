@@ -35,6 +35,7 @@ Below you will find the list of communities, projects and companies involved in 
 - Aperio Software <https://aperiosoftware.com/>
 - Astral: <https://astral.sh/>
 - Google: <https://about.google/>
+- Huawei: <https://www.huawei.com/>
 - Intel: <https://www.intel.com/>
 - Lablup Inc.: <https://lablup.com/>
 - Meta: <https://about.meta.com/>
