@@ -2,16 +2,15 @@
 
 | Resource             | Link                                                                                                                                     |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `PEP Link`           | [PEP 817: Wheel Variants: Beyond Platform Tags (preview)](https://pep-previews--4740.org.readthedocs.build/pep-0817/)                    |
-| `PEP Pull Request`   | [PEP 817: Wheel Variants: Beyond Platform Tags](https://github.com/python/peps/pull/4740)                                                |
+| `PEP Link`           | [PEP 817: Wheel Variants: Beyond Platform Tags](https://peps.python.org/pep-0817/)                                                       |
 | `DPO Discussion`     | [Implementation variants: rehashing and refocusing](https://discuss.python.org/t/implementation-variants-rehashing-and-refocusing/54884) |
 | `Github Repository`  | <https://github.com/wheelnext/pep_817_wheel_variants>                                                                                    |
 | `Demo / Wheel Index` | <https://wheelnext.github.io/variants-index/>                                                                                            |
 
 ## PEP Submitted
 
-This is a historical document. The current version of the specification is available in the
-[PEP 817 pull request](https://github.com/python/peps/pull/4740), pending merge to the PEP repository.
+This is a historical document. The current version of the specification is available upstream:
+[PEP 817](https://peps.python.org/pep-0817/).
 
 ## Abstract
 
